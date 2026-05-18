@@ -6,6 +6,7 @@
     <title>Les Silures de Canapé</title>
     
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link rel="apple-touch-icon" href="favicon.jpg">
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -81,7 +82,6 @@
     </footer>
 
     <script>
-        // Gestion des onglets Connexion / Inscription
         const tabLogin = document.getElementById('tab-login');
         const tabRegister = document.getElementById('tab-register');
         
@@ -95,17 +95,12 @@
             tabLogin.className = "flex-1 py-2 text-sm font-bold rounded-lg text-white/70 hover:text-white transition";
         });
 
-        // Fonction quand on valide le formulaire
         function handleAuth(event) {
-            event.preventDefault(); // Empêche de recharger la page
-            
-            // Masque l'écran de connexion pour afficher le site
+            event.preventDefault();
             document.getElementById('login-page').style.display = 'none';
         }
 
-        // Fonction de déconnexion
         function logout() {
-            // Réaffiche l'écran de connexion
             document.getElementById('login-page').style.display = 'flex';
         }
     </script>
