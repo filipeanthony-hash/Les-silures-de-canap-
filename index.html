@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Silures de Canapé</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.😎 sepia(100%) saturate(500%) hue-rotate(170deg);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-[#020d1a] text-slate-200 font-sans min-h-screen flex justify-center items-center p-0 sm:p-4">
+
+    <div id="app-container" class="w-full max-w-md h-screen sm:h-[850px] bg-[#031428] sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col relative border border-[#0b223c]">
+        
+        <div id="page-dashboard" class="flex-1 flex flex-col h-full overflow-hidden">
+            <div class="flex-1 overflow-y-auto no-scrollbar px-5 pt-8 pb-24">
+                
+                <div class="mb-4">
+                    <span class="text-xs font-semibold text-slate-400 tracking-wide uppercase">Bienvenue de retour</span>
+                    <h2 class="text-4xl font-black text-slate-100 mt-1">Salut, <span id="current-user" class="text-[#22d3ee] tracking-wider uppercase">SHARK</span></h2>
+                    <p class="text-sm text-slate-400 font-medium mt-1">Prêt pour une nouvelle session ?</p>
+                </div>
+
+                <div class="mb-6">
+                    <a href="https://www.facebook.com/groups/1435331308398155" target="_blank" class="w-full bg-[#1877f2] hover:bg-[#166fe5] text-white font-bold p-3 rounded-2xl flex items-center justify-center gap-2 shadow-lg hover:scale-[1.01] transition-all text-xs">
+                        <i data-lucide="facebook" class="w-4 h-4 fill-white"></i>
+                        Rejoindre le groupe Facebook
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    
+                    <div class="bg-gradient-to-r from-[#061b33] to-[#082547] p-4 rounded-2xl border border-[#0d2a4a] shadow-md flex flex-col justify-between min-h-[160px]">
+                        <div class="space-y-1">
+                            <div class="w-8 h-8 bg-[#0b294d] rounded-xl flex items-center justify-center text-[#22d3ee] mb-1">
+                                <i data-lucide="fish" class="w-4 h-4"></i>
+                            </div>
+                            <span id="badge-prises-count" class="text-3xl font-black text-white">0</span>
+                            <p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Prises</p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-slate-700/20 text-center">
+                            <label class="bg-[#031428] text-[#22d3ee] text-[10px] px-3 py-1.5 rounded-lg cursor-pointer font-bold border border-[#0d2a4a] inline-flex items-center gap-1 hover:bg-[#0b294d] transition-all w-full justify-center">
+                                <i data-lucide="camera" class="w-3.5 h-3.5"></i> Poster un poisson
+                                <input type="file" accept="image/*" onchange="ajouterPrise(this)" class="hidden">
+                            </label>
+                            <div id="affichage-prises" class="mt-2 flex flex-wrap justify-center gap-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-[#061b33] to-[#082547] p-4 rounded-2xl border border-[#0d2a4a] shadow-md flex flex-col justify-between min-h-[160px]">
+                        <div class="space-y-1">
+                            <div class="w-8 h-8 bg-[#0b294d] rounded-xl flex items-center justify-center text-[#22d3ee] mb-1">
+                                <i data-lucide="anchor" class="w-4 h-4"></i>
+                            </div>
+                            <span id="badge-noeuds-count" class="text-3xl font-black text-white">0</span>
+                            <p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Nœuds & Montages</p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-slate-700/20 text-center">
+                            <label class="bg-[#031428] text-[#22d3ee] text-[10px] px-3 py-1.5 rounded-lg cursor-pointer font-bold border border-[#0d2a4a] inline-flex items-center gap-1 hover:bg-[#0b294d] transition-all w-full justify-center">
+                                <i data-lucide="image" class="w-3.5 h-3.5"></i> Photo du montage
+                                <input type="file" accept="image/*" onchange="ajouterNoeud(this)" class="hidden">
+                            </label>
+                            <div id="affichage-noeuds" class="mt-2 flex flex-wrap justify-center gap-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-[#061b33] to-[#082547] p-4 rounded-2xl border border-[#0d2a4a] shadow-md flex flex-col justify-between min-h-[220px] col-span-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-[#0b294d] rounded-xl flex items-center justify-center text-[#10b981]">
+                                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                </div>
+                                <p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Spots Google Maps</p>
+                            </div>
+                            <span id="badge-spots-count" class="text-xl font-black text-[#10b981]">0</span>
+                        </div>
+                        
+                        <div class="mt-3 pt-3 border-t border-slate-700/20 flex flex-col gap-2">
+                            <div class="flex gap-2">
+                                <input type="text" id="latitude" placeholder="Lat" readonly class="w-1/2 bg-[#031428] border border-[#0d2a4a] p-2 rounded-lg text-[11px] text-center text-slate-300 focus:outline-none">
+                                <input type="text" id="longitude" placeholder="Lon" readonly class="w-1/2 bg-[#031428] border border-[#0d2a4a] p-2 rounded-lg text-[11px] text-center text-slate-300 focus:outline-none">
+                            </div>
+                            <input type="text" id="spot-name" placeholder="Nom du spot (ex: Étang des Carpes)" class="w-full bg-[#031428] border border-[#0d2a4a] p-2 rounded-lg text-[11px] text-slate-200 focus:outline-none">
+                            <input type="text" id="maps-url" placeholder="Lien Google Maps (optionnel si GPS)" class="w-full bg-[#031428] border border-[#0d2a4a] p-2 rounded-lg text-[11px] text-slate-200 focus:outline-none">
+                            
+                            <button onclick="ObtenirGPS()" class="w-full bg-[#0b294d] text-slate-300 text-[11px] font-bold py-2 rounded-lg border border-[#0d2a4a] hover:bg-[#11355e] flex items-center justify-center gap-1">
+                                <i data-lucide="navigation" class="w-3 h-3"></i> Choper mon GPS actuel
+                            </button>
+                            <button onclick="enregistrerSpot()" class="w-full bg-emerald-600 text-white text-[11px] font-bold py-2 rounded-lg hover:bg-emerald-500">
+                                Sauvegarder le Spot dans la liste
+                            </button>
+                        </div>
+                        <div id="liste-spots-enregistres" class="mt-3 space-y-2 max-h-40 overflow-y-auto no-scrollbar"></div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-[#061b33] to-[#082547] p-4 rounded-2xl border border-[#0d2a4a] shadow-md flex flex-col justify-between min-h-[160px] col-span-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-[#0b294d] rounded-xl flex items-center justify-center text-[#a855f7]">
+                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                </div>
+                                <p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Concours à venir</p>
+                            </div>
+                            <span id="badge-concours-count" class="text-xl font-black text-[#a855f7]">0</span>
+                        </div>
+                        
+                        <div id="admin-concours-form" class="mt-3 pt-2 border-t border-slate-700/10 space-y-2">
+                            <div class="flex gap-2">
+                                <input type="text" id="comp-name" placeholder="Nom du concours..." class="w-1/2 bg-[#031428] border border-[#0d2a4a] p-1.5 rounded-lg text-[10px] text-slate-200 focus:outline-none focus:border-[#a855f7]">
+                                <input type="date" id="comp-date" class="w-1/2 bg-[#031428] border border-[#0d2a4a] p-1.5 rounded-lg text-[10px] text-slate-200 focus:outline-none focus:border-[#a855f7]">
+                            </div>
+                            <button onclick="ajouterConcours()" class="w-full bg-[#a855f7] hover:bg-[#9333ea] text-white text-[10px] font-bold py-1 rounded-lg transition-all shadow-sm">
+                                Informer le personnel des nouveaux concours
+                            </button>
+                        </div>
+
+                        <div id="liste-concours-affichage" class="mt-3 space-y-1.5 max-h-32 overflow-y-auto no-scrollbar"></div>
+                    </div>
+
+                </div>
+
+                <div class="mt-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i data-lucide="trending-up" class="w-4 h-4 text-[#22d3ee]"></i>
+                        <h3 class="text-xs font-bold text-slate-400 tracking-wide uppercase">Dernières prises du groupe</h3>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-[#0d2a4a] shadow-md">
+                        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80" alt="Poissons" class="w-full h-32 object-cover">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Init les icônes direct au chargement
+        lucide.createIcons();
+
+        const NOM_UTILISATEUR_ACTUEL = "SHARK"; 
+
+        let listePrises = [];
+        let listeNoeuds = [];
+        let listeSpots = [];
+        let listeConcours = [];
+
+        // Exécution immédiate des affichages puisque la page est ouverte par défaut
+        verifierDroitsAdmin();
+        afficherPrises();
+        afficherNoeuds();
+        afficherSpots();
+        afficherConcours();
+
+        // PRISES
+        function ajouterPrise(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    listePrises.push({ id: Date.now(), imageSrc: e.target.result });
+                    afficherPrises();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function supprimerPrise(id) {
+            listePrises = listePrises.filter(p => p.id !== id);
+            afficherPrises();
+        }
+
+        function afficherPrises() {
+            const conteneur = document.getElementById('affichage-prises');
+            document.getElementById('badge-prises-count').innerText = listePrises.length;
+            if (!conteneur) return;
+            conteneur.innerHTML = '';
+            listePrises.forEach(p => {
+                conteneur.innerHTML += `
+                    <div class="relative inline-block m-0.5">
+                        <img src="${p.imageSrc}" class="w-10 h-10 object-cover rounded-md border border-[#0ea5e9]" />
+                        <button onclick="supprimerPrise(${p.id})" class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] rounded-full w-3 h-3 flex items-center justify-center font-bold">x</button>
+                    </div>`;
+            });
+        }
+
+        // NŒUDS
+        function ajouterNoeud(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    listeNoeuds.push({ id: Date.now(), imageSrc: e.target.result });
+                    afficherNoeuds();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function afficherNoeuds() {
+            const conteneur = document.getElementById('affichage-noeuds');
+            document.getElementById('badge-noeuds-count').innerText = listeNoeuds.length;
+            if (!conteneur) return;
+            conteneur.innerHTML = '';
+            listeNoeuds.forEach(n => {
+                conteneur.innerHTML += `
+                    <div class="inline-block m-0.5">
+                        <img src="${n.imageSrc}" class="w-10 h-10 object-cover rounded-md border border-[#0ea5e9]" />
+                    </div>`;
+            });
+        }
+
+        // SPOTS GPS
+        function ObtenirGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    document.getElementById('latitude').value = position.coords.latitude.toFixed(5);
+                    document.getElementById('longitude').value = position.coords.longitude.toFixed(5);
+                }, () => {
+                    alert("Impossible de récupérer la position GPS.");
+                });
+            } else {
+                alert("La géolocalisation n'est pas supportée par ton navigateur.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            lucide.createIcons();
+        });
+
+        function enregistrerSpot() {
+            const nameInput = document.getElementById('spot-name');
+            const urlInput = document.getElementById('maps-url');
+            const latInput = document.getElementById('latitude');
+            const lonInput = document.getElementById('longitude');
+
+            let name = nameInput.value.trim();
+            let url = urlInput.value.trim();
+            const lat = latInput.value;
+            const lon = lonInput.value;
+
+            if (!name) name = Coin #${listeSpots.length + 1};
+
+            if (!url && lat && lon) {
+                url = https://www.google.com/maps?q=${lat},${lon};
+            }
+
+            if (url) {
+                listeSpots.push({ id: Date.now(), name: name, mapsUrl: url });
+                nameInput.value = '';
+                urlInput.value = '';
+                latInput.value = '';
+                lonInput.value = '';
+                afficherSpots();
+                alert("Nouveau spot enregistré avec succès !");
+            } else {
+                alert("Veuillez entrer un lien Google Maps ou utiliser le bouton GPS pour localiser.");
+            }
+        }
+
+        function afficherSpots() {
+            const conteneur = document.getElementById('liste-spots-enregistres');
+            const badge = document.getElementById('badge-spots-count');
+            if (badge) badge.innerText = listeSpots.length;
+            if (!conteneur) return;
+            conteneur.innerHTML = '';
+
+            listeSpots.forEach(s => {
+                conteneur.innerHTML += `
+                    <div class="flex items-center justify-between bg-[#031428] border border-[#0d2a4a] p-3 rounded-xl shadow-sm mt-1.5">
+                        <span class="text-slate-200 font-medium truncate max-w-[180px]">${s.name}</span>
+                        <a href="${s.mapsUrl}" target="_blank" class="bg-gradient-to-r from-[#22d3ee] to-[#06b6d4] text-[#020d1a] text-[10px] font-black px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-sm hover:opacity-90">
+                            <i data-lucide="external-link" class="w-3 h-3"></i> Maps
+                        </a>
+                    </div>`;
+            });
+            lucide.createIcons();
+        }
+
+        // CALENDRIER CONCOURS
+        function verifierDroitsAdmin() {
+            const form = document.getElementById('admin-concours-form');
+            if (form && NOM_UTILISATEUR_ACTUEL !== "SHARK") {
+                form.classList.add('hidden');
+            }
+        }
+
+        function ajouterConcours() {
+            const nomInput = document.getElementById('comp-name');
+            const dateInput = document.getElementById('comp-date');
+            
+            const nom = nomInput.value.trim();
+            const date = dateInput.value;
+
+            if (nom && date) {
+                listeConcours.push({ id: Date.now(), nom: nom, date: date });
+                listeConcours.sort((a, b) => new Date(a.date) - new Date(b.date));
+                nomInput.value = '';
+                dateInput.value = '';
+                afficherConcours();
+            } else {
+                alert("Remplis le nom et choisis une date valide via le calendrier.");
+            }
+        }
+
+        function supprimerConcours(id) {
+            if (NOM_UTILISATEUR_ACTUEL === "SHARK") {
+                listeConcours = listeConcours.filter(c => c.id !== id);
+                afficherConcours();
+            }
+        }
+
+        function afficherConcours() {
+            const conteneur = document.getElementById('liste-concours-affichage');
+            document.getElementById('badge-concours-count').innerText = listeConcours.length;
+            if (!conteneur) return;
+            
+            if (listeConcours.length === 0) {
+                conteneur.innerHTML = <p class="text-center text-slate-500 text-[10px] py-2">Aucun concours programmé</p>;
+                return;
+            }
+
+            conteneur.innerHTML = '';
+            listeConcours.forEach(c => {
+                const dateFr = new Date(c.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+                const boutonSuppr = (NOM_UTILISATEUR_ACTUEL === "SHARK")
+                    ? <button onclick="supprimerConcours(${c.id})" class="text-slate-500 hover:text-red-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                    : '';
+
+                conteneur.innerHTML += `
+                    <div class="flex items-center justify-between bg-[#041a35] border border-[#0d2a4a] p-2 rounded-xl text-[11px] mt-1.5">
+                        <div class="flex items-center gap-2 truncate">
+                            <span class="bg-[#a855f7] text-[#020d1a] px-1.5 py-0.5 rounded font-black text-[9px] uppercase">${dateFr}</span>
+                            <span class="text-slate-200 font-bold truncate">${c.nom}</span>
+                        </div>
+                        ${boutonSuppr}
+                    </div>`;
+            });
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
