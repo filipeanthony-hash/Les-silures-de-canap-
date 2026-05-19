@@ -102,7 +102,7 @@
                 </div>
                 <form id="catch-form" class="space-y-3" onsubmit="event.preventDefault(); saveCatch();">
                     <div class="grid grid-cols-2 gap-3">
-                        <input id="fish-species" type="text" placeholder="Espèce (ex: Silure)" required class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
+                        <input id="fish-species" type="text" placeholder="Espèce (ex: Carpe, Silure)" required class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
                         <input id="fish-length" type="number" placeholder="Taille (cm)" required class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
@@ -128,8 +128,8 @@
                 <h4 class="text-xs font-bold uppercase tracking-wider text-blue-300 px-1">Vos exploits récents</h4>
                 <div id="catch-list" class="space-y-2.5">
                     <div class="p-3 glass-card rounded-xl flex items-center gap-4 border-l-4 border-l-[#4ac7f2]">
-                        <img src="https://images.unsplash.com/photo-1583244532610-2a234e7c3eca?q=80&w=150&auto=format&fit=crop" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0 cursor-zoom-in hover:opacity-80 transition-opacity" onclick="openLightbox(this.src)">
-                        <div class="flex-1 min-w-0">
+                        <img src="https://images.unsplash.com/photo-1583244532610-2a234e7c3eca?q=80&w=150&auto=format&fit=crop" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0 cursor-pointer" onclick="openLightbox(this.src)">
+                        <div class="flex-1 min-w-0" onclick="openLightbox('https://images.unsplash.com/photo-1583244532610-2a234e7c3eca?q=80&w=150&auto=format&fit=crop')">
                             <h5 class="text-sm font-bold truncate">Silure Glane</h5>
                             <p class="text-xs text-slate-300">142 cm • 22 kg • <span class="text-blue-300">Vif</span></p>
                         </div>
@@ -142,7 +142,7 @@
         <section id="tab-meteo" class="dashboard-tab hidden space-y-4">
             <div class="p-5 glass-card rounded-2xl shadow-xl text-center relative overflow-hidden">
                 <p class="text-xs uppercase font-bold tracking-wider text-blue-300 mb-1">Météo & Prédictions</p>
-                <h3 class="text-xl font-black text-white mb-4">Indice d'activité du Silure</h3>
+                <h3 class="text-xl font-black text-white mb-4">Indice d'activité</h3>
                 
                 <div class="relative flex items-center justify-center h-28 w-28 mx-auto mb-4 bg-slate-900/40 rounded-full border border-blue-400/20 shadow-inner">
                     <div class="text-center">
@@ -151,7 +151,31 @@
                     </div>
                 </div>
 
-                <div class="space-y-3 text-left bg-slate-900/30 p-3.5 rounded-xl border border-white/5">
+                <div class="space-y-4 text-left bg-slate-900/30 p-3.5 rounded-xl border border-white/5">
+                    
+                    <div>
+                        <span class="text-xs text-slate-300 font-semibold block mb-1.5"><i class="fas fa-fish mr-1 text-[#4ac7f2]"></i> Poisson ciblé</span>
+                        <select id="select-fish" onchange="updateMeteoSim()" class="w-full p-2.5 rounded-xl text-xs text-white input-marine focus:outline-none cursor-pointer">
+                            <option value="silure">🐟 Silure</option>
+                            <option value="carpe">🐟 Carpe</option>
+                            <option value="perche">🐟 Perche</option>
+                            <option value="brochet">🐟 Brochet</option>
+                            <option value="gardon">🐟 Gardon</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <span class="text-xs text-slate-300 font-semibold block mb-1.5"><i class="fas fa-water mr-1 text-[#4ac7f2]"></i> Type de Spot</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="spot-riviere" onclick="setSpotType('riviere')" class="py-2 text-xs font-bold rounded-xl border transition-all bg-gradient-to-r from-blue-500 to-[#4ac7f2] text-white border-transparent shadow-md">
+                                <i class="fas fa-water mr-1"></i> Rivière / Fleuve
+                            </button>
+                            <button id="spot-lac" onclick="setSpotType('lac')" class="py-2 text-xs font-bold rounded-xl border transition-all bg-slate-800/60 text-slate-300 border-white/10 hover:text-white">
+                                <i class="fas fa-circle mr-1"></i> Étang / Lac
+                            </button>
+                        </div>
+                    </div>
+
                     <div>
                         <div class="flex justify-between text-xs mb-1">
                             <span class="text-slate-300"><i class="fas fa-temperature-high mr-1 text-orange-400"></i> Temp. de l'eau</span>
@@ -159,6 +183,7 @@
                         </div>
                         <input id="slider-temp" type="range" min="4" max="28" value="19" class="w-full accent-[#4ac7f2]" oninput="updateMeteoSim()">
                     </div>
+
                     <div>
                         <div class="flex justify-between text-xs mb-1">
                             <span class="text-slate-300"><i class="fas fa-cloud-moon mr-1 text-indigo-300"></i> Phase Lunaire</span>
@@ -231,15 +256,17 @@
         </div>
     </nav>
 
-    <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 transition-all duration-300" onclick="closeLightbox()">
-        <button class="absolute top-5 right-5 text-white text-3xl focus:outline-none" onclick="closeLightbox()">
+    <div id="lightbox" class="hidden fixed inset-0 z-[9999] bg-black/95 flex flex-col items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="absolute top-4 right-4 text-white text-3xl p-2 cursor-pointer bg-black/40 rounded-full w-12 h-12 flex items-center justify-center">
             <i class="fas fa-times"></i>
-        </button>
-        <img id="lightbox-img" src="" alt="Photo agrandie" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transform scale-95 transition-transform duration-300">
+        </div>
+        <img id="lightbox-img" src="" alt="Zoom poisson" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
+        <p class="text-xs text-slate-400 mt-4 font-medium">Touchez l'écran pour fermer</p>
     </div>
 
     <script>
         let catches = [];
+        let currentSpotType = 'riviere';
 
         function tbgDashboard() {
             document.getElementById('login-page').classList.add('hidden');
@@ -310,10 +337,11 @@
             container.innerHTML = '';
 
             catches.forEach(c => {
+                const safeUrl = c.imgUrl.replace(/'/g, "\\'");
                 container.innerHTML += `
                     <div class="p-3 glass-card rounded-xl flex items-center gap-4 border-l-4 border-l-[#4ac7f2]">
-                        <img src="${c.imgUrl}" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0 cursor-zoom-in hover:opacity-80 transition-opacity" onclick="openLightbox(this.src)">
-                        <div class="flex-1 min-w-0">
+                        <img src="${c.imgUrl}" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0 cursor-pointer" onclick="openLightbox('${safeUrl}')">
+                        <div class="flex-1 min-w-0" onclick="openLightbox('${safeUrl}')">
                             <h5 class="text-sm font-bold truncate">${c.species}</h5>
                             <p class="text-xs text-slate-300">${c.length} cm • ${c.weight} kg • <span class="text-blue-300">${c.lure}</span></p>
                         </div>
@@ -323,29 +351,34 @@
             });
         }
 
-        // Fonctions d'ouverture et fermeture de la photo en grand (Lightbox)
-        function openLightbox(src) {
+        function openLightbox(imgSrc) {
             const lightbox = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
-            img.src = src;
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imgSrc;
             lightbox.classList.remove('hidden');
-            setTimeout(() => {
-                img.classList.remove('scale-95');
-                img.classList.add('scale-100');
-            }, 10);
         }
 
         function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
-            img.classList.remove('scale-100');
-            img.classList.add('scale-95');
-            setTimeout(() => {
-                lightbox.classList.add('hidden');
-            }, 200);
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        function setSpotType(type) {
+            currentSpotType = type;
+            const btnRiviere = document.getElementById('spot-riviere');
+            const btnLac = document.getElementById('spot-lac');
+
+            if (type === 'riviere') {
+                btnRiviere.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-gradient-to-r from-blue-500 to-[#4ac7f2] text-white border-transparent shadow-md";
+                btnLac.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-slate-800/60 text-slate-300 border-white/10 hover:text-white";
+            } else {
+                btnLac.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-gradient-to-r from-blue-500 to-[#4ac7f2] text-white border-transparent shadow-md";
+                btnRiviere.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-slate-800/60 text-slate-300 border-white/10 hover:text-white";
+            }
+            updateMeteoSim();
         }
 
         function updateMeteoSim() {
+            const selectedFish = document.getElementById('select-fish').value;
             const temp = parseInt(document.getElementById('slider-temp').value);
             const luneVal = parseInt(document.getElementById('slider-lune').value);
             
@@ -354,19 +387,51 @@
             let luneText = "";
             let luneBonus = 0;
             switch(luneVal) {
-                case 1: luneText = "Nouvelle Lune"; luneBonus = 15; break;
+                case 1: luneText = "Nouvelle Lune"; luneBonus = 10; break;
                 case 2: luneText = "Premier Quartier"; luneBonus = 5; break;
-                case 3: luneText = "Pleine Lune"; luneBonus = 25; break;
+                case 3: luneText = "Pleine Lune"; luneBonus = 20; break;
                 case 4: luneText = "Dernier Quartier"; luneBonus = 10; break;
             }
             document.getElementById('val-lune').innerText = luneText;
 
-            let tempScore = 0;
-            if (temp >= 16 && temp <= 22) tempScore = 70;
-            else if (temp > 22) tempScore = 50 - (temp - 22) * 4;
-            else tempScore = 20 + (temp * 2);
+            let baseScore = 50;
 
-            let totalScore = Math.min(Math.max(tempScore + luneBonus, 10), 100);
+            // ALGORITHME ADAPTÉ PAR POISSON ET PAR SPOT
+            if (selectedFish === 'silure') {
+                if (temp >= 16 && temp <= 23) baseScore = 75;
+                else if (temp > 23) baseScore = 55;
+                else baseScore = 20;
+                if (luneVal === 3) luneBonus += 15; // Le silure adore la pleine lune la nuit
+            } 
+            else if (selectedFish === 'carpe') {
+                // La carpe aime les eaux tempérées à chaudes
+                if (temp >= 18 && temp <= 24) baseScore = 80;
+                else if (temp < 12) baseScore = 25; // Très calme l'hiver
+                else baseScore = 50;
+                
+                // En étang, la carpe s'active fort à la nouvelle lune et pleine lune
+                if (currentSpotType === 'lac' && (luneVal === 1 || luneVal === 3)) luneBonus += 10;
+            } 
+            else if (selectedFish === 'perche') {
+                // La perche aime les eaux fraîches à moyennes, active en rivière dans le courant
+                if (temp >= 14 && temp <= 20) baseScore = 75;
+                else baseScore = 40;
+                if (currentSpotType === 'riviere') baseScore += 10; 
+            } 
+            else if (selectedFish === 'brochet') {
+                // Le brochet fuit les eaux trop chaudes
+                if (temp >= 10 && temp <= 17) baseScore = 80;
+                else if (temp > 22) baseScore = 20; // Bloqué en plein été
+                else baseScore = 50;
+            } 
+            else if (selectedFish === 'gardon') {
+                // Le gardon aime les étangs calmes et se pêche toute l'année
+                if (temp >= 12 && temp <= 19) baseScore = 75;
+                else baseScore = 45;
+                if (currentSpotType === 'lac') baseScore += 15; // Bonus étang pour le blanc
+            }
+
+            let totalScore = Math.min(Math.max(Math.round(baseScore + luneBonus), 5), 100);
 
             const indexEl = document.getElementById('bite-index');
             const labelEl = document.getElementById('bite-label');
