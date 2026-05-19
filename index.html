@@ -8,16 +8,16 @@
 </head>
 <body class="bg-slate-900 text-white p-4">
 
-    <h1 class="text-2xl font-bold">Les Silures de Canapé</h1>
-    <div id="bite-index">0%</div>
-    <div id="bite-label">Calme</div>
+    <h1 class="text-2xl font-bold mb-4">Les Silures de Canapé</h1>
+    <div class="bg-slate-800 p-4 rounded-lg">
+        <div id="bite-index" class="text-4xl font-bold">0%</div>
+        <div id="bite-label" class="text-[10px] text-emerald-400 font-bold uppercase">Calme</div>
+    </div>
 
     <script type="module">
-        // 1. On importe les outils Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
-        // 2. VOTRE CONFIGURATION (Copiez-la bien ici)
+        // VOS CLÉS (votre configuration)
         const firebaseConfig = {
             apiKey: "AIzaSyARnepyvwgjbv97IBiMEA2UR...",
             authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
@@ -28,11 +28,38 @@
             measurementId: "G-99MB1YMZR4"
         };
 
-        // 3. On initialise tout
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        
-        console.log("Les Silures de Canapé sont connectés à Firebase !");
+
+        // --- Votre logique Pêche ---
+        let catches = [];
+        let knots = [];
+
+        function calculateScore(fish, temp, luneBonus) {
+            let score = 50; 
+            if (fish === 'silure') score = (temp >= 20 && temp <= 28) ? 90 : 50;
+            else if (fish === 'carpe') score = (temp >= 18 && temp <= 24) ? 80 : 40;
+            
+            let total = Math.min(Math.max(Math.round(score + luneBonus), 10), 100);
+            document.getElementById('bite-index').innerText = `${total}%`;
+            const lbl = document.getElementById('bite-label');
+            if (total > 70) { lbl.innerText = "Excellent"; lbl.className = "text-[10px] text-emerald-400 font-bold uppercase"; }
+            else if (total > 45) { lbl.innerText = "Moyen"; lbl.className = "text-[10px] text-amber-400 font-bold uppercase"; }
+            else { lbl.innerText = "Calme"; lbl.className = "text-[10px] text-rose-400 font-bold uppercase"; }
+        }
+
+        function loadMockData() {
+            if(catches.length === 0) {
+                catches.push({species: "Exemple: Silure Glane", length: "142", weight: "22", lure: "Vif", imgUrl: "https://images.unsplash.com/photo-1583244532610-2a234e7c3eca?q=80&w=150"});
+            }
+            if(knots.length === 0) {
+                knots.push({name: "Nœud de Cuillère", type: "Émérillons", desc: "Faire 5 tours...", imgUrl: "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7"});
+            }
+            console.log("Données chargées !");
+        }
+
+        // Lancement
+        loadMockData();
+        calculateScore('silure', 22, 5); 
     </script>
 </body>
 </html>
