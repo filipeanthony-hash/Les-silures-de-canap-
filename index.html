@@ -71,7 +71,7 @@
         <button type="button" onclick="seConnecter(document.getElementById('username').value, document.getElementById('password').value)" class="w-full py-3 bg-blue-500 text-white rounded font-bold hover:bg-blue-600">
           Se connecter
         </button>
-        <button onclick="Inscrire()">S'inscrire</button>
+        <button id="btn-inscrire" type="button" class="w-full py-3 bg-blue-500 text-white rounded">S'inscrire</button>
           Pas encore de compte ? Créer un compte
         </button>
       </div>
@@ -277,7 +277,7 @@
         <img id="lightbox-img" src="" alt="Zoom" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
     </div>
 
-    <script>
+    <script type="module">
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
@@ -325,13 +325,11 @@
     // --- ÉCOUTEUR EN TEMPS RÉEL FIREBASE ( Firestore -> Interface ) ---
     // Dès que la base de données change, cette fonction se déclenche automatiquement
     onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
-        const container = document.getElementById('catch-list');
+        const container =
         container.innerHTML = ''; // Vide la liste actuelle pour tout reconstruire
 
         if (snapshot.empty) {
-            container.innerHTML = <p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée. Soyez le premier !</p>;
-            return;
-        }
+            container.innerHTML = <p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée. Soyez le premier !</p>
 
         snapshot.forEach((doc) => {
             const c = doc.data();
@@ -454,28 +452,26 @@ document.getElementById("btn-ajouter").addEventListener("click", async () => {
         alert("Erreur lors de l'ajout : " + e.message);
     }
 });
+// ... ton code précédent ...
 
-// --- Ton code existant (ne touche pas à ça) ---
+// --- Écouteur pour l'inscription ---
+document.getElementById("btn-inscrire").addEventListener("click", () => {
+    const email = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    
+    if (email && password) {
+        window.inscrire(email, password);
+    } else {
+        alert("Veuillez remplir l'email et le mot de passe.");
+    }
+});
+
+// --- Ton code existant ---
 window.switchTab = (tabId) => {
     document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
     document.getElementById(tab-${tabId}).classList.remove('hidden');
     // ... le reste de ta fonction
-    window.switchTab = (tabId) => {
-        document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
-        document.getElementById(tab-${tabId}).classList.remove('hidden');
-        
-        const navButtons = ['carnet', 'meteo', 'noeuds', 'chat'];
-        navButtons.forEach(id => {
-            const btn = document.getElementById(nav-${id});
-            if (id === tabId) {
-                btn.classList.add('text-[#4ac7f2]');
-                btn.classList.remove('text-slate-400');
-            } else {
-                btn.classList.remove('text-[#4ac7f2]');
-                btn.classList.add('text-slate-400');
-            }
-        });
-
+    // ... le reste de ta fonction
         if (tabId === 'chat') { renderChat(); }
     };
     </script>
