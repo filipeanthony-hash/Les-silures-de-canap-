@@ -286,7 +286,24 @@
         <img id="lightbox-img" src="" alt="Zoom" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
     </div>
 
-    <script {nonce}>
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // --- FIREBASE CONFIGURATION (Copie tes valeurs ici) ---
+    const firebaseConfig = {
+        apiKey: "AIzaSy...", 
+        authDomain: "les-silures-de-canape-c9.firebaseapp.com",
+        projectId: "les-silures-de-canape-c9",
+        storageBucket: "les-silures-de-canape-c9.appspot.com",
+        messagingSenderId: "1063082508513",
+        appId: "1:1063082508513:web:1068360a1...",
+        measurementId: "G-99MB1YMZR4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
         const ADMIN_CODE = "1985"; 
 
         let currentUser = "Anonyme";
