@@ -62,13 +62,6 @@
                     <p class="text-xs uppercase tracking-wider text-blue-300 font-semibold">Espace Membres</p>
                     <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
                 </div>
-<button onclick="seConnecter(document.getElementById('username').value, document.getElementById('password').value)" class="w-full bg-blue-500 p-2 rounded">
-  Se connecter
-</button>
-
-<button onclick="inscrire(document.getElementById('username').value, document.getElementById('password').value)" class="w-full mt-4 text-sm text-blue-300 underline">
-  Pas encore de compte ? Créer un compte
-</button>
 
 <form class="space-y-5" onsubmit="event.preventDefault(); tbgDashboard();">
   <div class="relative">
@@ -92,9 +85,14 @@
   </div>
 </form>
                     </div>
-                </form>
-            </div>
-        </div>
+<button type="submit" class="w-full bg-blue-500 p-2 rounded text-white">
+  Se connecter
+</button>
+
+<button type="button" onclick="inscrire(document.getElementById('username').value, document.getElementById('password').value)" class="w-full mt-4 text-sm text-blue-300 underline">
+  Pas encore de compte ? Créer un compte
+</button>
+
     </div>
 
     <div id="dashboard-page" class="hidden flex-col flex-1 w-full max-w-md mx-auto pt-24 px-4 space-y-4">
