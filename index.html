@@ -278,69 +278,38 @@
     </div>
 
     <script type="module">
-    // --- FIREBASE IMPORTS (Nécessaires pour le type="module") ---
-    // Modifie ta ligne d'import pour ajouter ceux de l'auth
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 
-    // --- FIREBASE CONFIGURATION (Remplace par tes vraies valeurs !) ---
-    // C'est ce bloc que tu dois copier depuis ta console Firebase.
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyARNepyvwgwjbv97IBiMEA2UR28c-jVALM",
-  authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
-  projectId: "les-silures-de-canape-c90e6",
-  storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
-  messagingSenderId: "1063082508513",
-  appId: "1:1063082508513:web:1068360a1db2dff18377a0",
-  measurementId: "G-99MB1YMZR4"
-};
+  const firebaseConfig = {
+    apiKey: "AzaSyARnepyvwgwjbv97IBIMEA2UR28c-jVALM",
+    authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
+    projectId: "les-silures-de-canape-c90e6",
+    storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
+    messagingSenderId: "1063082508513",
+    appId: "1:1063082508513:web:1068368a1db2dff18377a0",
+    measurementId: "G-99MB1YMZR4"
+  };
 
-    // Initialisation Firebase & Firestore
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    // --- LOGIQUE ADMIN & VARIABLES GLOBALES ---
-    const ADMIN_CODE = "1985"; 
-    let currentUser = "Anonyme";
-    let knots = []; // Les nœuds restent locaux pour l'instant
-    let currentSpotType = 'riviere';
-    let gpsLoaded = false;
+  // Rendre les fonctions globales pour les boutons HTML
+  window.inscrire = (email, password) => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => alert("Compte créé avec succès !"))
+      .catch((error) => alert("Erreur : " + error.message));
+  };
 
-    // Rendre les fonctions Firebase globales pour qu'elles soient appelées par les formulaires HTML
-    window.db = db;
-    window.collection = collection;
-    window.addDoc = addDoc;
-// Rendre les fonctions Firebase globales pour qu'elles soient appelées par les formulaires HTML
-window.db = db;
-window.collection = collection;
-window.addDoc = addDoc;
-
-// AJOUTE CES LIGNES ICI :
-window.inscrire = inscrire; 
-window.seConnecter = seConnecter;
-    //// Assure-toi d'avoir ces fonctions dans ton bloc script :
-function inscrire(email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => { alert("Compte créé !"); })
-    .catch((error) => { alert("Erreur : " + error.message); });
-}
-
-function seConnecter(email, password) {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => { alert("Connexion réussie !"); })
-    .catch((error) => { alert("Erreur : " + error.message); });
-} --- FONCTION POUR SAUVEGARDER UNE PRISE DANS FIREBASE (Cloud) ---
-    window.saveCatch = async () => {
-        const species = document.getElementById('fish-species').value;
-        const length = document.getElementById('fish-length').value;
-        const weight = document.getElementById('fish-weight').value || '?';
-        const lure = document.getElementById('fish-lure').value || 'Non spécifié';
-
-        try {
-            // Ajout du document dans la collection "catches" de Firestore
-            await addDoc(collection(db, "catches"), {
-                species: species,
+  window.seConnecter = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => alert("Connexion réussie !"))
+      .catch((error) => alert("Erreur : " + error.message));
+  };
+</script>
+En
                 length: length,
                 weight: weight,
                 lure: lure,
