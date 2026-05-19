@@ -7,55 +7,52 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .marine-bg { background-image: linear-gradient(rgba(12, 26, 38, 0.55), rgba(12, 26, 38, 0.75)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; }
+        .marine-bg { background-image: linear-gradient(rgba(12, 26, 38, 0.55), rgba(12, 26, 38, 0.75)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; }
         .glass-card { background: rgba(25, 59, 87, 0.45); backdrop-filter: blur(12px); border: 1px solid rgba(74, 199, 242, 0.3); }
         .input-marine { background: rgba(10, 25, 41, 0.6); border: 1px solid rgba(74, 199, 242, 0.2); }
     </style>
 </head>
-<body class="flex flex-col min-h-full marine-bg text-white">
+<body class="marine-bg text-white min-h-screen">
 
-    <div id="login-page" class="flex flex-col items-center justify-center flex-1 w-full max-w-md mx-auto p-6">
-        <div class="w-full p-8 glass-card rounded-2xl">
-            <h1 class="text-2xl font-bold text-center mb-6">Connexion</h1>
-            <form onsubmit="event.preventDefault(); tbgDashboard();" class="space-y-4">
-                <input id="username" type="text" placeholder="Identifiant" required class="w-full p-3 rounded-xl input-marine">
-                <input id="password" type="password" placeholder="Mot de passe" required class="w-full p-3 rounded-xl input-marine">
-                <button type="submit" class="w-full py-3 bg-blue-500 rounded-xl font-bold">Se connecter</button>
+    <div id="login-page" class="flex items-center justify-center min-h-screen p-6">
+        <div class="w-full max-w-sm p-8 glass-card rounded-2xl">
+            <h1 class="text-xl font-bold text-center mb-6">Connexion</h1>
+            <form onsubmit="event.preventDefault(); document.getElementById('login-page').classList.add('hidden'); document.getElementById('dashboard').classList.remove('hidden'); initAll();" class="space-y-4">
+                <input id="user" type="text" placeholder="Identifiant" required class="w-full p-3 rounded-xl input-marine">
+                <input id="pass" type="password" placeholder="Mot de passe" required class="w-full p-3 rounded-xl input-marine">
+                <button type="submit" class="w-full py-3 bg-blue-500 rounded-xl font-bold">Entrer</button>
             </form>
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden p-6 w-full max-w-md mx-auto">
-        <h2 class="text-xl font-bold mb-4">Tableau de bord</h2>
-        <div id="city-display" class="hidden mb-4 p-3 bg-emerald-900/50 rounded-xl text-emerald-300 font-bold">
-            <i class="fas fa-map-marker-alt"></i> Localisation : <span id="city-name">--</span>
+    <div id="dashboard" class="hidden p-6 max-w-md mx-auto space-y-6">
+        <h2 class="text-2xl font-bold">Tableau de bord</h2>
+        
+        <div class="p-5 glass-card rounded-2xl">
+            <h3 class="font-bold mb-2">Météo & Localisation</h3>
+            <div id="city-display" class="mb-3 p-3 bg-emerald-900/50 rounded-xl border border-emerald-500/20 text-emerald-300">
+                <i class="fas fa-map-marker-alt"></i> <span id="city-name">Recherche...</span>
+            </div>
+            <p id="gps-status" class="text-sm text-blue-300">Signal GPS actif</p>
         </div>
-        <p id="gps-status">Recherche GPS...</p>
+        
+        <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 glass-card rounded-xl text-center"><i class="fas fa-book text-xl"></i><p class="text-xs">Carnet</p></div>
+            <div class="p-4 glass-card rounded-xl text-center"><i class="fas fa-scroll text-xl"></i><p class="text-xs">Nœuds</p></div>
+        </div>
     </div>
 
     <script>
-        const ADMIN_CODE = "1985";
-
-        function tbgDashboard() {
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('dashboard-page').classList.remove('hidden');
-            initGPSWeather();
-        }
-
-        async function initGPSWeather() {
+        function initAll() {
             if (!navigator.geolocation) return;
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 const { latitude, longitude } = pos.coords;
                 try {
                     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
                     const data = await res.json();
-                    if (data.address) {
-                        document.getElementById('city-name').innerText = data.address.city || data.address.village || "Zone de pêche";
-                        document.getElementById('city-display').classList.remove('hidden');
-                        document.getElementById('gps-status').innerText = "Signal OK";
-                    }
-                } catch (e) {
-                    document.getElementById('gps-status').innerText = "Erreur de localisation";
+                    document.getElementById('city-name').innerText = data.address.city || data.address.town || "Position trouvée";
+                } catch(e) {
+                    document.getElementById('city-name').innerText = "Erreur localisation";
                 }
             });
         }
