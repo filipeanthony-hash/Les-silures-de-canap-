@@ -128,7 +128,7 @@
                 <h4 class="text-xs font-bold uppercase tracking-wider text-blue-300 px-1">Vos exploits récents</h4>
                 <div id="catch-list" class="space-y-2.5">
                     <div class="p-3 glass-card rounded-xl flex items-center gap-4 border-l-4 border-l-[#4ac7f2]">
-                        <img src="https://images.unsplash.com/photo-1583244532610-2a234e7c3eca?q=80&w=150&auto=format&fit=crop" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1583244532610-2a234e7c3eca?q=80&w=150&auto=format&fit=crop" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0 cursor-zoom-in hover:opacity-80 transition-opacity" onclick="openLightbox(this.src)">
                         <div class="flex-1 min-w-0">
                             <h5 class="text-sm font-bold truncate">Silure Glane</h5>
                             <p class="text-xs text-slate-300">142 cm • 22 kg • <span class="text-blue-300">Vif</span></p>
@@ -231,6 +231,13 @@
         </div>
     </nav>
 
+    <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 transition-all duration-300" onclick="closeLightbox()">
+        <button class="absolute top-5 right-5 text-white text-3xl focus:outline-none" onclick="closeLightbox()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Photo agrandie" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transform scale-95 transition-transform duration-300">
+    </div>
+
     <script>
         let catches = [];
 
@@ -260,7 +267,6 @@
             });
         }
 
-        // Gère l'affichage du nom du fichier sélectionné
         function previewImageName() {
             const fileInput = document.getElementById('fish-image');
             const label = document.getElementById('file-label');
@@ -271,7 +277,6 @@
             }
         }
 
-        // Sauvegarde la prise avec gestion de l'image
         function saveCatch() {
             const species = document.getElementById('fish-species').value;
             const length = document.getElementById('fish-length').value;
@@ -307,7 +312,7 @@
             catches.forEach(c => {
                 container.innerHTML += `
                     <div class="p-3 glass-card rounded-xl flex items-center gap-4 border-l-4 border-l-[#4ac7f2]">
-                        <img src="${c.imgUrl}" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0">
+                        <img src="${c.imgUrl}" alt="Poisson" class="w-16 h-16 object-cover rounded-lg bg-slate-800 flex-shrink-0 cursor-zoom-in hover:opacity-80 transition-opacity" onclick="openLightbox(this.src)">
                         <div class="flex-1 min-w-0">
                             <h5 class="text-sm font-bold truncate">${c.species}</h5>
                             <p class="text-xs text-slate-300">${c.length} cm • ${c.weight} kg • <span class="text-blue-300">${c.lure}</span></p>
@@ -316,6 +321,28 @@
                     </div>
                 `;
             });
+        }
+
+        // Fonctions d'ouverture et fermeture de la photo en grand (Lightbox)
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lightbox.classList.remove('hidden');
+            setTimeout(() => {
+                img.classList.remove('scale-95');
+                img.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.classList.remove('scale-100');
+            img.classList.add('scale-95');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+            }, 200);
         }
 
         function updateMeteoSim() {
