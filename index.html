@@ -8,18 +8,16 @@
 </head>
 <body class="bg-slate-900 text-white p-4">
 
+    <h1 class="text-2xl font-bold">Les Silures de Canapé</h1>
     <div id="bite-index">0%</div>
     <div id="bite-label">Calme</div>
-    
-    <div id="lightbox" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center" onclick="closeLightbox()">
-        <img id="lightbox-img" class="max-w-full max-h-full" src="" alt="Zoom">
-    </div>
 
     <script type="module">
-        // 1. Importation Firebase
+        // 1. On importe les outils Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
-        // 2. Configuration Firebase (Vos clés)
+        // 2. VOTRE CONFIGURATION (Copiez-la bien ici)
         const firebaseConfig = {
             apiKey: "AIzaSyARnepyvwgjbv97IBiMEA2UR...",
             authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
@@ -30,51 +28,11 @@
             measurementId: "G-99MB1YMZR4"
         };
 
-        // 3. Initialisation
+        // 3. On initialise tout
         const app = initializeApp(firebaseConfig);
-        console.log("Firebase connecté avec succès.");
-
-        // 4. Votre Logique Pêche
-        let catches = [];
-        let knots = [];
-
-        // ... (Insérez ici vos autres fonctions renderCatches, renderKnots, etc.)
-
-        function calculateScore(fish, temp, luneBonus) {
-            let score = 50; 
-            if (fish === 'silure') score = (temp >= 20 && temp <= 28) ? 90 : 50;
-            else if (fish === 'carpe') score = (temp >= 18 && temp <= 24) ? 80 : 40;
-            
-            let total = Math.min(Math.max(Math.round(score + luneBonus), 10), 100);
-            document.getElementById('bite-index').innerText = `${total}%`;
-            const lbl = document.getElementById('bite-label');
-            if (total > 70) { lbl.innerText = "Excellent"; lbl.className = "text-[10px] text-emerald-400 font-bold uppercase"; }
-            else if (total > 45) { lbl.innerText = "Moyen"; lbl.className = "text-[10px] text-amber-400 font-bold uppercase"; }
-            else { lbl.innerText = "Calme"; lbl.className = "text-[10px] text-rose-400 font-bold uppercase"; }
-        }
-
-        function loadMockData() {
-            if(catches.length === 0) {
-                catches.push({species: "Exemple: Silure Glane", length: "142", weight: "22", lure: "Vif", imgUrl: "https://images.unsplash.com/photo-1583244532610-2a234e7c3eca?q=80&w=150&auto=format&fit=crop"});
-                // renderCatches(); // Assurez-vous que cette fonction existe
-            }
-            if(knots.length === 0) {
-                knots.push({name: "Nœud de Cuillère", type: "Émérillons", desc: "Faire 5 tours autour du fil principal, repasser dans la première boucle puis serrer.", imgUrl: "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop"});
-                // renderKnots(); // Assurez-vous que cette fonction existe
-            }
-        }
-
-        function openLightbox(imgSrc) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            lightboxImg.src = imgSrc;
-            lightbox.classList.remove('hidden');
-        }
-
-        function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
+        const analytics = getAnalytics(app);
         
-        // Initialisation
-        loadMockData();
+        console.log("Les Silures de Canapé sont connectés à Firebase !");
     </script>
 </body>
 </html>
