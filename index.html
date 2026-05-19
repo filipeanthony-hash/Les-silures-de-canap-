@@ -1,102 +1,68 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-full bg-slate-950 text-white">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col justify-between">
+<body class="flex flex-col min-h-full pb-16 antialiased bg-slate-950">
 
-    <div id="login-page" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0d3b66] p-4">
-        <div class="w-full max-w-md bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-800 text-center">
-            
-            <div class="w-24 h-24 bg-slate-800 rounded-2xl mx-auto flex items-center justify-center shadow-xl mb-4 overflow-hidden border border-slate-700">
-                <img src="favicon.jpg" alt="Logo" class="w-full h-full object-cover">
+    <div id="login-page" class="flex flex-col items-center justify-center flex-1 px-4 py-12 sm:px-6 lg:px-8">
+        <div class="w-full max-w-md p-8 space-y-6 bg-blue-900 border border-blue-700 rounded-xl shadow-2xl">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold tracking-tight text-white">
+                    Les Silures de Canapé
+                </h2>
+                <p class="mt-2 text-sm text-blue-200">
+                    Connectez-vous pour accéder au groupe de pêche
+                </p>
             </div>
-            
-            <h1 class="text-3xl font-black tracking-tight text-white mb-1">Les Silures de Canapé</h1>
-            <p class="text-slate-400 text-sm font-medium mb-6">Espace Privé • Carnet de Pêche</p>
-            
-            <form onsubmit="verifierMotDePasse(event)" class="text-left space-y-4">
+            <form class="mt-8 space-y-4" onsubmit="event.preventDefault(); tbgDashboard();">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Adresse Email</label>
-                    <input type="email" required placeholder="exemple@silure.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00a8e8]">
+                    <label for="username" class="sr-only">Identifiant</label>
+                    <input id="username" name="username" type="text" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Identifiant">
                 </div>
-                
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Mot de passe secret</label>
-                    <input type="password" id="pass-secret" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00a8e8]">
+                    <label for="password" class="sr-only">Mot de passe</label>
+                    <input id="password" name="password" type="password" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Mot de passe">
                 </div>
-                
-                <button type="submit" class="w-full bg-[#00a8e8] hover:bg-[#0096d2] text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-xl">
-                    Se connecter
-                </button>
+                <div>
+                    <button type="submit" class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer">
+                        Se connecter
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
-    <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-40">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <span class="text-lg font-black tracking-tight text-white">Les Silures de Canapé</span>
+    <div id="dashboard-page" class="hidden flex-col flex-1 w-full">
+        <header class="border-b border-blue-700 bg-blue-600 text-white shadow-md">
+            <div class="max-w-md mx-auto flex items-center justify-between px-4 py-3">
+                <h1 class="text-xl font-bold tracking-tight">
+                    Les Silures de Canapé
+                </h1>
+                <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-white hover:text-blue-200 text-2xl transition-colors" title="Rejoindre le groupe Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
             </div>
-            <button onclick="logout()" class="text-[11px] bg-slate-800 hover:bg-red-950 px-3 py-2 rounded-xl font-bold border border-slate-700">
-                Déconnexion
-            </button>
-        </div>
-    </header>
+        </header>
 
-    <main class="flex-grow max-w-4xl w-full mx-auto p-4 space-y-6">
-        <div class="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-2xl border border-slate-800 shadow-xl">
-            <h2 class="text-xl font-extrabold mb-1.5 text-white">🎣 Salut les passionnés !</h2>
-            <p class="text-slate-400 text-xs leading-relaxed">
-                Bienvenue sur votre carnet privé. Enregistrez vos sorties, vos plus gros combats, vos montages et suivez les statistiques du groupe en direct.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
-                <span class="block text-2xl font-black text-[#00a8e8]">0</span>
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1 block">Sessions</span>
+        <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-4">
+            <div class="p-6 bg-blue-900 border border-blue-700 rounded-xl shadow-lg">
+                <h3 class="text-lg font-bold text-white mb-2">Bienvenue sur votre espace de pêche</h3>
+                <p class="text-sm text-blue-100">Le dashboard est prêt. Vous pouvez commencer à y ajouter vos fonctionnalités (météo, partages, rigs...).</p>
             </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
-                <span class="block text-2xl font-black text-emerald-400">0 kg</span>
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1 block">Poids Total</span>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
-                <span class="block text-2xl font-black text-amber-400">0 cm</span>
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1 block">Plus Grand</span>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
-                <span class="block text-2xl font-black text-purple-400">0</span>
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1 block">Capots</span>
-            </div>
-        </div>
-    </main>
-
-    <footer class="bg-slate-950 border-t border-slate-900 text-center py-4 text-[10px] text-slate-600 font-semibold">
-        &copy; 2026 - Les Silures de Canapé
-    </footer>
+        </main>
+    </div>
 
     <script>
-        function verifierMotDePasse(event) {
-            event.preventDefault();
-            var saisie = document.getElementById('pass-secret').value.trim();
-
-            if (saisie === "Silure2026") {
-                document.getElementById('login-page').style.display = 'none';
-            } else {
-                alert("❌ Mot de passe incorrect !");
-            }
-        }
-
-        function logout() {
-            document.getElementById('login-page').style.display = 'flex';
-            document.getElementById('pass-secret').value = '';
+        function tbgDashboard() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.remove('hidden');
+            document.getElementById('dashboard-page').classList.add('flex');
         }
     </script>
 </body>
 </html>
-
