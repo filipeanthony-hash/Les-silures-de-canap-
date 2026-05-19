@@ -52,48 +52,33 @@
     </header>
 
     <div id="login-page" class="flex flex-col items-center justify-center flex-1 px-6 pt-32 pb-12 w-full max-w-md mx-auto">
-        <div class="relative w-full px-4 py-8">
-            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20 drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
-                <img src="https://img.icons8.com/illustrations/external-fauzidea-flat-fauzidea/180/external-fish-animal-fauzidea-flat-fauzidea.png" alt="Poisson" class="w-28 h-28 object-contain">
-            </div>
-
-            <div class="w-full p-8 pt-16 space-y-6 glass-card rounded-2xl relative z-10">
-                <div class="text-center space-y-1">
-                    <p class="text-xs uppercase tracking-wider text-blue-300 font-semibold">Espace Membres</p>
-                    <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
-                </div>
-
-<form class="space-y-5" onsubmit="event.preventDefault(); tbgDashboard();">
-  <div class="relative">
-    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-300">
-      <i class="fas fa-user text-sm"></i>
-    </span>
-    <input id="username" type="text" required class="input-marine relative block w-full pl-10 pr-3 py-3 text-white placeholder-blue-300/60 rounded" placeholder="Identifiant">
-  </div>
-
-  <div class="relative">
-    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-300">
-      <i class="fas fa-lock text-sm"></i>
-    </span>
-    <input id="password" type="password" required class="input-marine relative block w-full pl-10 pr-3 py-3 text-white placeholder-blue-300/60 rounded" placeholder="Mot de passe">
-  </div>
-
-  <div class="pt-2">
-    <button type="submit" class="w-full py-3 px-4 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-600">
-      <i class="fas fa-sign-in-alt"></i> Se connecter
-    </button>
-  </div>
-</form>
-                    </div>
-<button type="submit" class="w-full bg-blue-500 p-2 rounded text-white">
-  Se connecter
-</button>
-
-<button type="button" onclick="inscrire(document.getElementById('username').value, document.getElementById('password').value)" class="w-full mt-4 text-sm text-blue-300 underline">
-  Pas encore de compte ? Créer un compte
-</button>
-
+  <div class="w-full p-8 space-y-6 glass-card rounded-2xl relative z-10">
+    <div class="text-center space-y-1">
+      <p class="text-xs uppercase tracking-wider text-blue-300 font-semibold">Espace Membres</p>
+      <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
     </div>
+
+    <form id="auth-form" class="space-y-5">
+      <div class="relative">
+        <input id="username" type="text" required class="input-marine relative block w-full p-3 text-white bg-transparent border border-blue-500/30 rounded" placeholder="Identifiant (e-mail)">
+      </div>
+
+      <div class="relative">
+        <input id="password" type="password" required class="input-marine relative block w-full p-3 text-white bg-transparent border border-blue-500/30 rounded" placeholder="Mot de passe">
+      </div>
+
+      <div class="pt-2 space-y-3">
+        <button type="button" onclick="seConnecter(document.getElementById('username').value, document.getElementById('password').value)" class="w-full py-3 bg-blue-500 text-white rounded font-bold">
+          Se connecter
+        </button>
+        <button type="button" onclick="inscrire(document.getElementById('username').value, document.getElementById('password').value)" class="w-full text-sm text-blue-300 underline">
+          Pas encore de compte ? Créer un compte
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+    <input id="password" type
 
     <div id="dashboard-page" class="hidden flex-col flex-1 w-full max-w-md mx-auto pt-24 px-4 space-y-4">
         
