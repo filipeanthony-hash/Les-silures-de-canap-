@@ -141,15 +141,19 @@
 
         <section id="tab-meteo" class="dashboard-tab hidden space-y-4">
             <div class="p-5 glass-card rounded-2xl shadow-xl text-center relative overflow-hidden">
-                <p class="text-xs uppercase font-bold tracking-wider text-blue-300 mb-1">Météo & Prédictions</p>
+                <p class="text-xs uppercase font-bold tracking-wider text-blue-300 mb-1">Météo & Prédictions GPS</p>
                 <h3 class="text-xl font-black text-white mb-4">Indice d'activité</h3>
                 
-                <div class="relative flex items-center justify-center h-28 w-28 mx-auto mb-4 bg-slate-900/40 rounded-full border border-blue-400/20 shadow-inner">
+                <div class="relative flex items-center justify-center h-28 w-28 mx-auto mb-2 bg-slate-900/40 rounded-full border border-blue-400/20 shadow-inner">
                     <div class="text-center">
-                        <span id="bite-index" class="text-3xl font-black text-[#4ac7f2]">75%</span>
-                        <p id="bite-label" class="text-[10px] text-emerald-400 font-bold uppercase">Excellent</p>
+                        <span id="bite-index" class="text-3xl font-black text-[#4ac7f2]">--%</span>
+                        <p id="bite-label" class="text-[10px] text-slate-400 font-bold uppercase">Chargement...</p>
                     </div>
                 </div>
+
+                <p id="gps-status" class="text-[11px] text-blue-300/80 mb-4 italic">
+                    <i class="fas fa-location-arrow animate-pulse mr-1"></i> Recherche des coordonnées GPS...
+                </p>
 
                 <div class="space-y-4 text-left bg-slate-900/30 p-3.5 rounded-xl border border-white/5">
                     
@@ -176,20 +180,22 @@
                         </div>
                     </div>
 
+                    <hr class="border-white/10 my-2">
+
                     <div>
                         <div class="flex justify-between text-xs mb-1">
-                            <span class="text-slate-300"><i class="fas fa-temperature-high mr-1 text-orange-400"></i> Temp. de l'eau</span>
-                            <span id="val-temp" class="font-bold text-[#4ac7f2]">19°C</span>
+                            <span class="text-slate-300"><i class="fas fa-temperature-high mr-1 text-orange-400"></i> Temp. Estimée de l'eau</span>
+                            <span id="val-temp" class="font-bold text-[#4ac7f2]">16°C</span>
                         </div>
-                        <input id="slider-temp" type="range" min="4" max="28" value="19" class="w-full accent-[#4ac7f2]" oninput="updateMeteoSim()">
+                        <input id="slider-temp" type="range" min="4" max="28" value="16" class="w-full accent-[#4ac7f2]" oninput="updateMeteoSim()">
                     </div>
 
                     <div>
                         <div class="flex justify-between text-xs mb-1">
                             <span class="text-slate-300"><i class="fas fa-cloud-moon mr-1 text-indigo-300"></i> Phase Lunaire</span>
-                            <span id="val-lune" class="font-bold text-[#4ac7f2]">Pleine Lune</span>
+                            <span id="val-lune" class="font-bold text-[#4ac7f2]">Calcul...</span>
                         </div>
-                        <input id="slider-lune" type="range" min="1" max="4" value="3" class="w-full accent-[#4ac7f2]" oninput="updateMeteoSim()">
+                        <input id="slider-lune" type="range" min="1" max="4" value="1" class="w-full accent-[#4ac7f2]" oninput="updateMeteoSim()">
                     </div>
                 </div>
             </div>
@@ -228,7 +234,7 @@
                         <div class="p-3 bg-slate-950/40 text-xs text-slate-300 border-t border-white/5 space-y-1.5">
                             <p><strong>Idéal pour :</strong> Relier deux lignes de diamètres différents.</p>
                             <ol class="list-decimal pl-4 space-y-1 text-[11px]">
-                                <li>Former une boucle avec le gros fluorocarbone.</li>
+                                <li>Formation d'une boucle avec le gros fluorocarbone.</li>
                                 <li>Passer la tresse dans la boucle et faire 10 à 12 spires en remontant.</li>
                                 <li>Faire 5 spires en sens inverse, lubrifier et serrer.</li>
                             </ol>
@@ -261,7 +267,6 @@
             <i class="fas fa-times"></i>
         </div>
         <img id="lightbox-img" src="" alt="Zoom poisson" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
-        <p class="text-xs text-slate-400 mt-4 font-medium">Touchez l'écran pour fermer</p>
     </div>
 
     <script>
@@ -274,7 +279,10 @@
             document.getElementById('dashboard-page').classList.add('flex');
             document.getElementById('bottom-nav').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            updateMeteoSim();
+            
+            // Lancement automatique du calcul GPS & Lune
+            autoCalculateMoon();
+            initGPSWeather();
         }
 
         function switchTab(tabId) {
@@ -294,6 +302,170 @@
             });
         }
 
+        // --- CALCUL DE LA LUNE AUTOMATIQUE (CYCLE SYNODIQUE) ---
+        function autoCalculateMoon() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            
+            // Formule simplifiée de la phase lunaire
+            let c = e = jd = b = 0;
+            if (month < 3) { year--; month += 12; }
+            month++;
+            c = 365.25 * year;
+            e = 30.6 * month;
+            jd = c + e + day - 694039.09; // Jours depuis la nouvelle lune de référence
+            jd /= 29.530588853; // Divisé par le mois lunaire
+            b = parseInt(jd);
+            jd -= b;
+            let phase = Math.round(jd * 30); // Âge de la lune entre 0 et 30
+
+            let sliderVal = 1; 
+            if (phase >= 27 || phase <= 2) sliderVal = 1;      // Nouvelle lune
+            else if (phase > 2 && phase < 13) sliderVal = 2;   // Premier Quartier
+            else if (phase >= 13 && phase <= 17) sliderVal = 3; // Pleine lune
+            else sliderVal = 4;                                // Dernier Quartier
+
+            document.getElementById('slider-lune').value = sliderVal;
+        }
+
+        // --- POSITION GPS ET METEO DIRECT EN LIGNE ---
+        function initGPSWeather() {
+            const statusText = document.getElementById('gps-status');
+
+            if (!navigator.geolocation) {
+                statusText.innerHTML = "❌ GPS non supporté par le téléphone.";
+                updateMeteoSim();
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    statusText.innerHTML = `🌍 GPS OK (Lat: ${lat.toFixed(2)}, Lon: ${lon.toFixed(2)})`;
+
+                    try {
+                        // Connexion directe à l'API météo Open-Meteo
+                        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`);
+                        const data = await response.json();
+                        
+                        if (data && data.current) {
+                            const airTemp = data.current.temperature_2m;
+                            
+                            // Algorithme de conversion Temp Air -> Temp Eau estimée
+                            let estimatedWaterTemp = Math.round(airTemp * 0.85);
+                            if (currentSpotType === 'riviere') {
+                                estimatedWaterTemp = Math.round(airTemp * 0.78); // Une rivière est souvent plus fraîche
+                            }
+                            
+                            // On borne la valeur entre 4°C et 28°C pour coller au curseur
+                            estimatedWaterTemp = Math.min(Math.max(estimatedWaterTemp, 4), 28);
+                            
+                            // Mise à jour automatique des curseurs
+                            document.getElementById('slider-temp').value = estimatedWaterTemp;
+                            statusText.innerHTML = `🌍 Météo en direct : Air ${airTemp}°C • Eau estimée ${estimatedWaterTemp}°C`;
+                        }
+                    } catch (error) {
+                        statusText.innerHTML = "⚠️ Impossible de charger la météo en ligne. Mode manuel activé.";
+                    }
+                    updateMeteoSim();
+                },
+                (error) => {
+                    statusText.innerHTML = "⚠️ Autorisation GPS refusée. Mode manuel activé.";
+                    updateMeteoSim();
+                }
+            );
+        }
+
+        function setSpotType(type) {
+            currentSpotType = type;
+            const btnRiviere = document.getElementById('spot-riviere');
+            const btnLac = document.getElementById('spot-lac');
+
+            if (type === 'riviere') {
+                btnRiviere.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-gradient-to-r from-blue-500 to-[#4ac7f2] text-white border-transparent shadow-md";
+                btnLac.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-slate-800/60 text-slate-300 border-white/10 hover:text-white";
+            } else {
+                btnLac.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-gradient-to-r from-blue-500 to-[#4ac7f2] text-white border-transparent shadow-md";
+                btnRiviere.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-slate-800/60 text-slate-300 border-white/10 hover:text-white";
+            }
+            
+            // Recalculer l'estimation car le type d'eau change l'inertie thermique
+            initGPSWeather();
+        }
+
+        function updateMeteoSim() {
+            const selectedFish = document.getElementById('select-fish').value;
+            const temp = parseInt(document.getElementById('slider-temp').value);
+            const luneVal = parseInt(document.getElementById('slider-lune').value);
+            
+            document.getElementById('val-temp').innerText = `${temp}°C`;
+            
+            let luneText = "";
+            let luneBonus = 0;
+            switch(luneVal) {
+                case 1: luneText = "Nouvelle Lune 🌑"; luneBonus = 10; break;
+                case 2: luneText = "Premier Quartier 🌓"; luneBonus = 5; break;
+                case 3: luneText = "Pleine Lune 🌕"; luneBonus = 20; break;
+                case 4: luneText = "Dernier Quartier 🌗"; luneBonus = 10; break;
+            }
+            document.getElementById('val-lune').innerText = luneText;
+
+            let baseScore = 50;
+
+            if (selectedFish === 'silure') {
+                if (temp >= 16 && temp <= 23) baseScore = 75;
+                else if (temp > 23) baseScore = 55;
+                else baseScore = 20;
+                if (luneVal === 3) luneBonus += 15;
+            } 
+            else if (selectedFish === 'carpe') {
+                if (temp >= 18 && temp <= 24) baseScore = 80;
+                else if (temp < 12) baseScore = 25;
+                else baseScore = 50;
+                if (currentSpotType === 'lac' && (luneVal === 1 || luneVal === 3)) luneBonus += 10;
+            } 
+            else if (selectedFish === 'perche') {
+                if (temp >= 14 && temp <= 20) baseScore = 75;
+                else baseScore = 40;
+                if (currentSpotType === 'riviere') baseScore += 10; 
+            } 
+            else if (selectedFish === 'brochet') {
+                if (temp >= 10 && temp <= 17) baseScore = 80;
+                else if (temp > 22) baseScore = 20;
+                else baseScore = 50;
+            } 
+            else if (selectedFish === 'gardon') {
+                if (temp >= 12 && temp <= 19) baseScore = 75;
+                else baseScore = 45;
+                if (currentSpotType === 'lac') baseScore += 15;
+            }
+
+            let totalScore = Math.min(Math.max(Math.round(baseScore + luneBonus), 5), 100);
+
+            const indexEl = document.getElementById('bite-index');
+            const labelEl = document.getElementById('bite-label');
+            
+            indexEl.innerText = `${totalScore}%`;
+
+            if (totalScore > 75) {
+                labelEl.innerText = "Excellent";
+                labelEl.className = "text-[10px] text-emerald-400 font-bold uppercase";
+                indexEl.className = "text-3xl font-black text-emerald-400";
+            } else if (totalScore > 45) {
+                labelEl.innerText = "Moyen";
+                labelEl.className = "text-[10px] text-amber-400 font-bold uppercase";
+                indexEl.className = "text-3xl font-black text-amber-400";
+            } else {
+                labelEl.innerText = "Très Calme";
+                labelEl.className = "text-[10px] text-rose-400 font-bold uppercase";
+                indexEl.className = "text-3xl font-black text-rose-400";
+            }
+        }
+
+        // --- FONCTIONS CARNET & PREVIEW ---
         function previewImageName() {
             const fileInput = document.getElementById('fish-image');
             const label = document.getElementById('file-label');
@@ -335,7 +507,6 @@
         function renderCatches() {
             const container = document.getElementById('catch-list');
             container.innerHTML = '';
-
             catches.forEach(c => {
                 const safeUrl = c.imgUrl.replace(/'/g, "\\'");
                 container.innerHTML += `
@@ -360,97 +531,6 @@
 
         function closeLightbox() {
             document.getElementById('lightbox').classList.add('hidden');
-        }
-
-        function setSpotType(type) {
-            currentSpotType = type;
-            const btnRiviere = document.getElementById('spot-riviere');
-            const btnLac = document.getElementById('spot-lac');
-
-            if (type === 'riviere') {
-                btnRiviere.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-gradient-to-r from-blue-500 to-[#4ac7f2] text-white border-transparent shadow-md";
-                btnLac.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-slate-800/60 text-slate-300 border-white/10 hover:text-white";
-            } else {
-                btnLac.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-gradient-to-r from-blue-500 to-[#4ac7f2] text-white border-transparent shadow-md";
-                btnRiviere.className = "py-2 text-xs font-bold rounded-xl border transition-all bg-slate-800/60 text-slate-300 border-white/10 hover:text-white";
-            }
-            updateMeteoSim();
-        }
-
-        function updateMeteoSim() {
-            const selectedFish = document.getElementById('select-fish').value;
-            const temp = parseInt(document.getElementById('slider-temp').value);
-            const luneVal = parseInt(document.getElementById('slider-lune').value);
-            
-            document.getElementById('val-temp').innerText = `${temp}°C`;
-            
-            let luneText = "";
-            let luneBonus = 0;
-            switch(luneVal) {
-                case 1: luneText = "Nouvelle Lune"; luneBonus = 10; break;
-                case 2: luneText = "Premier Quartier"; luneBonus = 5; break;
-                case 3: luneText = "Pleine Lune"; luneBonus = 20; break;
-                case 4: luneText = "Dernier Quartier"; luneBonus = 10; break;
-            }
-            document.getElementById('val-lune').innerText = luneText;
-
-            let baseScore = 50;
-
-            // ALGORITHME ADAPTÉ PAR POISSON ET PAR SPOT
-            if (selectedFish === 'silure') {
-                if (temp >= 16 && temp <= 23) baseScore = 75;
-                else if (temp > 23) baseScore = 55;
-                else baseScore = 20;
-                if (luneVal === 3) luneBonus += 15; // Le silure adore la pleine lune la nuit
-            } 
-            else if (selectedFish === 'carpe') {
-                // La carpe aime les eaux tempérées à chaudes
-                if (temp >= 18 && temp <= 24) baseScore = 80;
-                else if (temp < 12) baseScore = 25; // Très calme l'hiver
-                else baseScore = 50;
-                
-                // En étang, la carpe s'active fort à la nouvelle lune et pleine lune
-                if (currentSpotType === 'lac' && (luneVal === 1 || luneVal === 3)) luneBonus += 10;
-            } 
-            else if (selectedFish === 'perche') {
-                // La perche aime les eaux fraîches à moyennes, active en rivière dans le courant
-                if (temp >= 14 && temp <= 20) baseScore = 75;
-                else baseScore = 40;
-                if (currentSpotType === 'riviere') baseScore += 10; 
-            } 
-            else if (selectedFish === 'brochet') {
-                // Le brochet fuit les eaux trop chaudes
-                if (temp >= 10 && temp <= 17) baseScore = 80;
-                else if (temp > 22) baseScore = 20; // Bloqué en plein été
-                else baseScore = 50;
-            } 
-            else if (selectedFish === 'gardon') {
-                // Le gardon aime les étangs calmes et se pêche toute l'année
-                if (temp >= 12 && temp <= 19) baseScore = 75;
-                else baseScore = 45;
-                if (currentSpotType === 'lac') baseScore += 15; // Bonus étang pour le blanc
-            }
-
-            let totalScore = Math.min(Math.max(Math.round(baseScore + luneBonus), 5), 100);
-
-            const indexEl = document.getElementById('bite-index');
-            const labelEl = document.getElementById('bite-label');
-            
-            indexEl.innerText = `${totalScore}%`;
-
-            if (totalScore > 75) {
-                labelEl.innerText = "Excellent";
-                labelEl.className = "text-[10px] text-emerald-400 font-bold uppercase";
-                indexEl.className = "text-3xl font-black text-emerald-400";
-            } else if (totalScore > 45) {
-                labelEl.innerText = "Moyen";
-                labelEl.className = "text-[10px] text-amber-400 font-bold uppercase";
-                indexEl.className = "text-3xl font-black text-amber-400";
-            } else {
-                labelEl.innerText = "Très Calme";
-                labelEl.className = "text-[10px] text-rose-400 font-bold uppercase";
-                indexEl.className = "text-3xl font-black text-rose-400";
-            }
         }
     </script>
 </body>
