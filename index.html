@@ -1,58 +1,90 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full bg-slate-950 text-white">
+<html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="flex flex-col min-h-full pb-16 antialiased bg-slate-950">
+    <style>
+        /* Fond personnalisé texturé de l'image de référence */
+        .deep-blue-bg {
+            background-color: #0c1a26; /* Bleu très profond */
+            background-image: radial-gradient(circle at center, #15304b 0%, #0c1a26 100%);
+            background-size: cover;
+        }
 
-    <div id="login-page" class="flex flex-col items-center justify-center flex-1 px-4 py-12 sm:px-6 lg:px-8">
-        <div class="w-full max-w-md p-8 space-y-6 bg-blue-900 border border-blue-700 rounded-xl shadow-2xl">
-            <div class="text-center">
-                <h2 class="text-3xl font-extrabold tracking-tight text-white">
-                    Les Silures de Canapé
-                </h2>
-                <p class="mt-2 text-sm text-blue-200">
-                    Connectez-vous pour accéder au groupe de pêche
-                </p>
+        /* Effet verre dépoli pour le panneau de connexion */
+        .glass-panel {
+            background: rgba(21, 48, 75, 0.7);
+            border: 1px solid rgba(43, 114, 158, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Icônes flottantes personnalisées pour correspondre à la référence */
+        .custom-fish-icon {
+            color: #4ac7f2; /* Bleu cyan clair pour les icônes */
+        }
+        .custom-anchor-icon {
+            color: #4ac7f2;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-full pb-16 antialiased deep-blue-bg text-white">
+
+    <header class="glass-panel text-white shadow-md w-full fixed top-0 z-50">
+        <div class="max-w-md mx-auto flex items-center justify-between px-4 py-3">
+            <h1 class="text-xl font-bold tracking-tight">
+                Les Silures de Canapé
+            </h1>
+            <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-white hover:text-blue-200 text-2xl transition-colors" title="Rejoindre le groupe Facebook">
+                <i class="fab fa-facebook"></i>
+            </a>
+        </div>
+    </header>
+
+    <div id="login-page" class="flex flex-col items-center justify-center flex-1 px-4 pt-24 py-12 sm:px-6 lg:px-8">
+        <div class="relative w-full max-w-md">
+            
+            <div class="absolute -top-16 left-1/2 transform -translate-x-1/2">
+                <i class="fas fa-fish-fins fa-4x custom-fish-icon"></i>
             </div>
-            <form class="mt-8 space-y-4" onsubmit="event.preventDefault(); tbgDashboard();">
-                <div>
-                    <label for="username" class="sr-only">Identifiant</label>
-                    <input id="username" name="username" type="text" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Identifiant">
+            
+            <div class="absolute -left-12 top-1/2 transform -translate-y-1/2">
+                <i class="fas fa-anchor fa-3x custom-anchor-icon"></i>
+            </div>
+
+            <div class="w-full p-8 space-y-6 glass-panel rounded-xl">
+                <div class="text-center">
+                    <p class="mt-2 text-sm text-blue-200">
+                        Connectez-vous pour activer le Dashboard
+                    </p>
                 </div>
-                <div>
-                    <label for="password" class="sr-only">Mot de passe</label>
-                    <input id="password" name="password" type="password" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Mot de passe">
-                </div>
-                <div>
-                    <button type="submit" class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer">
-                        Se connecter
-                    </button>
-                </div>
-            </form>
+                <form class="mt-8 space-y-4" onsubmit="event.preventDefault(); tbgDashboard();">
+                    <div>
+                        <label for="username" class="sr-only">Identifiant</label>
+                        <input id="username" name="username" type="text" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Identifiant">
+                    </div>
+                    <div>
+                        <label for="password" class="sr-only">Mot de passe</label>
+                        <input id="password" name="password" type="password" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Mot de passe">
+                    </div>
+                    <div>
+                        <button type="submit" class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer">
+                            Se connecter
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden flex-col flex-1 w-full">
-        <header class="border-b border-blue-700 bg-blue-600 text-white shadow-md">
-            <div class="max-w-md mx-auto flex items-center justify-between px-4 py-3">
-                <h1 class="text-xl font-bold tracking-tight">
-                    Les Silures de Canapé
-                </h1>
-                <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-white hover:text-blue-200 text-2xl transition-colors" title="Rejoindre le groupe Facebook">
-                    <i class="fab fa-facebook"></i>
-                </a>
-            </div>
-        </header>
-
+    <div id="dashboard-page" class="hidden flex-col flex-1 w-full pt-20">
         <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-4">
-            <div class="p-6 bg-blue-900 border border-blue-700 rounded-xl shadow-lg">
+            <div class="p-6 glass-panel rounded-xl shadow-lg">
                 <h3 class="text-lg font-bold text-white mb-2">Bienvenue sur votre espace de pêche</h3>
-                <p class="text-sm text-blue-100">Le dashboard est prêt. Vous pouvez commencer à y ajouter vos fonctionnalités (météo, partages, rigs...).</p>
+                <p class="text-sm text-blue-100">Connectez-vous pour activer le Dashboard</p>
             </div>
         </main>
     </div>
@@ -62,6 +94,7 @@
             document.getElementById('login-page').classList.add('hidden');
             document.getElementById('dashboard-page').classList.remove('hidden');
             document.getElementById('dashboard-page').classList.add('flex');
+            window.scrollTo(0, 0); // Revenir en haut de la page après la connexion
         }
     </script>
 </body>
