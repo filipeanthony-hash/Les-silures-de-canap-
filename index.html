@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Arrière-plan marin texturé haute définition tiré de l'application */
         .marine-bg {
-            background-image: linear-gradient(rgba(12, 26, 38, 0.4), rgba(12, 26, 38, 0.4)), 
+            background-image: linear-gradient(rgba(12, 26, 38, 0.55), rgba(12, 26, 38, 0.75)), 
                               url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -17,29 +16,32 @@
             background-attachment: fixed;
         }
 
-        /* Panneau en verre dépoli (Glassmorphism) avec lueur néon bleue */
         .glass-card {
-            background: rgba(25, 59, 87, 0.55);
+            background: rgba(25, 59, 87, 0.45);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(74, 199, 242, 0.4);
-            box-shadow: 0 0 25px rgba(74, 199, 242, 0.2), inset 0 0 15px rgba(74, 199, 242, 0.1);
+            border: 1px solid rgba(74, 199, 242, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* Champs de saisie stylisés */
         .input-marine {
-            background: rgba(10, 25, 41, 0.7);
-            border: 1px solid rgba(74, 199, 242, 0.3);
+            background: rgba(10, 25, 41, 0.6);
+            border: 1px solid rgba(74, 199, 242, 0.2);
             transition: all 0.3s ease;
         }
         .input-marine:focus {
             border-color: #4ac7f2;
-            box-shadow: 0 0 10px rgba(74, 199, 242, 0.5);
+            box-shadow: 0 0 10px rgba(74, 199, 242, 0.4);
         }
+        
+        /* Cacher la scrollbar mais garder le défilement */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="flex flex-col min-h-full pb-16 antialiased marine-bg text-white">
+<body class="flex flex-col min-h-full pb-24 antialiased marine-bg text-white">
 
+    <!-- HEADER -->
     <header class="glass-card text-white shadow-lg w-full fixed top-0 z-50 rounded-b-xl border-t-0 border-x-0">
         <div class="max-w-md mx-auto flex items-center justify-between px-5 py-3">
             <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
@@ -51,10 +53,9 @@
         </div>
     </header>
 
+    <!-- PAGE DE CONNEXION -->
     <div id="login-page" class="flex flex-col items-center justify-center flex-1 px-6 pt-32 pb-12 w-full max-w-md mx-auto">
-        
         <div class="relative w-full px-4 py-8">
-            
             <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20 drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
                 <img src="https://img.icons8.com/illustrations/external-fauzidea-flat-fauzidea/180/external-fish-animal-fauzidea-flat-fauzidea.png" alt="Poisson" class="w-28 h-28 object-contain">
             </div>
@@ -74,14 +75,14 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-300">
                             <i class="fas fa-user text-sm"></i>
                         </span>
-                        <input id="username" name="username" type="text" required class="input-marine relative block w-full pl-10 pr-3 py-3 text-white placeholder-blue-300/60 rounded-xl focus:outline-none text-sm" placeholder="Identifiant">
+                        <input id="username" type="text" required class="input-marine relative block w-full pl-10 pr-3 py-3 text-white placeholder-blue-300/60 rounded-xl focus:outline-none text-sm" placeholder="Identifiant">
                     </div>
 
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-300">
                             <i class="fas fa-lock text-sm"></i>
                         </span>
-                        <input id="password" name="password" type="password" required class="input-marine relative block w-full pl-10 pr-3 py-3 text-white placeholder-blue-300/60 rounded-xl focus:outline-none text-sm" placeholder="Mot de passe">
+                        <input id="password" type="password" required class="input-marine relative block w-full pl-10 pr-3 py-3 text-white placeholder-blue-300/60 rounded-xl focus:outline-none text-sm" placeholder="Mot de passe">
                     </div>
 
                     <div class="pt-2">
@@ -91,36 +92,261 @@
                     </div>
                 </form>
             </div>
-
-            <div class="mt-8 flex justify-center text-blue-400/40">
-                <i class="fas fa-map-marker-alt text-3xl animate-bounce"></i>
-            </div>
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden flex-col flex-1 w-full max-w-md mx-auto pt-24 px-4">
-        <main class="flex-1 space-y-4">
-            <div class="p-6 glass-card rounded-2xl shadow-xl border-none">
-                <div class="flex items-center gap-3 mb-3 text-[#4ac7f2]">
-                    <i class="fas fa-water text-xl"></i>
-                    <h3 class="text-lg font-bold text-white">Bienvenue sur votre espace de pêche</h3>
+    <!-- DASHBOARD PRINCIPAL (Masqué au départ) -->
+    <div id="dashboard-page" class="hidden flex-col flex-1 w-full max-w-md mx-auto pt-24 px-4 space-y-4">
+        
+        <!-- SECTION 1 : CARNET DE CAPTURES (Actif par défaut) -->
+        <section id="tab-carnet" class="dashboard-tab space-y-4">
+            <!-- Formulaire d'ajout -->
+            <div class="p-5 glass-card rounded-2xl shadow-xl">
+                <div class="flex items-center gap-3 mb-4 text-[#4ac7f2]">
+                    <i class="fas fa-plus-circle text-xl"></i>
+                    <h3 class="text-base font-bold text-white">Enregistrer une prise</h3>
                 </div>
-                <p class="text-sm text-slate-200 leading-relaxed">
-                    Le tableau de bord est déverrouillé avec succès. Vous allez pouvoir y intégrer vos outils favoris : suivi des prises, nœuds de pêche, météo et gestion de vos spots.
-                </p>
+                <form id="catch-form" class="space-y-3" onsubmit="event.preventDefault(); saveCatch();">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input id="fish-species" type="text" placeholder="Espèce (ex: Silure)" required class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
+                        <input id="fish-length" type="number" placeholder="Taille (cm)" required class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input id="fish-weight" type="number" step="0.1" placeholder="Poids (kg)" class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
+                        <input id="fish-lure" type="text" placeholder="Leurre / Appât" class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full py-2.5 text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition-all shadow-md active:scale-98">
+                        Ajouter au carnet
+                    </button>
+                </form>
             </div>
-        </main>
+
+            <!-- Liste des captures -->
+            <div class="space-y-2">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-blue-300 px-1">Vos exploits récents</h4>
+                <div id="catch-list" class="space-y-2.5">
+                    <!-- Les captures s'afficheront ici en JS -->
+                    <div class="p-4 glass-card rounded-xl flex items-center justify-between border-l-4 border-l-[#4ac7f2]">
+                        <div>
+                            <h5 class="text-sm font-bold">Silure Glane</h5>
+                            <p class="text-xs text-slate-300">142 cm • 22 kg • <span class="text-blue-300">Vif</span></p>
+                        </div>
+                        <span class="text-xs bg-blue-500/30 text-[#4ac7f2] px-2.5 py-1 rounded-full font-semibold">Exemple</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2 : METEO INTERACTIVE -->
+        <section id="tab-meteo" class="dashboard-tab hidden space-y-4">
+            <div class="p-5 glass-card rounded-2xl shadow-xl text-center relative overflow-hidden">
+                <p class="text-xs uppercase font-bold tracking-wider text-blue-300 mb-1">Météo & Prédictions</p>
+                <h3 class="text-xl font-black text-white mb-4">Indice d'activité du Silure</h3>
+                
+                <!-- Jauge d'indice dynamique -->
+                <div class="relative flex items-center justify-center h-28 w-28 mx-auto mb-4 bg-slate-900/40 rounded-full border border-blue-400/20 shadow-inner">
+                    <div class="text-center">
+                        <span id="bite-index" class="text-3xl font-black text-[#4ac7f2]">75%</span>
+                        <p id="bite-label" class="text-[10px] text-emerald-400 font-bold uppercase">Excellent</p>
+                    </div>
+                </div>
+
+                <!-- Simulateur de conditions (Sliders) -->
+                <div class="space-y-3 text-left bg-slate-900/30 p-3.5 rounded-xl border border-white/5">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-300"><i class="fas fa-temperature-high mr-1 text-orange-400"></i> Temp. de l'eau</span>
+                            <span id="val-temp" class="font-bold text-[#4ac7f2]">19°C</span>
+                        </div>
+                        <input id="slider-temp" type="range" min="4" max="28" value="19" class="w-full accent-[#4ac7f2]" oninput="updateMeteoSim()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-300"><i class="fas fa-cloud-moon mr-1 text-indigo-300"></i> Phase Lunaire</span>
+                            <span id="val-lune" class="font-bold text-[#4ac7f2]">Pleine Lune</span>
+                        </div>
+                        <input id="slider-lune" type="range" min="1" max="4" value="3" class="w-full accent-[#4ac7f2]" oninput="updateMeteoSim()">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3 : GUIDE DES NŒUDS -->
+        <section id="tab-noeuds" class="dashboard-tab hidden space-y-3">
+            <div class="p-4 glass-card rounded-2xl shadow-xl">
+                <div class="flex items-center gap-3 mb-2 text-[#4ac7f2]">
+                    <i class="fas fa-graduation-cap text-xl"></i>
+                    <h3 class="text-base font-bold text-white">Nœuds Indispensables</h3>
+                </div>
+                <p class="text-xs text-slate-300 mb-4">Sélectionne un nœud pour voir la fiche technique de montage.</p>
+                
+                <!-- Liste des nœuds -->
+                <div class="space-y-2">
+                    <details class="group bg-slate-900/30 border border-white/5 rounded-xl overflow-hidden transition-all">
+                        <summary class="flex justify-between items-center p-3 text-xs font-bold cursor-pointer list-none text-slate-200 hover:text-white">
+                            <span><i class="fas fa-circle-notch mr-2 text-emerald-400"></i>Nœud Palomar (Émerillons/Agrafes)</span>
+                            <i class="fas fa-chevron-down text-[10px] group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="p-3 bg-slate-950/40 text-xs text-slate-300 border-t border-white/5 space-y-1.5">
+                            <p><strong>Idéal pour :</strong> Tresse et gros fluorocarbone. Résistance proche de 100%.</p>
+                            <ol class="list-decimal pl-4 space-y-1 text-[11px]">
+                                <li>Doubler la ligne et la passer dans l'œillet.</li>
+                                <li>Faire un nœud simple avec la boucle autour de la ligne principale.</li>
+                                <li>Passer l'émerillon à l'intérieur de la boucle ainsi formée.</li>
+                                <li>Humidifier avec de la salive et serrer fermement.</li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details class="group bg-slate-900/30 border border-white/5 rounded-xl overflow-hidden transition-all">
+                        <summary class="flex justify-between items-center p-3 text-xs font-bold cursor-pointer list-none text-slate-200 hover:text-white">
+                            <span><i class="fas fa-link mr-2 text-amber-400"></i>Nœud Albright (Raccord Tresse/Fluoro)</span>
+                            <i class="fas fa-chevron-down text-[10px] group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="p-3 bg-slate-950/40 text-xs text-slate-300 border-t border-white/5 space-y-1.5">
+                            <p><strong>Idéal pour :</strong> Relier un corps de ligne en tresse à un gros bas de ligne.</p>
+                            <ol class="list-decimal pl-4 space-y-1 text-[11px]">
+                                <li>Former une boucle avec le gros fluorocarbone.</li>
+                                <li>Passer la tresse dans la boucle et faire 10 à 12 spires en remontant.</li>
+                                <li>Faire 5 spires en sens inverse par-dessus les premières.</li>
+                                <li>Repasser la tresse dans la boucle dans le même sens qu'au départ, lubrifier et serrer.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
     </div>
 
+    <!-- BARRE DE NAVIGATION COMMUNE (Fixée en bas) -->
+    <nav id="bottom-nav" class="hidden glass-card fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl border-b-0 border-x-0 shadow-[0_-8px_24px_rgba(0,0,0,0.3)]">
+        <div class="max-w-md mx-auto flex justify-around py-2">
+            <button onclick="switchTab('carnet')" id="nav-carnet" class="flex flex-col items-center gap-1 text-xs font-medium text-[#4ac7f2] transition-colors py-1 px-3">
+                <i class="fas fa-book-open text-base"></i>
+                <span>Carnet</span>
+            </button>
+            <button onclick="switchTab('meteo')" id="nav-meteo" class="flex flex-col items-center gap-1 text-xs font-medium text-slate-400 hover:text-white transition-colors py-1 px-3">
+                <i class="fas fa-cloud-sun-rain text-base"></i>
+                <span>Météo</span>
+            </button>
+            <button onclick="switchTab('noeuds')" id="nav-noeuds" class="flex flex-col items-center gap-1 text-xs font-medium text-slate-400 hover:text-white transition-colors py-1 px-3">
+                <i class="fas fa-scroll text-base"></i>
+                <span>Nœuds</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- LOGIQUE JAVASCRIPT -->
     <script>
+        // Tableau pour stocker les prises en mémoire vive
+        let catches = [];
+
         function tbgDashboard() {
-            // Cache la page de login
             document.getElementById('login-page').classList.add('hidden');
-            // Affiche le tableau de bord
             document.getElementById('dashboard-page').classList.remove('hidden');
             document.getElementById('dashboard-page').classList.add('flex');
-            // Remonte l'écran automatiquement 
+            document.getElementById('bottom-nav').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            updateMeteoSim(); // Initialise l'indice météo au chargement
+        }
+
+        // Système d'onglets
+        function switchTab(tabId) {
+            // Masquer tous les onglets
+            document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
+            // Afficher l'onglet sélectionné
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            
+            // Réinitialiser le style des boutons de nav
+            const navButtons = ['carnet', 'meteo', 'noeuds'];
+            navButtons.forEach(id => {
+                const btn = document.getElementById(`nav-${id}`);
+                if (id === tabId) {
+                    btn.classList.add('text-[#4ac7f2]');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('text-[#4ac7f2]');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+        }
+
+        // Ajouter une prise au carnet
+        function saveCatch() {
+            const species = document.getElementById('fish-species').value;
+            const length = document.getElementById('fish-length').value;
+            const weight = document.getElementById('fish-weight').value || '?';
+            const lure = document.getElementById('fish-lure').value || 'Non spécifié';
+
+            const newCatch = { species, length, weight, lure };
+            catches.unshift(newCatch); // Ajoute en haut de liste
+
+            renderCatches();
+            document.getElementById('catch-form').reset();
+        }
+
+        // Mettre à jour le rendu visuel de la liste des captures
+        function renderCatches() {
+            const container = document.getElementById('catch-list');
+            container.innerHTML = '';
+
+            catches.forEach(c => {
+                container.innerHTML += `
+                    <div class="p-4 glass-card rounded-xl flex items-center justify-between border-l-4 border-l-[#4ac7f2] animate-fade-in">
+                        <div>
+                            <h5 class="text-sm font-bold">${c.species}</h5>
+                            <p class="text-xs text-slate-300">${c.length} cm • ${c.weight} kg • <span class="text-blue-300">${c.lure}</span></p>
+                        </div>
+                        <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full font-semibold">Validé</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Simulateur d'indice météo
+        function updateMeteoSim() {
+            const temp = parseInt(document.getElementById('slider-temp').value);
+            const luneVal = parseInt(document.getElementById('slider-lune').value);
+            
+            document.getElementById('val-temp').innerText = `${temp}°C`;
+            
+            let luneText = "";
+            let luneBonus = 0;
+            switch(luneVal) {
+                case 1: luneText = "Nouvelle Lune"; luneBonus = 15; break;
+                case 2: luneText = "Premier Quartier"; luneBonus = 5; break;
+                case 3: luneText = "Pleine Lune"; luneBonus = 25; break; // Le silure adore la lune
+                case 4: luneText = "Dernier Quartier"; luneBonus = 10; break;
+            }
+            document.getElementById('val-lune').innerText = luneText;
+
+            // Calcul fictif mais réaliste de l'activité du silure (optimal entre 16°C et 22°C)
+            let tempScore = 0;
+            if (temp >= 16 && temp <= 22) tempScore = 70;
+            else if (temp > 22) tempScore = 50 - (temp - 22) * 4;
+            else tempScore = 20 + (temp * 2);
+
+            let totalScore = Math.min(Math.max(tempScore + luneBonus, 10), 100);
+
+            // Mettre à jour l'affichage de la jauge
+            const indexEl = document.getElementById('bite-index');
+            const labelEl = document.getElementById('bite-label');
+            
+            indexEl.innerText = `${totalScore}%`;
+
+            if (totalScore > 75) {
+                labelEl.innerText = "Excellent";
+                labelEl.className = "text-[10px] text-emerald-400 font-bold uppercase";
+                indexEl.className = "text-3xl font-black text-emerald-400";
+            } else if (totalScore > 45) {
+                labelEl.innerText = "Moyen";
+                labelEl.className = "text-[10px] text-amber-400 font-bold uppercase";
+                indexEl.className = "text-3xl font-black text-amber-400";
+            } else {
+                labelEl.innerText = "Très Calme";
+                labelEl.className = "text-[10px] text-rose-400 font-bold uppercase";
+                indexEl.className = "text-3xl font-black text-rose-400";
+            }
         }
     </script>
 </body>
