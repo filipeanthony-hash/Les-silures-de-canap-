@@ -458,10 +458,6 @@ document.getElementById("btn-ajouter").addEventListener("click", async () => {
 document.getElementById("btn-inscrire").addEventListener("click", () => {
     const email = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-    
-    if (email && password) {
-        window.inscrire(email, password);
-    } else {
         alert("Veuillez remplir l'email et le mot de passe.");
     }
 });
