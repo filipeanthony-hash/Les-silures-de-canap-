@@ -204,42 +204,43 @@
         <section id="tab-noeuds" class="dashboard-tab hidden space-y-3">
             <div class="p-4 glass-card rounded-2xl shadow-xl">
                 <div class="flex items-center gap-3 mb-2 text-[#4ac7f2]">
-                    <i class="fas fa-graduation-cap text-xl"></i>
+                    <i class="fas fa-scroll text-xl"></i>
                     <h3 class="text-base font-bold text-white">Nœuds Indispensables</h3>
                 </div>
-                <p class="text-xs text-slate-300 mb-4">Sélectionne un nœud pour voir la fiche technique de montage.</p>
+                <p class="text-xs text-slate-300 mb-4">Cliquez sur une image pour l'ouvrir en grand et suivre les étapes de montage.</p>
                 
-                <div class="space-y-2">
-                    <details class="group bg-slate-900/30 border border-white/5 rounded-xl overflow-hidden transition-all">
-                        <summary class="flex justify-between items-center p-3 text-xs font-bold cursor-pointer list-none text-slate-200 hover:text-white">
-                            <span><i class="fas fa-circle-notch mr-2 text-emerald-400"></i>Nœud Palomar (Émerillons/Agrafes)</span>
-                            <i class="fas fa-chevron-down text-[10px] group-open:rotate-180 transition-transform"></i>
-                        </summary>
-                        <div class="p-3 bg-slate-950/40 text-xs text-slate-300 border-t border-white/5 space-y-1.5">
-                            <p><strong>Idéal pour :</strong> Tresse et gros fluorocarbone.</p>
-                            <ol class="list-decimal pl-4 space-y-1 text-[11px]">
-                                <li>Doubler la ligne et la passer dans l'œillet.</li>
-                                <li>Faire un nœud simple avec la boucle autour de la ligne principale.</li>
-                                <li>Passer l'émerillon à l'intérieur de la boucle ainsi formée.</li>
-                                <li>Humidifier et serrer fermement.</li>
-                            </ol>
+                <div class="space-y-4">
+                    <div class="bg-slate-900/40 border border-white/10 rounded-xl p-3.5 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wide">
+                                <i class="fas fa-circle-notch mr-1.5"></i> Nœud Palomar
+                            </h4>
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/20 font-medium">Tresse / Emerillons</span>
                         </div>
-                    </details>
+                        <div class="relative group cursor-pointer overflow-hidden rounded-lg border border-white/5 bg-slate-950/60" onclick="openLightbox('https://images.unsplash.com/photo-1601247447934-2b7e19f9d784?q=80&w=600&auto=format&fit=crop')">
+                            <img src="https://images.unsplash.com/photo-1601247447934-2b7e19f9d784?q=80&w=600&auto=format&fit=crop" alt="Montage Palomar" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="bg-black/60 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5"><i class="fas fa-search-plus text-[#4ac7f2]"></i> Voir en grand</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">Passez la boucle dans l'œillet, réalisez un nœud simple, puis faites passer l'émerillon à l'intérieur de la boucle avant d'humidifier et de serrer.</p>
+                    </div>
 
-                    <details class="group bg-slate-900/30 border border-white/5 rounded-xl overflow-hidden transition-all">
-                        <summary class="flex justify-between items-center p-3 text-xs font-bold cursor-pointer list-none text-slate-200 hover:text-white">
-                            <span><i class="fas fa-link mr-2 text-amber-400"></i>Nœud Albright (Raccord Tresse/Fluoro)</span>
-                            <i class="fas fa-chevron-down text-[10px] group-open:rotate-180 transition-transform"></i>
-                        </summary>
-                        <div class="p-3 bg-slate-950/40 text-xs text-slate-300 border-t border-white/5 space-y-1.5">
-                            <p><strong>Idéal pour :</strong> Relier deux lignes de diamètres différents.</p>
-                            <ol class="list-decimal pl-4 space-y-1 text-[11px]">
-                                <li>Formation d'une boucle avec le gros fluorocarbone.</li>
-                                <li>Passer la tresse dans la boucle et faire 10 à 12 spires en remontant.</li>
-                                <li>Faire 5 spires en sens inverse, lubrifier et serrer.</li>
-                            </ol>
+                    <div class="bg-slate-900/40 border border-white/10 rounded-xl p-3.5 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wide">
+                                <i class="fas fa-link mr-1.5"></i> Nœud Albright
+                            </h4>
+                            <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20 font-medium">Raccord Corps/Bas de ligne</span>
                         </div>
-                    </details>
+                        <div class="relative group cursor-pointer overflow-hidden rounded-lg border border-white/5 bg-slate-950/60" onclick="openLightbox('https://images.unsplash.com/photo-1517462964-21fdcec3f25b?q=80&w=600&auto=format&fit=crop')">
+                            <img src="https://images.unsplash.com/photo-1517462964-21fdcec3f25b?q=80&w=600&auto=format&fit=crop" alt="Montage Albright" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="bg-black/60 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5"><i class="fas fa-search-plus text-[#4ac7f2]"></i> Voir en grand</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">Formez une boucle avec le gros brin (Fluoro), insérez la tresse, puis réalisez 10 à 12 spires serrées autour de la boucle avant de repasser à l'intérieur.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -266,10 +267,10 @@
         <div class="absolute top-4 right-4 text-white text-3xl p-2 cursor-pointer bg-black/40 rounded-full w-12 h-12 flex items-center justify-center">
             <i class="fas fa-times"></i>
         </div>
-        <img id="lightbox-img" src="" alt="Zoom poisson" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
+        <img id="lightbox-img" src="" alt="Zoom" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
     </div>
 
-    <script>
+    <script {nonce}>
         let catches = [];
         let currentSpotType = 'riviere';
         let gpsLoaded = false;
@@ -339,7 +340,6 @@
                 return;
             }
 
-            // TIMEOUT SÉCURITÉ : Si après 4 secondes rien n'est trouvé, on libère l'application
             const gpsTimeout = setTimeout(() => {
                 if (!gpsLoaded) {
                     statusText.innerHTML = "ℹ️ Réseau/GPS indisponible. Mode manuel activé (Ajustez ci-dessous).";
@@ -361,7 +361,6 @@
                         if (data && data.current) {
                             const airTemp = data.current.temperature_2m;
                             
-                            // Formule conversion Air -> Eau selon type de spot
                             let estimatedWaterTemp = Math.round(airTemp * 0.85);
                             if (currentSpotType === 'riviere') {
                                 estimatedWaterTemp = Math.round(airTemp * 0.78);
@@ -383,7 +382,7 @@
                     statusText.innerHTML = "ℹ️ Signal GPS masqué/refusé. Mode manuel activé.";
                     updateMeteoSim();
                 },
-                { timeout: 3500 } // Temps max accordé au capteur matériel GPS avant erreur interne
+                { timeout: 3500 }
             );
         }
 
