@@ -311,8 +311,26 @@ const firebaseConfig = {
     window.db = db;
     window.collection = collection;
     window.addDoc = addDoc;
+// Rendre les fonctions Firebase globales pour qu'elles soient appelées par les formulaires HTML
+window.db = db;
+window.collection = collection;
+window.addDoc = addDoc;
 
-    // --- FONCTION POUR SAUVEGARDER UNE PRISE DANS FIREBASE (Cloud) ---
+// AJOUTE CES LIGNES ICI :
+window.inscrire = inscrire; 
+window.seConnecter = seConnecter;
+    //// Assure-toi d'avoir ces fonctions dans ton bloc script :
+function inscrire(email, password) {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => { alert("Compte créé !"); })
+    .catch((error) => { alert("Erreur : " + error.message); });
+}
+
+function seConnecter(email, password) {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => { alert("Connexion réussie !"); })
+    .catch((error) => { alert("Erreur : " + error.message); });
+} --- FONCTION POUR SAUVEGARDER UNE PRISE DANS FIREBASE (Cloud) ---
     window.saveCatch = async () => {
         const species = document.getElementById('fish-species').value;
         const length = document.getElementById('fish-length').value;
