@@ -62,7 +62,13 @@
                     <p class="text-xs uppercase tracking-wider text-blue-300 font-semibold">Espace Membres</p>
                     <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
                 </div>
+<button onclick="seConnecter(document.getElementById('email').value, document.getElementById('password').value)" class="w-full bg-blue-500 p-2 rounded">
+  Se connecter
+</button>
 
+<button onclick="inscrire(document.getElementById('email').value, document.getElementById('password').value)" class="w-full mt-4 text-sm text-blue-300 underline">
+  Pas encore de compte ? Créer un compte
+</button>
                 <form class="space-y-5" onsubmit="event.preventDefault(); tbgDashboard();">
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-300">
@@ -288,7 +294,8 @@
 
     <script type="module">
     // --- FIREBASE IMPORTS (Nécessaires pour le type="module") ---
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    // Modifie ta ligne d'import pour ajouter ceux de l'auth
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // --- FIREBASE CONFIGURATION (Remplace par tes vraies valeurs !) ---
