@@ -330,7 +330,7 @@ function saveSession() {
     // ... votre code existant ...
 }
 
-// --- AJOUTEZ LE CODE POUR LES PHOTOS ICI ---
+// --- AJOUT DES FONCTIONS PHOTOS ---
 
 function previewKnot(input) {
     if (input.files && input.files[0]) {
@@ -354,14 +354,10 @@ function openLightbox(imgSrc) {
 }
 
 function closeLightbox() {
-    document.getElementById('lightbox').classList.add('hidden'); // C'est le .add('hidden') qui est crucial
+    document.getElementById('lightbox').classList.add('hidden');
 }
 
-
-    // ... votre code précédent ...
-    function closeLightbox() {
-        document.getElementById('lightbox').classList.add('hidden');
-    }
+// --- FIN DU SCRIPT ---
 </script>
 
 <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4" onclick="closeLightbox()">
@@ -370,7 +366,3 @@ function closeLightbox() {
 
 </body>
 </html>
-
-
-
-
