@@ -103,12 +103,12 @@
                 <p class="text-base text-slate-200">Connectez-vous pour activer le Dashboard</p>
             </div>
 
-            <form id="auth-form" class="space-y-6" onsubmit="loginUser(event)">
+            <form id="auth-form" class="space-y-6" onsubmit="event.preventDefault();">
                 <input id="email" type="email" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Identifiant (e-mail)">
                 <input id="password" type="password" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Mot de passe">
 
                 <div class="pt-3 space-y-4">
-                    <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-xl text-lg font-black hover:bg-blue-500 transition-colors cursor-pointer">
+                    <button id="submit-login" type="button" class="w-full py-4 bg-blue-600 text-white rounded-xl text-lg font-black hover:bg-blue-500 transition-colors cursor-pointer">
                         Se connecter
                     </button>
                     <p class="text-sm text-center text-slate-400">
@@ -217,8 +217,9 @@
         let circumference = 0;
         const ADMIN_CODE = "1985"; // Ton code secret pour effacer
 
-        // Initialisation après chargement de la page
+        // Initialisation après chargement complet du DOM
         window.addEventListener('DOMContentLoaded', () => {
+            // Configuration jauge d'activité
             ring = document.getElementById('activity-ring');
             if (ring) {
                 const radius = ring.r.baseVal.value;
@@ -226,24 +227,28 @@
                 ring.style.strokeDasharray = `${circumference} ${circumference}`;
                 ring.style.strokeDashoffset = circumference;
             }
-        });
 
-        // --- CORRECTION DE LA FONCTION DE CONNEXION ---
-        window.loginUser = function(event) {
-            event.preventDefault();
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value.trim();
-            
-            if (email !== "" && password !== "") {
-                document.getElementById("login-page").classList.add("hidden");
-                
-                const dashboard = document.getElementById("dashboard-page");
-                dashboard.classList.remove("hidden");
-                dashboard.classList.add("flex");
-            } else {
-                alert("Veuillez remplir l'identifiant et le mot de passe.");
+            // Écouteur de clic robuste pour la connexion
+            const loginBtn = document.getElementById('submit-login');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', () => {
+                    const email = document.getElementById("email").value.trim();
+                    const password = document.getElementById("password").value.trim();
+                    
+                    if (email !== "" && password !== "") {
+                        // Masque la page de login
+                        document.getElementById("login-page").style.display = "none";
+                        
+                        // Affiche proprement le dashboard
+                        const dashboard = document.getElementById("dashboard-page");
+                        dashboard.classList.remove("hidden");
+                        dashboard.style.display = "flex";
+                    } else {
+                        alert("Veuillez remplir l'identifiant et le mot de passe.");
+                    }
+                });
             }
-        };
+        });
 
         // Dropdown Poisson
         function toggleFishDropdown() {
