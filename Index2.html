@@ -1,68 +1,158 @@
-<!DOCTYPE html>
-<html lang="fr" class="h-full bg-slate-950 text-white">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Silures de Canapé</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="flex flex-col min-h-full pb-16 antialiased bg-slate-950">
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
-    <div id="login-page" class="flex flex-col items-center justify-center flex-1 px-4 py-12 sm:px-6 lg:px-8">
-        <div class="w-full max-w-md p-8 space-y-6 bg-blue-900 border border-blue-700 rounded-xl shadow-2xl">
-            <div class="text-center">
-                <h2 class="text-3xl font-extrabold tracking-tight text-white">
-                    Les Silures de Canapé
-                </h2>
-                <p class="mt-2 text-sm text-blue-200">
-                    Connectez-vous pour accéder au groupe de pêche
-                </p>
-            </div>
-            <form class="mt-8 space-y-4" onsubmit="event.preventDefault(); tbgDashboard();">
-                <div>
-                    <label for="username" class="sr-only">Identifiant</label>
-                    <input id="username" name="username" type="text" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Identifiant">
-                </div>
-                <div>
-                    <label for="password" class="sr-only">Mot de passe</label>
-                    <input id="password" name="password" type="password" required class="relative block w-full px-3 py-2 text-white placeholder-blue-300 bg-blue-950 border border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Mot de passe">
-                </div>
-                <div>
-                    <button type="submit" class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer">
-                        Se connecter
-                    </button>
-                </div>
-            </form>
+  // --- COLLEZ VOTRE CONFIGURATION FIREBASE ORIGINALE ICI ---
+  const firebaseConfig = {
+    apiKey: "VOTRE_CLE_API_COMPLETE_ICI",
+    authDomain: "...",
+    projectId: "...",
+    storageBucket: "...",
+    messagingSenderId: "...",
+    appId: "...",
+    measurementId: "..."
+  };
+  // ---------------------------------------------------------
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let knots = [];
+  let currentUser = "Membre";
+
+  window.inscrire = (email, password) => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => alert("Compte créé avec succès !"))
+      .catch((error) => alert("Erreur d'inscription : " + error.message));
+  };
+
+  window.seConnecter = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        alert("Connexion réussie !");
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('dashboard-page').classList.remove('hidden');
+        document.getElementById('bottom-nav').classList.remove('hidden');
+        currentUser = email;
+      })
+      .catch((error) => alert("Erreur de connexion : " + error.message));
+  };
+
+  document.getElementById("btn-inscrire").addEventListener("click", () => {
+    const email = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    if (email && password) {
+      window.inscrire(email, password);
+    } else {
+      alert("Veuillez remplir l'email et le mot de passe.");
+    }
+  });
+
+  window.switchTab = (tabId) => {
+    document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
+    document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+    if (tabId === 'noeuds' && knots.length === 0) {
+      // Initialiser avec un nœud par défaut
+      knots.push({ name: "Nœud de Cuillère", type: "Émérillons", desc: "Faire 5 tours autour du fil principal, repasser dans la première boucle puis serrer.", imgUrl: "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop" });
+      renderKnots();
+    }
+    // Gérer l'état actif des boutons de nav
+    document.querySelectorAll('#bottom-nav button').forEach(btn => btn.classList.add('text-slate-400'));
+    document.querySelectorAll('#bottom-nav button').forEach(btn => btn.classList.remove('text-[#4ac7f2]'));
+    document.getElementById(`nav-${tabId}`).classList.add('text-[#4ac7f2]');
+    document.getElementById(`nav-${tabId}`).classList.remove('text-slate-400');
+  };
+
+  document.getElementById("btn-ajouter").addEventListener("click", async (event) => {
+    event.preventDefault();
+    const species = document.getElementById("fish-species").value;
+    const length = document.getElementById("fish-length").value;
+    const weight = document.getElementById("fish-weight").value;
+    const lure = document.getElementById("fish-lure").value;
+
+    if (!species || !length || !weight || !lure) {
+      alert("Merci de remplir tous les champs !");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "catches"), {
+        species: species,
+        length: length,
+        weight: weight,
+        lure: lure,
+        timestamp: new Date()
+      });
+      alert("Poisson ajouté au carnet avec succès !");
+      document.getElementById('catch-form').reset();
+    } catch (e) {
+      alert("Erreur lors de l'ajout : " + e.message);
+    }
+  });
+
+  // --- ÉCOUTEUR EN TEMPS RÉEL FIREBASE ---
+  onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
+    const container = document.getElementById('catch-list');
+    container.innerHTML = '';
+
+    if (snapshot.empty) {
+      container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée. Soyez le premier !</p>';
+      return;
+    }
+
+    snapshot.forEach((doc) => {
+      const c = doc.data();
+      const imgUrl = "https://img.icons8.com/color/96/fish.png"; // Icône temporaire
+
+      container.innerHTML += `
+        <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
+          <img src="${imgUrl}" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
+          <div class="flex-1 min-w-0">
+            <h5 class="text-xs font-bold text-white">${c.species}</h5>
+            <p class="text-[11px] text-slate-300">${c.length}cm • ${c.weight}kg • <span class="text-blue-300">${c.lure}</span></p>
+          </div>
         </div>
-    </div>
+      `;
+    });
+  });
 
-    <div id="dashboard-page" class="hidden flex-col flex-1 w-full">
-        <header class="border-b border-blue-700 bg-blue-600 text-white shadow-md">
-            <div class="max-w-md mx-auto flex items-center justify-between px-4 py-3">
-                <h1 class="text-xl font-bold tracking-tight">
-                    Les Silures de Canapé
-                </h1>
-                <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-white hover:text-blue-200 text-2xl transition-colors" title="Rejoindre le groupe Facebook">
-                    <i class="fab fa-facebook"></i>
-                </a>
-            </div>
-        </header>
+  // --- LOGIQUE NŒUDS ---
+  window.saveKnot = () => {
+    const name = document.getElementById('knot-name').value;
+    const type = document.getElementById('knot-type').value;
+    const desc = document.getElementById('knot-desc').value || 'Aucune consigne.';
+    const imgUrl = "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop";
 
-        <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-4">
-            <div class="p-6 bg-blue-900 border border-blue-700 rounded-xl shadow-lg">
-                <h3 class="text-lg font-bold text-white mb-2">Bienvenue sur votre espace de pêche</h3>
-                <p class="text-sm text-blue-100">Le dashboard est prêt. Vous pouvez commencer à y ajouter vos fonctionnalités (météo, partages, rigs...).</p>
-            </div>
-        </main>
-    </div>
+    knots.unshift({ name, type, desc, imgUrl });
+    renderKnots();
+    document.getElementById('knot-form').reset();
+  };
 
-    <script>
-        function tbgDashboard() {
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('dashboard-page').classList.remove('hidden');
-            document.getElementById('dashboard-page').classList.add('flex');
-        }
-    </script>
-</body>
-</html>
+  function renderKnots() {
+    const container = document.getElementById('knot-list');
+    container.innerHTML = '';
+    knots.forEach((k) => {
+      container.innerHTML += `
+        <div class="bg-slate-900/40 border border-[#4ac7f2]/20 rounded-xl p-3 space-y-2">
+          <h4 class="text-xs font-bold text-[#4ac7f2] uppercase"><i class="fas fa-bullseye mr-1"></i> ${k.name}</h4>
+          <img src="${k.imgUrl}" alt="${k.name}" class="w-full h-36 object-cover rounded-lg">
+          <p class="text-[11px] text-slate-300 leading-relaxed">${k.desc}</p>
+        </div>
+      `;
+    });
+  }
+
+  // --- LOGIQUE DASHBOARD ---
+  window.tbgDashboard = () => {
+    if (auth.currentUser) {
+      document.getElementById('login-page').classList.add('hidden');
+      document.getElementById('dashboard-page').classList.remove('hidden');
+      document.getElementById('dashboard-page').classList.add('flex');
+      document.getElementById('bottom-nav').classList.remove('hidden');
+    } else {
+      alert("Veuillez d'abord vous connecter.");
+    }
+  };
+</script>
