@@ -8,17 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* Thème visuel sous-marin dépoli */
         .underwater-bg {
             background-image: linear-gradient(rgba(12, 26, 38, 0.7), rgba(12, 26, 38, 0.9)), 
                               url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
             background-attachment: fixed;
         }
 
         .glass-card {
             background: rgba(25, 59, 87, 0.4);
             backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(74, 199, 242, 0.3);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
@@ -27,40 +30,173 @@
             background: rgba(10, 25, 41, 0.7);
             border: 1px solid rgba(74, 199, 242, 0.2);
             color: white;
+            transition: all 0.3s ease;
+        }
+        .input-marine:focus {
+            border-color: #4ac7f2;
+            box-shadow: 0 0 10px rgba(74, 199, 242, 0.5);
         }
     </style>
 </head>
-<body class="underwater-bg min-h-screen text-white">
+<body class="underwater-bg flex flex-col min-h-full antialiased text-white pb-10">
 
-    <header class="glass-card w-full fixed top-0 z-50 rounded-b-xl">
+    <header class="glass-card text-white shadow-lg w-full fixed top-0 z-50 rounded-b-xl border-t-0 border-x-0">
         <div class="max-w-md mx-auto flex items-center justify-between px-5 py-3">
-            <h1 class="text-xl font-bold">Les Silures de Canapé</h1>
-            <i class="fab fa-facebook text-2xl text-[#4ac7f2]"></i>
+            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                Les Silures de Canapé
+            </h1>
+            <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-[#4ac7f2] hover:text-white text-2xl transition-all transform hover:scale-110" title="Rejoindre le groupe Facebook">
+                <i class="fab fa-facebook"></i>
+            </a>
         </div>
     </header>
 
-    <div id="login-page" class="flex flex-col items-center justify-center pt-32 px-6">
-        <div class="w-full max-w-md p-8 glass-card rounded-2xl">
-            <p class="text-xs uppercase text-blue-300 text-center">Espace Membres</p>
-            <input id="email" type="email" class="input-marine w-full p-3 mt-4 rounded" placeholder="Identifiant">
-            <input id="password" type="password" class="input-marine w-full p-3 mt-4 rounded" placeholder="Mot de passe">
-            <button id="btn-login" class="w-full py-3 mt-6 bg-blue-500 rounded font-bold">Se connecter</button>
+    <div id="login-page" class="flex flex-col items-center justify-center flex-1 px-6 pt-32 w-full max-w-md mx-auto">
+        <div class="w-full p-8 space-y-6 glass-card rounded-2xl relative z-10">
+            <div class="text-center space-y-1">
+                <p class="text-xs uppercase tracking-wider text-blue-300 font-semibold">ESPACE MEMBRES</p>
+                <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
+            </div>
+
+            <form id="auth-form" class="space-y-5" onsubmit="event.preventDefault();">
+                <div class="relative">
+                    <input id="email" type="email" required class="input-marine relative block w-full p-3 rounded" placeholder="Identifiant (e-mail)">
+                </div>
+
+                <div class="relative">
+                    <input id="password" type="password" required class="input-marine relative block w-full p-3 rounded" placeholder="Mot de passe">
+                </div>
+
+                <div class="pt-2 space-y-3">
+                    <button id="btn-login" type="submit" class="w-full py-3 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 transition-colors">
+                        Se connecter
+                    </button>
+                    <button id="btn-register" type="button" class="w-full py-3 bg-blue-700 text-white rounded font-medium hover:bg-blue-800 transition-colors">
+                        Créer un compte
+                    </button>
+                    <p class="text-xs text-center text-slate-400">
+                        Pas encore de compte ? Créer un compte
+                    </p>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden pt-24 px-4 space-y-4">
-        <section id="tab-carnet" class="glass-card p-5 rounded-2xl">
-            <h3 class="font-bold mb-2">Mon Carnet</h3>
-            <button onclick="alert('Fonctionne !')" class="w-full py-2 bg-blue-500 rounded">Enregistrer</button>
+    <div id="dashboard-page" class="hidden flex flex-col pt-24 px-4 pb-10 space-y-4">
+        
+        <section class="glass-card p-5 rounded-2xl relative z-10 w-full max-w-md mx-auto">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-white font-bold"><i class="fas fa-location-dot mr-2 text-blue-300"></i>Ma Position</h3>
+                <span id="lune-icon" class="text-2xl text-blue-200"></span>
+            </div>
+            
+            <button onclick="getGPS()" type="button" class="w-full py-2 mb-3 bg-blue-700 text-white rounded text-sm font-semibold hover:bg-blue-600 transition-colors">
+                <i class="fas fa-satellite mr-2"></i>Récupérer mes coordonnées GPS
+            </button>
+            <p id="gps-coords" class="text-xs text-blue-200 text-center mb-4 italic">Position non définie</p>
+
+            <div class="grid grid-cols-2 gap-3 mb-2">
+                <input id="temp-eau" type="number" placeholder="T° Eau (°C)" class="input-marine w-full p-2.5 rounded text-sm" step="0.5">
+                <select id="lune" class="input-marine w-full p-2.5 rounded text-sm text-white" onchange="updateLuneIcon()">
+                    <option value="">-- Lune --</option>
+                    <option value="nouvelle" data-icon="🌑">Nouvelle Lune</option>
+                    <option value="croissante" data-icon="🌒">Premier Quartier</option>
+                    <option value="pleine" data-icon="🌕">Pleine Lune</option>
+                    <option value="decroissante" data-icon="🌘">Dernier Quartier</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="glass-card p-5 rounded-2xl relative z-10 w-full max-w-md mx-auto">
+            <h3 class="text-white font-bold mb-3"><i class="fas fa-chart-line mr-2 text-blue-300"></i>Probabilités de capture (Session)</h3>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-blue-100">
+                <div class="flex justify-between"><span>Silure</span> <span class="font-bold text-blue-300">75%</span></div>
+                <div class="flex justify-between"><span>Carpe</span> <span class="font-bold text-blue-300">60%</span></div>
+                <div class="flex justify-between"><span>Brochet</span> <span class="font-bold text-blue-300">45%</span></div>
+                <div class="flex justify-between"><span>Perche</span> <span class="font-bold text-blue-300">80%</span></div>
+                <div class="flex justify-between"><span>Gardon</span> <span class="font-bold text-blue-300">90%</span></div>
+                <div class="flex justify-between"><span>Anguille</span> <span class="font-bold text-blue-300">30%</span></div>
+            </div>
+            <button onclick="saveSession()" type="button" class="w-full mt-5 py-3 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition-colors">
+                Enregistrer cette session de pêche
+            </button>
+            <button onclick="logout()" type="button" class="w-full mt-3 py-2 bg-slate-700 text-slate-200 rounded text-xs font-medium hover:bg-slate-600 transition-colors">
+                Retour à la connexion
+            </button>
         </section>
     </div>
 
     <script>
-        document.getElementById("btn-login").onclick = () => {
-            document.getElementById("login-page").classList.add("hidden");
-            document.getElementById("dashboard-page").classList.remove("hidden");
-        };
+        // --- GESTION DE L'AFFICHAGE ---
+        
+        // Fonction pour se connecter (Test sans Firebase)
+        document.getElementById("btn-login").addEventListener("click", (e) => {
+            e.preventDefault(); // Empêche le formulaire de se soumettre réellement
+            
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (email !== "" && password !== "") {
+                document.getElementById("login-page").classList.add("hidden");
+                document.getElementById("dashboard-page").classList.remove("hidden");
+                document.getElementById("dashboard-page").classList.add("flex");
+            } else {
+                alert("Veuillez remplir l'identifiant et le mot de passe (ceci est un test).");
+            }
+        });
+
+        // Fonction pour se déconnecter (Retour)
+        function logout() {
+            document.getElementById("dashboard-page").classList.remove("flex");
+            document.getElementById("dashboard-page").classList.add("hidden");
+            document.getElementById("login-page").classList.remove("hidden");
+        }
+
+        // --- NOUVELLES FONCTIONS DASHBOARD ---
+
+        // Fonction pour récupérer la position GPS
+        function getGPS() {
+            if (navigator.geolocation) {
+                document.getElementById("gps-coords").innerText = "Recherche en cours...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude.toFixed(4);
+                        const lon = position.coords.longitude.toFixed(4);
+                        document.getElementById("gps-coords").innerText = "Lat: " + lat + " | Lon: " + lon;
+                    },
+                    (error) => {
+                        console.error(error);
+                        document.getElementById("gps-coords").innerText = "Impossible d'obtenir la position.";
+                        alert("Erreur GPS : Veuillez activer la localisation sur votre téléphone.");
+                    }
+                );
+            } else {
+                alert("La géolocalisation n'est pas supportée par votre appareil.");
+            }
+        }
+
+        // Fonction pour mettre à jour l'icône de la lune (esthétique)
+        function updateLuneIcon() {
+            const select = document.getElementById('lune');
+            const iconSpan = document.getElementById('lune-icon');
+            const selectedOption = select.options[select.selectedIndex];
+            iconSpan.innerText = selectedOption.getAttribute('data-icon') || '';
+        }
+
+        // Fonction de test pour l'enregistrement (sans base de données pour l'instant)
+        function saveSession() {
+            const coords = document.getElementById('gps-coords').innerText;
+            const temp = document.getElementById('temp-eau').value;
+            const moon = document.getElementById('lune').value;
+
+            if (coords === "Position non définie" || temp === "" || moon === "") {
+                alert("Veuillez remplir toutes les conditions (GPS, Température et Lune) avant d'enregistrer.");
+                return;
+            }
+
+            // Pour l'instant, on fait juste une alerte.
+            alert("Session enregistrée localement (Test) !\nPosition : " + coords + "\nTemp : " + temp + "°C\nLune : " + moon);
+        }
     </script>
 </body>
-
 </html>
