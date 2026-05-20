@@ -191,13 +191,13 @@
     </div>
 
     <script>
-    // --- DONNÉES GLOBALES ---
+    // --- VARIABLES ---
     let currentLatitude = null;
     let targetSpecies = null;
     const ring = document.getElementById('activity-ring');
     let circumference = 0;
 
-    // --- INITIALISATION ---
+    // --- INITIALISATION ANNEAU ---
     if (ring) {
         const radius = ring.r.baseVal.value;
         circumference = radius * 2 * Math.PI;
@@ -205,7 +205,7 @@
         ring.style.strokeDashoffset = circumference;
     }
 
-    // --- CONNEXION ---
+    // --- FONCTION DE CONNEXION (C'est celle-ci qui débloquera votre bouton) ---
     document.getElementById("btn-login").onclick = function() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
@@ -217,29 +217,42 @@
         }
     };
 
-    // --- FONCTIONS ---
+    // --- FONCTIONS GPS & DÉCOR ---
+    function toggleFishDropdown() { document.getElementById("fish-options").classList.toggle("hidden"); }
+    
     function selectFish(fishName, iconType) {
         targetSpecies = fishName;
-        document.getElementById("fish-selector").innerHTML = '<span><i class="fas fa-' + iconType + ' text-blue-300 mr-2"></i>' + fishName + '</span>';
+        document.getElementById("fish-selector").innerHTML = '<span><i class="fas fa-' + iconType + ' text-blue-300 mr-2"></i>' + fishName + '</span> <i class="fas fa-chevron-down text-blue-400"></i>';
         document.getElementById("fish-options").classList.add("hidden");
         calculateActivityIndex();
+    }
+
+    async function getCityName(lat, lon) {
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+            const data = await res.json();
+            document.getElementById("gps-status-bar").innerText = `📍 ` + (data.address.city || data.address.town || "Zone de pêche");
+        } catch(e) { console.error(e); }
     }
 
     function getGPS() {
         navigator.geolocation.getCurrentPosition((pos) => {
             currentLatitude = pos.coords.latitude;
+            getCityName(currentLatitude, pos.coords.longitude);
             document.getElementById("gps-coords").innerText = "Position activée";
             calculateActivityIndex();
-        }, () => alert("GPS requis."));
+        }, () => alert("GPS refusé."));
     }
 
     function calculateActivityIndex() {
         if (!currentLatitude || !targetSpecies) return;
-        ring.style.strokeDashoffset = circumference * 0.2; // Exemple 80%
+        const offset = circumference - (0.8 * circumference); // Valeur test
+        ring.style.strokeDashoffset = offset;
         document.getElementById('activity-percent').innerText = "80%";
         document.getElementById('activity-status').innerText = "ACTIF";
     }
 </script>
+
 
         const radius = ring.r.baseVal.value;
         circumference = radius * 2 * Math.PI;
