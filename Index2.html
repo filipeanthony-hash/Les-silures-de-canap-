@@ -1,158 +1,48 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Silures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
 
-  // --- COLLEZ VOTRE CONFIGURATION FIREBASE ORIGINALE ICI ---
-  const firebaseConfig = {
-    apiKey: "VOTRE_CLE_API_COMPLETE_ICI",
-    authDomain: "...",
-    projectId: "...",
-    storageBucket: "...",
-    messagingSenderId: "...",
-    appId: "...",
-    measurementId: "..."
-  };
-  // ---------------------------------------------------------
+    <div id="app" class="max-w-sm mx-auto p-6 bg-slate-800 rounded-xl shadow-lg">
+        <h1 class="text-xl font-bold mb-4">Connexion</h1>
+        <input id="email" type="email" placeholder="Email" class="w-full p-2 mb-2 text-black rounded">
+        <input id="password" type="password" placeholder="Mot de passe" class="w-full p-2 mb-4 text-black rounded">
+        <button id="btn-login" class="w-full py-2 bg-blue-600 rounded font-bold">Connexion</button>
+    </div>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
 
-  let knots = [];
-  let currentUser = "Membre";
+    <script>
+        // 1. CONFIGURATION (Copiez vos lignes ici)
+        const firebaseConfig = {
+            apiKey: "VOTRE_CLE_ICI",
+            authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
+            projectId: "les-silures-de-canape-c90e6",
+            storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
+            messagingSenderId: "1063082508513",
+            appId: "1:1063082508513:web:1068368a1db2dff18377a0"
+        };
 
-  window.inscrire = (email, password) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => alert("Compte créé avec succès !"))
-      .catch((error) => alert("Erreur d'inscription : " + error.message));
-  };
+        // 2. INITIALISATION
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
-  window.seConnecter = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        alert("Connexion réussie !");
-        document.getElementById('login-page').classList.add('hidden');
-        document.getElementById('dashboard-page').classList.remove('hidden');
-        document.getElementById('bottom-nav').classList.remove('hidden');
-        currentUser = email;
-      })
-      .catch((error) => alert("Erreur de connexion : " + error.message));
-  };
-
-  document.getElementById("btn-inscrire").addEventListener("click", () => {
-    const email = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    if (email && password) {
-      window.inscrire(email, password);
-    } else {
-      alert("Veuillez remplir l'email et le mot de passe.");
-    }
-  });
-
-  window.switchTab = (tabId) => {
-    document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
-    document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-    if (tabId === 'noeuds' && knots.length === 0) {
-      // Initialiser avec un nœud par défaut
-      knots.push({ name: "Nœud de Cuillère", type: "Émérillons", desc: "Faire 5 tours autour du fil principal, repasser dans la première boucle puis serrer.", imgUrl: "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop" });
-      renderKnots();
-    }
-    // Gérer l'état actif des boutons de nav
-    document.querySelectorAll('#bottom-nav button').forEach(btn => btn.classList.add('text-slate-400'));
-    document.querySelectorAll('#bottom-nav button').forEach(btn => btn.classList.remove('text-[#4ac7f2]'));
-    document.getElementById(`nav-${tabId}`).classList.add('text-[#4ac7f2]');
-    document.getElementById(`nav-${tabId}`).classList.remove('text-slate-400');
-  };
-
-  document.getElementById("btn-ajouter").addEventListener("click", async (event) => {
-    event.preventDefault();
-    const species = document.getElementById("fish-species").value;
-    const length = document.getElementById("fish-length").value;
-    const weight = document.getElementById("fish-weight").value;
-    const lure = document.getElementById("fish-lure").value;
-
-    if (!species || !length || !weight || !lure) {
-      alert("Merci de remplir tous les champs !");
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "catches"), {
-        species: species,
-        length: length,
-        weight: weight,
-        lure: lure,
-        timestamp: new Date()
-      });
-      alert("Poisson ajouté au carnet avec succès !");
-      document.getElementById('catch-form').reset();
-    } catch (e) {
-      alert("Erreur lors de l'ajout : " + e.message);
-    }
-  });
-
-  // --- ÉCOUTEUR EN TEMPS RÉEL FIREBASE ---
-  onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
-    const container = document.getElementById('catch-list');
-    container.innerHTML = '';
-
-    if (snapshot.empty) {
-      container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée. Soyez le premier !</p>';
-      return;
-    }
-
-    snapshot.forEach((doc) => {
-      const c = doc.data();
-      const imgUrl = "https://img.icons8.com/color/96/fish.png"; // Icône temporaire
-
-      container.innerHTML += `
-        <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
-          <img src="${imgUrl}" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
-          <div class="flex-1 min-w-0">
-            <h5 class="text-xs font-bold text-white">${c.species}</h5>
-            <p class="text-[11px] text-slate-300">${c.length}cm • ${c.weight}kg • <span class="text-blue-300">${c.lure}</span></p>
-          </div>
-        </div>
-      `;
-    });
-  });
-
-  // --- LOGIQUE NŒUDS ---
-  window.saveKnot = () => {
-    const name = document.getElementById('knot-name').value;
-    const type = document.getElementById('knot-type').value;
-    const desc = document.getElementById('knot-desc').value || 'Aucune consigne.';
-    const imgUrl = "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop";
-
-    knots.unshift({ name, type, desc, imgUrl });
-    renderKnots();
-    document.getElementById('knot-form').reset();
-  };
-
-  function renderKnots() {
-    const container = document.getElementById('knot-list');
-    container.innerHTML = '';
-    knots.forEach((k) => {
-      container.innerHTML += `
-        <div class="bg-slate-900/40 border border-[#4ac7f2]/20 rounded-xl p-3 space-y-2">
-          <h4 class="text-xs font-bold text-[#4ac7f2] uppercase"><i class="fas fa-bullseye mr-1"></i> ${k.name}</h4>
-          <img src="${k.imgUrl}" alt="${k.name}" class="w-full h-36 object-cover rounded-lg">
-          <p class="text-[11px] text-slate-300 leading-relaxed">${k.desc}</p>
-        </div>
-      `;
-    });
-  }
-
-  // --- LOGIQUE DASHBOARD ---
-  window.tbgDashboard = () => {
-    if (auth.currentUser) {
-      document.getElementById('login-page').classList.add('hidden');
-      document.getElementById('dashboard-page').classList.remove('hidden');
-      document.getElementById('dashboard-page').classList.add('flex');
-      document.getElementById('bottom-nav').classList.remove('hidden');
-    } else {
-      alert("Veuillez d'abord vous connecter.");
-    }
-  };
-</script>
+        // 3. LOGIQUE
+        document.getElementById("btn-login").addEventListener("click", () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => alert("Connecté !"))
+                .catch(err => alert("Erreur : " + err.message));
+        });
+    </script>
+</body>
+</html>
