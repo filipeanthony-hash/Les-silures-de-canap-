@@ -287,46 +287,43 @@ Enregistrer dans le guide
 <img id="lightbox-img" src="" alt="Zoom" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
 </div>
 
-<script {nonce}>
-const ADMIN_CODE = "1985";
-
-let currentUser = "Anonyme";
-let catches = [];
-let knots = [];
-let chatMessages = [];
-let currentSpotType = 'riviere';
-let gpsLoaded = false;
-
 function tbgDashboard() {
-const userIn = document.getElementById('username').value.trim();
-const passIn = document.getElementById('password').value.trim();
+    const userIn = document.getElementById('username').value.trim();
+    const passIn = document.getElementById('password').value.trim();
 
-
-    // Vérification du mot de passe (1985)
     if (passIn !== ADMIN_CODE) {
         alert("❌ Mot de passe incorrect !");
-        return; // Stoppe la fonction si le code est faux
+        return;
     }
 
     currentUser = userIn ? userIn : "Membre"; 
-
     document.getElementById('login-page').classList.add('hidden');
     document.getElementById('dashboard-page').classList.remove('hidden');
     document.getElementById('dashboard-page').classList.add('flex');
     document.getElementById('bottom-nav').classList.remove('hidden');
-    
     window.scrollTo({ top: 0, behavior: 'smooth' }); 
 
-    // Initialisation des fonctions
     autoCalculateMoon();
     initGPSWeather();
     loadMockData();
 }
 
-
 function switchTab(tabId) {
-document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
-document.getElementById(tab-${tabId}`).classList.remove('hidden');
+    document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
+    document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+    const navButtons = ['carnet', 'meteo', 'noeuds', 'chat'];
+    navButtons.forEach(id => {
+        const btn = document.getElementById(`nav-${id}`);
+        if (id === tabId) {
+            btn.classList.add('text-[#4ac7f2]');
+            btn.classList.remove('text-slate-400');
+        } else {
+            btn.classList.remove('text-[#4ac7f2]');
+            btn.classList.add('text-slate-400');
+        }
+    });
+}
 
 const navButtons = ['carnet', 'meteo', 'noeuds', 'chat'];
 navButtons.forEach(id => {
