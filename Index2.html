@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Thème visuel sous-marin dépoli haute qualité */
+        /* Thème visuel sous-marin dépoli haute qualité (Style Image 3) */
         .underwater-bg {
             background-image: linear-gradient(rgba(12, 26, 38, 0.6), rgba(12, 26, 38, 0.9)), 
                               url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop');
@@ -18,13 +18,14 @@
             background-attachment: fixed;
         }
 
+        /* Carte verre dépoli épurée (Style Image 3) */
         .glass-card {
-            background: rgba(25, 59, 87, 0.35);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(74, 199, 242, 0.2);
-            border-radius: 1.5rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            background: rgba(25, 59, 87, 0.25); /* Plus translucide pour le style épuré */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(74, 199, 242, 0.15); /* Bordure très fine */
+            border-radius: 2rem; /* Coins plus arrondis pour la beauté */
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
         }
 
         .input-marine {
@@ -35,173 +36,166 @@
         }
         .input-marine:focus {
             border-color: #4ac7f2;
-            box-shadow: 0 0 10px rgba(74, 199, 242, 0.5);
+            box-shadow: 0 0 12px rgba(74, 199, 242, 0.6);
         }
 
-        /* Styles spécifiques pour le Dashboard 'Beau' */
+        /* Styles spécifiques pour le Dashboard épuré (Style Image 3) */
         .progress-ring__circle {
-            transition: stroke-dashoffset 0.35s;
+            transition: stroke-dashoffset 0.3s;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
         }
 
-        .spot-selector input:checked + label {
-            background-color: #3b82f6; 
-            color: white;
-            border-color: #3b82f6;
+        /* Style des options de poisson (Style Image 4 : fond gris et épuré) */
+        #fish-options {
+            background: rgba(30, 41, 59, 0.95); /* Fond gris foncé épuré (Style Image 4) */
+            border: 1px solid rgba(74, 199, 242, 0.2);
+            border-radius: 1rem;
+            margin-top: 5px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
         }
-
         #fish-options p {
-            padding: 10px;
+            padding: 12px 16px;
             cursor: pointer;
             transition: background 0.2s;
+            display: flex;
+            items-center: true;
+            gap: 12px;
+            color: white; /* Texte blanc sur fond gris */
         }
         #fish-options p:hover {
-            background: rgba(74, 199, 242, 0.2);
+            background: rgba(74, 199, 242, 0.1); /* Surlignage subtil */
+        }
+
+        /* Sliders horizontaux épurés (Style Image 3) */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4ac7f2;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 8px rgba(74, 199, 242, 0.8);
         }
     </style>
 </head>
 <body class="underwater-bg flex flex-col h-full antialiased text-white font-sans overflow-hidden">
 
     <header class="glass-card text-white shadow-lg w-full fixed top-0 z-50 rounded-b-xl border-t-0 border-x-0">
-        <div class="max-w-md mx-auto flex items-center justify-between px-5 py-3">
-            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+        <div class="max-w-md mx-auto flex items-center justify-between px-6 py-4">
+            <h1 class="text-2xl font-black tracking-tighter bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
                 Les Silures de Canapé
             </h1>
-            <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-[#4ac7f2] hover:text-white text-2xl transition-all transform hover:scale-110" title="Rejoindre le groupe Facebook">
+            <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-[#4ac7f2] hover:text-white text-3xl transition-all transform hover:scale-110" title="Facebook">
                 <i class="fab fa-facebook"></i>
             </a>
         </div>
     </header>
 
     <div id="login-page" class="flex flex-col items-center justify-center h-full px-6 pt-32 w-full max-w-md mx-auto">
-        <div class="w-full p-8 space-y-6 glass-card relative z-10">
-            <div class="text-center space-y-1">
-                <p class="text-xs uppercase tracking-wider text-blue-300 font-semibold">ESPACE MEMBRES</p>
-                <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
+        <div class="w-full p-10 space-y-7 glass-card relative z-10">
+            <div class="text-center space-y-1.5">
+                <p class="text-xs uppercase tracking-wider text-blue-300 font-bold">ESPACE MEMBRES</p>
+                <p class="text-base text-slate-200">Connectez-vous pour activer le Dashboard</p>
             </div>
 
-            <form id="auth-form" class="space-y-5" onsubmit="event.preventDefault();">
-                <div class="relative">
-                    <input id="email" type="email" required class="input-marine relative block w-full p-3 rounded-lg" placeholder="Identifiant (e-mail)">
-                </div>
+            <form id="auth-form" class="space-y-6" onsubmit="event.preventDefault();">
+                <input id="email" type="email" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Identifiant (e-mail)">
+                <input id="password" type="password" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Mot de passe">
 
-                <div class="relative">
-                    <input id="password" type="password" required class="input-marine relative block w-full p-3 rounded-lg" placeholder="Mot de passe">
-                </div>
-
-                <div class="pt-2 space-y-3">
-                    <button id="btn-login" type="submit" class="w-full py-3 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition-colors">
+                <div class="pt-3 space-y-4">
+                    <button id="btn-login" type="submit" class="w-full py-4 bg-blue-600 text-white rounded-xl text-lg font-black hover:bg-blue-500 transition-colors">
                         Se connecter
                     </button>
-                    <button id="btn-register" type="button" class="w-full py-3 bg-blue-700 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors">
-                        Créer un compte
-                    </button>
-                    <p class="text-xs text-center text-slate-400">
-                        Pas encore de compte ? Créer un compte
+                    <p class="text-sm text-center text-slate-400">
+                        Pas encore de compte ? <a href="#" class="text-blue-300 font-bold">Créer un compte</a>
                     </p>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden flex flex-col flex-1 pt-24 px-4 pb-20 space-y-4 overflow-y-auto w-full max-w-md mx-auto z-10 relative">
+    <div id="dashboard-page" class="hidden flex flex-col flex-1 pt-24 px-5 pb-24 space-y-5 overflow-y-auto w-full max-w-md mx-auto z-10 relative">
         
-        <section class="glass-card p-6 flex flex-col items-center">
-            <p class="text-xs uppercase tracking-wider text-blue-300 font-medium mb-1">PRÉDICTIONS DYNAMIQUES GPS & ESPÈCE</p>
-            <h2 class="text-2xl font-bold mb-5 text-white">Indice d'activité ciblé</h2>
+        <section class="glass-card p-8 flex flex-col items-center">
+            <p class="text-sm uppercase tracking-widest text-blue-300 font-bold mb-1.5">MÉTÉO & PRÉDICTIONS GPS</p>
+            <h2 class="text-3xl font-black mb-6 text-white tracking-tight">Indice d'activité</h2>
 
-            <div class="relative w-40 h-40 flex items-center justify-center mb-5">
-                <svg class="progress-ring" width="160" height="160">
-                    <circle class="progress-ring__circle" stroke="#1c4b72" stroke-width="12" fill="transparent" r="70" cx="80" cy="80"/>
-                    <circle id="activity-ring" class="progress-ring__circle" stroke="#4fd1c5" stroke-width="12" fill="transparent" r="70" cx="80" cy="80"/>
+            <div class="relative w-44 h-44 flex items-center justify-center mb-6">
+                <svg class="progress-ring" width="176" height="176">
+                    <circle class="progress-ring__circle" stroke="#1c4b72" stroke-width="12" fill="transparent" r="80" cx="88" cy="88"/>
+                    <circle id="activity-ring" class="progress-ring__circle" stroke="#4fd1c5" stroke-width="12" fill="transparent" r="80" cx="88" cy="88"/>
                 </svg>
                 <div class="absolute text-center">
-                    <p id="activity-percent" class="text-5xl font-black text-[#4fd1c5]">0%</p>
-                    <p id="activity-status" class="text-sm font-semibold text-slate-300 uppercase tracking-wide">EN ATTENTE GPS</p>
+                    <p id="activity-percent" class="text-6xl font-black text-[#4fd1c5]">0%</p>
+                    <p id="activity-status" class="text-base font-bold text-slate-300 uppercase tracking-widest">EN ATTENTE GPS</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 text-sm text-blue-200">
-                <span>🌎 Position Actuelle :</span>
-                <span id="gps-status-bar" class="font-medium text-white italic">Position non définie</span>
+            <div class="flex items-center gap-2.5 text-sm text-blue-200">
+                <span>🌎 En direct du spot :</span>
+                <span id="gps-status-bar" class="font-bold text-white">Air 14.6°C • Eau estimée 12°C</span>
             </div>
         </section>
 
-        <section class="glass-card p-5 space-y-4">
+        <section class="glass-card p-6 space-y-5">
             
             <div>
-                <label class="block text-sm font-semibold text-blue-300 mb-2"><i class="fas fa-fish mr-2"></i>Poisson ciblé</label>
+                <label class="block text-sm font-bold text-blue-300 mb-2.5"><i class="fas fa-fish mr-2"></i>Poisson ciblé</label>
                 <div class="relative">
-                    <button onclick="toggleFishDropdown()" id="fish-selector" type="button" class="input-marine w-full p-3 rounded-lg flex items-center justify-between">
-                        <span><i class="fas fa-fish text-blue-300 mr-2"></i>-- Choisir une espèce --</span>
+                    <button onclick="toggleFishDropdown()" id="fish-selector" type="button" class="input-marine w-full p-4 rounded-xl flex items-center justify-between text-lg">
+                        <span><i class="fas fa-fish text-blue-300 mr-2.5"></i>-- Choisir une espèce --</span>
                         <i class="fas fa-chevron-down text-blue-400"></i>
                     </button>
-                    <div id="fish-options" class="hidden absolute top-full left-0 right-0 glass-card p-2 mt-1 z-20 space-y-1">
-                        <p onclick="selectFish('Silure')"><i class="fas fa-fish text-blue-300 mr-2"></i>Silure</p>
-                        <p onclick="selectFish('Carpe')"><i class="fas fa-fish text-blue-300 mr-2"></i>Carpe</p>
-                        <p onclick="selectFish('Perche')"><i class="fas fa-fish text-blue-300 mr-2"></i>Perche</p>
-                        <p onclick="selectFish('Brochet')"><i class="fas fa-fish text-blue-300 mr-2"></i>Brochet</p>
-                        <p onclick="selectFish('Gardon')"><i class="fas fa-fish text-blue-300 mr-2"></i>Gardon</p>
-                        <p onclick="selectFish('Anguille')"><i class="fas fa-snake text-blue-300 mr-2"></i>Anguille</p>
+                    <div id="fish-options" class="hidden absolute top-full left-0 right-0 z-20">
+                        <p onclick="selectFish('Silure', 'fish')"><i class="fas fa-fish text-blue-300 mr-2"></i>Silure</p>
+                        <p onclick="selectFish('Carpe', 'fish')"><i class="fas fa-fish text-blue-300 mr-2"></i>Carpe</p>
+                        <p onclick="selectFish('Perche', 'fish')"><i class="fas fa-fish text-blue-300 mr-2"></i>Perche</p>
+                        <p onclick="selectFish('Brochet', 'fish')"><i class="fas fa-fish text-blue-300 mr-2"></i>Brochet</p>
+                        <p onclick="selectFish('Gardon', 'fish')"><i class="fas fa-fish text-blue-300 mr-2"></i>Gardon</p>
+                        <p onclick="selectFish('Anguille', 'snake')"><i class="fas fa-snake text-blue-300 mr-2"></i><i class="fas fa-fish text-xs text-blue-400 ml-[-5px] mr-1"></i>Anguille</p>
                     </div>
                 </div>
             </div>
 
-            <button onclick="getGPS()" type="button" class="w-full py-2.5 mt-2 bg-blue-700 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 transition-colors">
-                <i class="fas fa-satellite mr-2"></i>Récupérer ma position GPS (Indispensable)
+            <button onclick="getGPS()" type="button" class="w-full py-3 mt-1 bg-blue-700 text-white rounded-xl text-base font-bold hover:bg-blue-600 transition-colors">
+                <i class="fas fa-satellite mr-2.5"></i>Récupérer ma position GPS (Indispensable)
             </button>
-            <p id="gps-coords" class="text-xs text-blue-200 text-center italic">Veuillez activer votre GPS</p>
+            <p id="gps-coords" class="text-xs text-blue-200 text-center italic">Veuillez activer votre GPS pour le calcul</p>
 
             <div>
-                <label class="block text-sm font-semibold text-blue-300 mb-2"><i class="fas fa-thermometer-half mr-2"></i>Conditions de session (Carnet)</label>
                 <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs text-blue-200">Temp. de l'eau</span>
-                    <span id="temp-eau-val" class="text-sm font-bold text-white">12°C</span>
+                    <span class="text-sm text-blue-200">Temp. de l'eau</span>
+                    <span id="temp-eau-val" class="text-base font-bold text-white">12°C</span>
                 </div>
-                <input id="temp-eau" type="range" min="0" max="30" value="12" step="1" oninput="updateTempWater(this.value)" class="w-full h-2 bg-blue-900 rounded-lg appearance-none cursor-pointer">
+                <input id="temp-eau" type="range" min="0" max="30" value="12" step="1" oninput="updateTempWater(this.value)" class="w-full h-2.5 bg-blue-900 rounded-full appearance-none cursor-pointer">
             </div>
 
             <div>
                 <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs text-blue-200">Phase Lunaire</span>
-                    <span id="lune-val" class="text-sm font-bold text-white flex items-center gap-1.5">Premier Quartier 🌗</span>
+                    <span class="text-sm text-blue-200">Phase Lunaire</span>
+                    <span id="lune-val" class="text-base font-bold text-white flex items-center gap-2">Premier Quartier 🌗</span>
                 </div>
-                <input id="lune" type="range" min="0" max="3" value="1" step="1" oninput="updateMoonPhase(this.value)" class="w-full h-2 bg-blue-900 rounded-lg appearance-none cursor-pointer">
+                <input id="lune" type="range" min="0" max="3" value="1" step="1" oninput="updateMoonPhase(this.value)" class="w-full h-2.5 bg-blue-900 rounded-full appearance-none cursor-pointer">
             </div>
 
-            <button onclick="saveSession()" type="button" class="w-full mt-3 py-3 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600 transition-colors">
+            <button onclick="saveSession()" type="button" class="w-full mt-4 py-4 bg-blue-600 text-white rounded-xl text-lg font-black hover:bg-blue-500 transition-colors">
                 Enregistrer la session de pêche
             </button>
         </section>
     </div>
 
-    <nav class="glass-card text-white shadow-lg w-full fixed bottom-0 z-50 rounded-t-xl border-b-0 border-x-0 hidden" id="app-nav">
-        <div class="max-w-md mx-auto flex items-center justify-around px-2 py-3.5 text-blue-200">
-            <button onclick="alert('Bientôt : Carnet !')" class="flex flex-col items-center gap-1.5 hover:text-white">
-                <i class="fas fa-book text-xl"></i>
-                <span class="text-xs">Carnet</span>
-            </button>
-            <button onclick="logout()" class="flex flex-col items-center gap-1.5 hover:text-white text-white">
-                <i class="fas fa-cloud-sun-rain text-xl text-white"></i>
-                <span class="text-xs">Météo</span>
-            </button>
-            <button onclick="alert('Bientôt : Nœuds !')" class="flex flex-col items-center gap-1.5 hover:text-white">
-                <i class="fas fa-anchor text-xl"></i>
-                <span class="text-xs">Nœuds</span>
-            </button>
-        </div>
-    </nav>
-
     <script>
-        // --- DONNÉES GLOBALES POUR LE CALCUL ---
+        // --- DONNÉES GLOBALES ---
         let currentLatitude = null;
-        let currentLongitude = null;
         let targetSpecies = null;
         const ring = document.getElementById('activity-ring');
         let circumference = 0;
 
-        // Configuration de l'anneau de progression (Activity ring)
+        // Configuration de l'anneau de progression épuré (Activity ring)
         if (ring) {
             const radius = ring.r.baseVal.value;
             circumference = radius * 2 * Math.PI;
@@ -209,22 +203,7 @@
             ring.style.strokeDashoffset = circumference;
         }
 
-        // Fonction pour mettre à jour l'anneau de progression (DYNAMIQUE)
-        function setActivity(percent, statusText, colorStatus) {
-            const offset = circumference - percent / 100 * circumference;
-            ring.style.strokeDashoffset = offset;
-            
-            const percentElement = document.getElementById('activity-percent');
-            const statusElement = document.getElementById('activity-status');
-            
-            percentElement.innerText = percent + "%";
-            percentElement.className = "text-5xl font-black text-[" + colorStatus + "]";
-            
-            statusElement.innerText = statusText;
-            statusElement.className = "text-sm font-semibold text-[" + colorStatus + "] uppercase tracking-wide";
-        }
-
-        // --- GESTION DE L'AFFICHAGE ET CONNEXION ---
+        // Fonction pour se connecter épurée
         document.getElementById("btn-login").addEventListener("click", (e) => {
             e.preventDefault();
             const email = document.getElementById("email").value;
@@ -233,61 +212,52 @@
                 document.getElementById("login-page").classList.add("hidden");
                 document.getElementById("dashboard-page").classList.remove("hidden");
                 document.getElementById("dashboard-page").classList.add("flex");
-                document.getElementById("app-nav").classList.remove("hidden");
             } else {
                 alert("Veuillez remplir l'identifiant et le mot de passe (ceci est un test).");
             }
         });
 
-        function logout() {
-            document.getElementById("dashboard-page").classList.remove("flex");
-            document.getElementById("dashboard-page").classList.add("hidden");
-            document.getElementById("login-page").classList.remove("hidden");
-            document.getElementById("app-nav").classList.add("hidden");
-        }
-
-        // --- MOTEUR DE CALCUL INTELLIGENT ---
-
-        // Dropdown Custom Poisson Ciblé (Déclenche le calcul)
+        // Dropdown Poisson style gris épuré (Image 4)
         function toggleFishDropdown() {
             document.getElementById("fish-options").classList.toggle("hidden");
         }
 
-        function selectFish(fishName) {
+        function selectFish(fishName, iconType) {
             targetSpecies = fishName;
-            let icon = '<i class="fas fa-fish text-blue-300 mr-2"></i>';
-            if (fishName === "Anguille") icon = '<i class="fas fa-snake text-blue-300 mr-2"></i>';
+            let iconCode = `<i class="fas fa-${iconType} text-blue-300 mr-2.5"></i>`;
             
-            document.getElementById("fish-selector").innerHTML = '<span>' + icon + fishName + '</span> <i class="fas fa-chevron-down text-blue-400"></i>';
+            // On gère l'anguille avec son petit poisson pour le sélecteur
+            if (fishName === "Anguille") {
+                iconCode = `<i class="fas fa-snake text-blue-300 mr-2"></i><i class="fas fa-fish text-xs text-blue-400 ml-[-5px] mr-1"></i>`;
+            }
+
+            document.getElementById("fish-selector").innerHTML = '<span>' + iconCode + fishName + '</span> <i class="fas fa-chevron-down text-blue-400"></i>';
             document.getElementById("fish-options").classList.add("hidden");
             
-            // On lance le calcul dès qu'un poisson est choisi, si le GPS est présent
+            // Calcul automatique si le GPS est déjà présent
             calculateActivityIndex();
         }
 
-        // Fonction pour récupérer la position GPS (Nécessaire au calcul)
+        // Fonction GPS épurée
         function getGPS() {
             if (navigator.geolocation) {
                 document.getElementById("gps-coords").innerText = "Recherche en cours...";
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         currentLatitude = position.coords.latitude;
-                        currentLongitude = position.coords.longitude;
-                        
                         const latVal = currentLatitude.toFixed(4);
-                        const lonVal = currentLongitude.toFixed(4);
+                        const lonVal = position.coords.longitude.toFixed(4);
                         
-                        document.getElementById("gps-coords").innerText = "Lat: " + latVal + " | Lon: " + lonVal;
+                        document.getElementById("gps-coords").innerText = "Lat: " + latVal + " • Lon: " + lonVal;
                         document.getElementById("gps-status-bar").innerText = "Lat: " + latVal + " • Lon: " + lonVal;
                         
-                        // On lance le calcul dès que le GPS est récupéré, si un poisson est déjà choisi
+                        // Calcul automatique si le poisson est déjà choisi
                         calculateActivityIndex();
                     },
                     (error) => {
                         console.error(error);
                         document.getElementById("gps-coords").innerText = "Impossible d'obtenir la position.";
-                        document.getElementById("gps-status-bar").innerText = "Position non définie (Activez GPS)";
-                        setActivity(0, "ERREUR GPS", "#ef4444"); // Rouge pour l'erreur
+                        alert("Erreur GPS : Veuillez activer la localisation sur votre téléphone.");
                     }
                 );
             } else {
@@ -295,95 +265,64 @@
             }
         }
 
-        // --- FONCTION DE CALCUL DYNAMIQUE (Cœur de l'application) ---
+        // --- MOTEUR DE CALCUL INTELLIGENT ---
         function calculateActivityIndex() {
-            // Si l'un des deux éléments manque, on ne fait rien
-            if (!currentLatitude || !targetSpecies) {
-                return;
-            }
+            if (!currentLatitude || !targetSpecies) return;
 
-            // --- Logique Prédictive de l'Activité (Théorique) ---
-            // Dans une vraie app, on interrogerait une API Météo avec Lat/Lon.
-            // Ici, nous créons un moteur théorique basé sur le poisson et la position GPS.
-            
             let percent = 0;
             let statusText = "Faible";
-            let colorStatus = "#fb923c"; // Orange/Jaune pour faible
-
-            // Exemple de logique simple : on utilise la latitude pour changer les scores
-            // (Simule une différence de score entre nord et sud, par exemple)
-            const isNorth = currentLatitude > 48; // Ex: Nord de la France
+            let colorStatus = "#fb923c"; // Orange
+            const isNorth = currentLatitude > 48; // Exemple nord/sud
 
             // Base de score pour chaque espèce
             switch (targetSpecies) {
-                case 'Silure':
-                    percent = isNorth ? 60 : 75; // Le silure est plus actif au sud
-                    break;
-                case 'Carpe':
-                    percent = isNorth ? 50 : 65;
-                    break;
-                case 'Brochet':
-                    percent = isNorth ? 85 : 70; // Le brochet aime le frais (nord)
-                    break;
-                case 'Perche':
-                    percent = 80; // Stable
-                    break;
-                case 'Gardon':
-                    percent = 90; // Stable
-                    break;
-                case 'Anguille':
-                    percent = isNorth ? 30 : 45; // L'anguille est discrète
-                    break;
-                default:
-                    percent = 0;
+                case 'Silure': percent = isNorth ? 60 : 75; break;
+                case 'Carpe': percent = isNorth ? 50 : 65; break;
+                case 'Brochet': percent = isNorth ? 85 : 70; break;
+                case 'Perche': percent = 80; break;
+                case 'Gardon': percent = 90; break;
+                case 'Anguille': percent = isNorth ? 30 : 45; break;
+                default: percent = 0;
             }
 
-            // On définit le statut visuel en fonction du score
-            if (percent >= 80) {
-                statusText = "EXCELLENT";
-                colorStatus = "#4fd1c5"; // Teal/Vert pour excellent
-            } else if (percent >= 60) {
-                statusText = "BON";
-                colorStatus = "#4ac7f2"; // Bleu pour bon
-            } else if (percent >= 40) {
-                statusText = "MOYEN";
-                colorStatus = "#fb923c"; // Orange pour moyen
-            } else {
-                statusText = "FAIBLE";
-                colorStatus = "#ef4444"; // Rouge pour faible
-            }
+            if (percent >= 80) { statusText = "EXCELLENT"; colorStatus = "#4fd1c5"; }
+            else if (percent >= 60) { statusText = "BON"; colorStatus = "#4ac7f2"; }
+            else if (percent >= 40) { statusText = "MOYEN"; colorStatus = "#fb923c"; }
+            else { statusText = "FAIBLE"; colorStatus = "#ef4444"; }
 
-            // On met à jour l'anneau de progression avec le score calculé
-            setActivity(percent, statusText, colorStatus);
+            // Mise à jour épurée
+            const offset = circumference - percent / 100 * circumference;
+            ring.style.strokeDashoffset = offset;
+            
+            const percentElement = document.getElementById('activity-percent');
+            percentElement.innerText = percent + "%";
+            percentElement.style.color = colorStatus;
+            
+            const statusElement = document.getElementById('activity-status');
+            statusElement.innerText = statusText;
+            statusElement.style.color = colorStatus;
         }
 
-        // --- AUTRES FONCTIONS Saisie (Conditions) ---
+        // Autres fonctions épurées
         function updateTempWater(val) {
             document.getElementById("temp-eau-val").innerText = val + "°C";
         }
 
         function updateMoonPhase(val) {
             const moonData = [
-                {text: "Nouvelle Lune", icon: "🌑"},
-                {text: "Premier Quartier", icon: "🌗"},
-                {text: "Pleine Lune", icon: "🌕"},
-                {text: "Dernier Quartier", icon: "🌘"}
+                {text: "Nouvelle Lune", icon: "🌑"}, {text: "Premier Quartier", icon: "🌗"},
+                {text: "Pleine Lune", icon: "🌕"}, {text: "Dernier Quartier", icon: "🌘"}
             ];
             document.getElementById("lune-val").innerHTML = moonData[val].text + " " + moonData[val].icon;
         }
 
         function saveSession() {
             const coordsText = document.getElementById('gps-coords').innerText;
-            const fish = document.getElementById('fish-selector').innerText.trim();
-            const temp = document.getElementById('temp-eau').value;
-            const moon = document.getElementById('lune').value;
-
-            if (coordsText === "Position non définie") {
+            if (coordsText === "Veuillez activer votre GPS pour le calcul") {
                 alert("Veuillez d'abord récupérer vos coordonnées GPS avant d'enregistrer.");
                 return;
             }
-
-            alert("Prise / Session enregistrée (Test) !\nPoisson : " + fish + "\nPosition : " + coordsText + "\nTemp : " + temp + "°C\nLune : " + moon);
+            alert("Session enregistrée !");
         }
     </script>
 </body>
