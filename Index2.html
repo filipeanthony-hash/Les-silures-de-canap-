@@ -238,64 +238,31 @@
             calculateActivityIndex();
         }
 
-        // --- FONCTION GPS CORRIGÉE ET SÉCURISÉE ---
+        // Fonction GPS épurée
         function getGPS() {
-            const gpsCoords = document.getElementById("gps-coords");
-            const gpsStatusBar = document.getElementById("gps-status-bar");
-
-            // Vérification si la géolocalisation est supportée
-            if (!navigator.geolocation) {
-                gpsCoords.innerText = "La géolocalisation n'est pas supportée par ce navigateur.";
-                alert("Erreur : Votre navigateur ne supporte pas le GPS.");
-                return;
-            }
-
-            // Options pour une meilleure précision
-            const options = {
-                enableHighAccuracy: true, // Demande la meilleure précision possible
-                timeout: 10000,           // Attend 10 secondes maximum
-                maximumAge: 0             // Ne pas utiliser de position en cache
-            };
-
-            gpsCoords.innerText = "Recherche de votre position...";
-
-            // Lancement de la demande de position
-            navigator.geolocation.getCurrentPosition(
-                // Succès
-                (position) => {
-                    currentLatitude = position.coords.latitude;
-                    const latVal = currentLatitude.toFixed(4);
-                    const lonVal = position.coords.longitude.toFixed(4);
-                    
-                    // Mise à jour de l'affichage
-                    gpsCoords.innerText = "Lat: " + latVal + " • Lon: " + lonVal;
-                    gpsStatusBar.innerText = "Lat: " + latVal + " • Lon: " + lonVal;
-                    
-                    // Lancement automatique du calcul
-                    calculateActivityIndex();
-                },
-                // Erreur
-                (error) => {
-                    console.error("Erreur Geolocation :", error);
-                    let msg = "";
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            msg = "Accès GPS refusé par l'utilisateur.";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            msg = "Position GPS non disponible (signal faible ?).";
-                            break;
-                        case error.TIMEOUT:
-                            msg = "Délai d'attente GPS dépassé.";
-                            break;
-                        default:
-                            msg = "Une erreur GPS inconnue est survenue.";
+            if (navigator.geolocation) {
+                document.getElementById("gps-coords").innerText = "Recherche en cours...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLatitude = position.coords.latitude;
+                        const latVal = currentLatitude.toFixed(4);
+                        const lonVal = position.coords.longitude.toFixed(4);
+                        
+                        document.getElementById("gps-coords").innerText = "Lat: " + latVal + " • Lon: " + lonVal;
+                        document.getElementById("gps-status-bar").innerText = "Lat: " + latVal + " • Lon: " + lonVal;
+                        
+                        // Calcul automatique si le poisson est déjà choisi
+                        calculateActivityIndex();
+                    },
+                    (error) => {
+                        console.error(error);
+                        document.getElementById("gps-coords").innerText = "Impossible d'obtenir la position.";
+                        alert("Erreur GPS : Veuillez activer la localisation sur votre téléphone.");
                     }
-                    gpsCoords.innerText = "Erreur : " + msg;
-                    alert("Erreur GPS : " + msg + "\nAssurez-vous d'avoir activé la localisation et autorisé le site.");
-                },
-                options
-            );
+                );
+            } else {
+                alert("La géolocalisation n'est pas supportée par votre appareil.");
+            }
         }
 
         // --- MOTEUR DE CALCUL INTELLIGENT ---
@@ -351,7 +318,7 @@
 
         function saveSession() {
             const coordsText = document.getElementById('gps-coords').innerText;
-            if (coordsText === "Veuillez activer votre GPS pour le calcul" || coordsText.startsWith("Erreur")) {
+            if (coordsText === "Veuillez activer votre GPS pour le calcul") {
                 alert("Veuillez d'abord récupérer vos coordonnées GPS avant d'enregistrer.");
                 return;
             }
