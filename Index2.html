@@ -324,13 +324,33 @@
             }
             alert("Session enregistrée !");
         }
-    </script// ... (votre code existant) ...
+         // --- AJOUT DES FONCTIONS PHOTOS ---
 
-function saveSession() {
-    // ... votre code existant ...
-}
+    function previewKnot(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const knotList = document.getElementById('knot-list');
+                const div = document.createElement('div');
+                div.className = "glass-card p-1 cursor-pointer";
+                div.innerHTML = `<img src="${e.target.result}" class="rounded-xl w-full h-24 object-cover" onclick="openLightbox('${e.target.result}')">`;
+                knotList.appendChild(div);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
-// --- AJOUT DES FONCTIONS PHOTOS ---
+    function openLightbox(imgSrc) {
+        const lightbox = document.getElementById('lightbox');
+        const img = document.getElementById('lightbox-img');
+        img.src = imgSrc;
+        lightbox.classList.remove('hidden');
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.add('hidden');
+    }
+
 
 function previewKnot(input) {
     if (input.files && input.files[0]) {
