@@ -299,18 +299,30 @@ let gpsLoaded = false;
 
 function tbgDashboard() {
 const userIn = document.getElementById('username').value.trim();
-currentUser = userIn ? userIn : "Membre";
+const passIn = document.getElementById('password').value.trim();
 
-document.getElementById('login-page').classList.add('hidden');
-document.getElementById('dashboard-page').classList.remove('hidden');
-document.getElementById('dashboard-page').classList.add('flex');
-document.getElementById('bottom-nav').classList.remove('hidden');
-window.scrollTo({ top: 0, behavior: 'smooth' });
 
-autoCalculateMoon();
-initGPSWeather();
-loadMockData();
+    // Vérification du mot de passe (1985)
+    if (passIn !== ADMIN_CODE) {
+        alert("❌ Mot de passe incorrect !");
+        return; // Stoppe la fonction si le code est faux
+    }
+
+    currentUser = userIn ? userIn : "Membre"; 
+
+    document.getElementById('login-page').classList.add('hidden');
+    document.getElementById('dashboard-page').classList.remove('hidden');
+    document.getElementById('dashboard-page').classList.add('flex');
+    document.getElementById('bottom-nav').classList.remove('hidden');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+
+    // Initialisation des fonctions
+    autoCalculateMoon();
+    initGPSWeather();
+    loadMockData();
 }
+
 
 function switchTab(tabId) {
 document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
