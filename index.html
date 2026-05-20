@@ -279,36 +279,35 @@
 
     <script type="module">
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 
-  const firebaseConfig = {
-    apiKey: "AzaSyARnepyvwgwjbv97IBIMEA2UR28c-jVALM",
-    authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
-    projectId: "les-silures-de-canape-c90e6",
-    storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
-    messagingSenderId: "1063082508513",
-    appId: "1:1063082508513:web:1068368a1db2dff18377a0",
-    measurementId: "G-99MB1YMZR4"
-  };
-
+  const firebaseConfig = { /* ... votre config ... */ };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Rendre les fonctions globales pour les boutons HTML
-  window.inscrire = (email, password) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => alert("Compte créé avec succès !"))
-      .catch((error) => alert("Erreur : " + error.message));
-  };
+  // --- LOGIQUE GLOBALE ---
+  // Mettez ici toutes vos fonctions : saveSession, previewKnot, onSnapshot, etc.
+  
+  window.inscrire = (email, password) => { /* ... */ };
+  window.seConnecter = (email, password) => { /* ... */ };
 
-  window.seConnecter = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => alert("Connexion réussie !"))
-      .catch((error) => alert("Erreur : " + error.message));
+  // ... Ajoutez ici TOUTES les fonctions que vous aviez précédemment ...
+  
+  // Exemple pour votre bouton ajouter :
+  document.getElementById("btn-ajouter").addEventListener("click", async () => {
+      // ... votre logique ...
+  });
+
+  window.switchTab = (tabId) => {
+      document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden'); // Correction du template string
+      if (tabId === 'chat') { renderChat(); }
   };
-</script>
+</script> 
+</body> 
+</html>
                 length: length,
                 weight: weight,
                 lure: lure,
