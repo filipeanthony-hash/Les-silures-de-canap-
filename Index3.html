@@ -95,7 +95,6 @@
         </div>
     </header>
 
-    <!-- ÉCRAN DE CONNEXION -->
     <div id="login-page" class="flex flex-col items-center justify-center h-full px-6 pt-32 w-full max-w-md mx-auto">
         <div class="w-full p-10 space-y-7 glass-card relative z-10">
             <div class="text-center space-y-1.5">
@@ -119,7 +118,6 @@
         </div>
     </div>
 
-    <!-- TABLEAU DE BORD (DASHBOARD) -->
     <div id="dashboard-page" class="hidden flex-col flex-1 pt-24 px-5 pb-24 space-y-5 overflow-y-auto w-full max-w-md mx-auto z-10 relative">
         
         <section class="glass-card p-8 flex flex-col items-center">
@@ -186,7 +184,6 @@
             </div>
         </section>
 
-        <!-- --- CASE NE : ALBUM PHOTO SÉCURISÉ --- -->
         <section class="glass-card p-6 space-y-4">
             <div class="flex items-center justify-between border-b border-white/10 pb-2">
                 <h3 class="text-lg font-black text-white flex items-center gap-2">
@@ -204,9 +201,15 @@
             </div>
 
             <div id="knot-list" class="grid grid-cols-3 gap-3 pt-2">
-                <!-- Emplacement des photos -->
-            </div>
+                </div>
         </section>
+    </div>
+
+    <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 cursor-pointer" onclick="closeLightbox()">
+        <div class="absolute top-4 right-4 text-white text-2xl p-2 bg-white/10 rounded-full w-10 h-10 flex items-center justify-center">
+            <i class="fas fa-times"></i>
+        </div>
+        <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl object-contain">
     </div>
 
     <script>
@@ -215,7 +218,7 @@
         let targetSpecies = null;
         let ring = null;
         let circumference = 0;
-        const ADMIN_CODE = "1985"; // Ton code secret pour effacer
+        const ADMIN_CODE = "1985"; // Code secret pour effacer les photos
 
         // Initialisation après chargement complet du DOM
         window.addEventListener('DOMContentLoaded', () => {
@@ -236,10 +239,7 @@
                     const password = document.getElementById("password").value.trim();
                     
                     if (email !== "" && password !== "") {
-                        // Masque la page de login
                         document.getElementById("login-page").style.display = "none";
-                        
-                        // Affiche proprement le dashboard
                         const dashboard = document.getElementById("dashboard-page");
                         dashboard.classList.remove("hidden");
                         dashboard.style.display = "flex";
@@ -385,14 +385,5 @@
             document.getElementById('lightbox').classList.add('hidden');
         }
     </script>
-
-    <!-- Lightbox (Zoom photo) -->
-    <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 cursor-pointer" onclick="closeLightbox()">
-        <div class="absolute top-4 right-4 text-white text-2xl p-2 bg-white/10 rounded-full w-10 h-10 flex items-center justify-center">
-            <i class="fas fa-times"></i>
-        </div>
-        <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl object-contain">
-    </div>
-
 </body>
 </html>
