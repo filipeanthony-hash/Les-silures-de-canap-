@@ -278,53 +278,38 @@
     </div>
 
     <script type="module">
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    // --- IMPORTS FIREBASE ---
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 
-  const firebaseConfig = { /* ... votre config ... */ };
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    // --- CONFIGURATION ---
+    const firebaseConfig = { 
+        apiKey: "AzaSyARnepyvwgwjbv97IBIMEA2UR28c-jVALM",
+        authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
+        projectId: "les-silures-de-canape-c90e6",
+        storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
+        messagingSenderId: "1063082508513",
+        appId: "1:1063082508513:web:1068368a1db2dff18377a0",
+        measurementId: "G-99MB1YMZR4"
+    };
 
-  // --- LOGIQUE GLOBALE ---
-  // Mettez ici toutes vos fonctions : saveSession, previewKnot, onSnapshot, etc.
-  
-  window.inscrire = (email, password) => { /* ... */ };
-  window.seConnecter = (email, password) => { /* ... */ };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  // ... Ajoutez ici TOUTES les fonctions que vous aviez précédemment ...
-  
-  // Exemple pour votre bouton ajouter :
-  document.getElementById("btn-ajouter").addEventListener("click", async () => {
-      // ... votre logique ...
-  });
+    // --- VOS FONCTIONS ---
+    window.inscrire = (email, password) => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => alert("Compte créé !"))
+            .catch((e) => alert("Erreur : " + e.message));
+    };
 
-  window.switchTab = (tabId) => {
-      document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
-      document.getElementById(`tab-${tabId}`).classList.remove('hidden'); // Correction du template string
-      if (tabId === 'chat') { renderChat(); }
-  };
-</scripttype="module">
-    // 1. Vos imports (getAuth, getFirestore, etc.)
-    
-    // 2. Votre config Firebase
-    
-    // 3. Toutes vos fonctions (saveSession, previewKnot, onSnapshot, etc.)
-    // C'est ICI que vous collez le code qui commençait par "length: length, ..."
-    
-    // 4. Vos EventListeners (btn-ajouter, btn-inscrire)
-
-    // 5. Votre fonction switchTab
-
-             
-                weight: weight,
-                lure: lure,
-                timestamp: new Date() // Ajout d'un timestamp pour le tri
-            });
-            document.getElementById('catch-form').reset();
-            // Pas besoin d'alerte, onSnapshot s'occupe de l'affichage
-        } catch (e) {
+    window.seConnecter = (email, password) => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => alert("Connecté !"))
+            .catch((e) => alert("Erreur : " + e.message));
+    };
             console.error("Erreur d'ajout dans Firestore : ", e);
             alert("Erreur lors de l'enregistrement de la prise.");
         }
