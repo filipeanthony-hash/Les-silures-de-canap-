@@ -110,8 +110,7 @@
                 <div class="flex justify-between items-center px-1">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-blue-300">Vos exploits récents</h4>
                 </div>
-                <div id="catch-list" class="space-y-2.5">
-                    </div>
+                <div id="catch-list" class="space-y-2.5"></div>
             </div>
         </section>
 
@@ -218,7 +217,6 @@
         let knots = [];
         let chatMessages = [];
 
-        // Neutraliser la soumission par défaut des formulaires
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', (e) => e.preventDefault());
         });
@@ -238,7 +236,6 @@
             }
         }
 
-        // Écouteur Connexion
         document.getElementById("btn-connexion").addEventListener("click", () => {
             const email = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value.trim();
@@ -256,7 +253,6 @@
                 .catch((e) => alert("Erreur de connexion : " + e.message));
         });
 
-        // Écouteur Inscription
         document.getElementById("btn-inscrire").addEventListener("click", () => {
             const email = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value.trim();
@@ -274,7 +270,6 @@
                 .catch((e) => alert("Erreur d'inscription : " + e.message));
         });
 
-        // Ajouter une capture
         document.getElementById("btn-ajouter").addEventListener("click", async () => {
             const species = document.getElementById("fish-species").value.trim();
             const length = document.getElementById("fish-length").value;
@@ -301,7 +296,6 @@
             }
         });
 
-        // Écouteur Firestore Prises
         onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
             const container = document.getElementById('catch-list'); 
             if (!container) return;
@@ -326,7 +320,6 @@
             });
         });
 
-        // Changement d'onglets
         function switchTab(tabId) {
             document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
@@ -345,7 +338,6 @@
         document.getElementById('nav-btn-noeuds').addEventListener('click', () => switchTab('noeuds'));
         document.getElementById('nav-btn-chat').addEventListener('click', () => switchTab('chat'));
 
-        // Rendu Chat
         function renderChat() {
             const box = document.getElementById('chat-box');
             if (!box) return;
@@ -378,7 +370,6 @@
             textInput.value = '';
         });
 
-        // Rendu Noeuds
         function renderKnots() {
             const container = document.getElementById('knot-list');
             if (!container) return;
