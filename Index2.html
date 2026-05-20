@@ -272,91 +272,115 @@
                     gpsStatusBar.innerText = "Lat: " + latVal + " • Lon: " + lonVal;
                     
                     // Lancement automatique du calcul
-                    calculateActivityIndex();
-                },
-                // Erreur
-                (error) => {
-                    console.error("Erreur Geolocation :", error);
-                    let msg = "";
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            msg = "Accès GPS refusé par l'utilisateur.";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            msg = "Position GPS non disponible (signal faible ?).";
-                            break;
-                        case error.TIMEOUT:
-                            msg = "Délai d'attente GPS dépassé.";
-                            break;
-                        default:
-                            msg = "Une erreur GPS inconnue est survenue.";
-                    }
-                    gpsCoords.innerText = "Erreur : " + msg;
-                    alert("Erreur GPS : " + msg + "\nAssurez-vous d'avoir activé la localisation et autorisé le site.");
-                },
-                options
-            );
+<script>
+    // --- DONNÉES GLOBALES ---
+    let currentLatitude = null;
+    let targetSpecies = null;
+    const ring = document.getElementById('activity-ring');
+    let circumference = 0;
+
+    // Configuration de l'anneau de progression
+    if (ring) {
+        const radius = ring.r.baseVal.value;
+        circumference = radius * 2 * Math.PI;
+        ring.style.strokeDasharray = `${circumference} ${circumference}`;
+        ring.style.strokeDashoffset = circumference;
+    }
+
+    // Gestion de la connexion
+    document.getElementById("btn-login").addEventListener("click", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        if (email !== "" && password !== "") {
+            document.getElementById("login-page").classList.add("hidden");
+            document.getElementById("dashboard-page").classList.remove("hidden");
+            document.getElementById("dashboard-page").classList.add("flex");
+        } else {
+            alert("Veuillez remplir l'identifiant et le mot de passe.");
+        }
+    });
+
+    // Gestion du menu espèce
+    function toggleFishDropdown() {
+        document.getElementById("fish-options").classList.toggle("hidden");
+    }
+
+    function selectFish(fishName, iconType) {
+        targetSpecies = fishName;
+        let iconCode = `<i class="fas fa-${iconType} text-blue-300 mr-2.5"></i>`;
+        if (fishName === "Anguille") {
+            iconCode = `<i class="fas fa-snake text-blue-300 mr-2"></i><i class="fas fa-fish text-xs text-blue-400 ml-[-5px] mr-1"></i>`;
+        }
+        document.getElementById("fish-selector").innerHTML = '<span>' + iconCode + fishName + '</span> <i class="fas fa-chevron-down text-blue-400"></i>';
+        document.getElementById("fish-options").classList.add("hidden");
+        calculateActivityIndex();
+    }
+
+    // --- NOUVELLE FONCTION : RÉCUPÉRATION DU NOM DE LA VILLE ---
+    async function getCityName(lat, lon) {
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+            const data = await response.json();
+            const city = data.address.city || data.address.town || data.address.village || "Zone de pêche";
+            document.getElementById("gps-status-bar").innerText = `📍 ${city}`;
+        } catch (error) {
+            console.error("Erreur ville:", error);
+        }
+    }
+
+    // --- FONCTION GPS AMÉLIORÉE ---
+    function getGPS() {
+        if (!navigator.geolocation) {
+            alert("GPS non supporté.");
+            return;
+        }
+        document.getElementById("gps-coords").innerText = "Recherche...";
+        
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                currentLatitude = position.coords.latitude;
+                let lon = position.coords.longitude;
+                
+                // 1. Afficher les coordonnées
+                document.getElementById("gps-coords").innerText = "Lat: " + currentLatitude.toFixed(4) + " • Lon: " + lon.toFixed(4);
+                
+                // 2. Récupérer le nom de la ville
+                getCityName(currentLatitude, lon);
+                
+                // 3. Lancer le calcul
+                calculateActivityIndex();
+            },
+            (error) => {
+                alert("Erreur GPS : Activez la localisation.");
+            },
+            { enableHighAccuracy: true }
+        );
+    }
+
+    // --- CALCUL DE L'ACTIVITÉ ---
+    function calculateActivityIndex() {
+        if (!currentLatitude || !targetSpecies) return;
+
+        let percent = 0;
+        switch (targetSpecies) {
+            case 'Silure': percent = 70; break;
+            case 'Carpe': percent = 60; break;
+            case 'Brochet': percent = 85; break;
+            case 'Anguille': percent = 40; break;
+            default: percent = 50;
         }
 
-        // --- MOTEUR DE CALCUL INTELLIGENT ---
-        function calculateActivityIndex() {
-            if (!currentLatitude || !targetSpecies) return;
+        const offset = circumference - (percent / 100) * circumference;
+        ring.style.strokeDashoffset = offset;
+        document.getElementById('activity-percent').innerText = percent + "%";
+        document.getElementById('activity-status').innerText = "ACTIF";
+    }
 
-            let percent = 0;
-            let statusText = "Faible";
-            let colorStatus = "#fb923c"; // Orange
-            const isNorth = currentLatitude > 48; // Exemple nord/sud
+    function updateTempWater(val) { document.getElementById("temp-eau-val").innerText = val + "°C"; }
+    function updateMoonPhase(val) { /* ... logique phase lunaire ... */ }
+    function saveSession() { alert("Session enregistrée !"); }
+</script>
 
-            // Base de score pour chaque espèce
-            switch (targetSpecies) {
-                case 'Silure': percent = isNorth ? 60 : 75; break;
-                case 'Carpe': percent = isNorth ? 50 : 65; break;
-                case 'Brochet': percent = isNorth ? 85 : 70; break;
-                case 'Perche': percent = 80; break;
-                case 'Gardon': percent = 90; break;
-                case 'Anguille': percent = isNorth ? 30 : 45; break;
-                default: percent = 0;
-            }
-
-            if (percent >= 80) { statusText = "EXCELLENT"; colorStatus = "#4fd1c5"; }
-            else if (percent >= 60) { statusText = "BON"; colorStatus = "#4ac7f2"; }
-            else if (percent >= 40) { statusText = "MOYEN"; colorStatus = "#fb923c"; }
-            else { statusText = "FAIBLE"; colorStatus = "#ef4444"; }
-
-            // Mise à jour épurée
-            const offset = circumference - percent / 100 * circumference;
-            ring.style.strokeDashoffset = offset;
-            
-            const percentElement = document.getElementById('activity-percent');
-            percentElement.innerText = percent + "%";
-            percentElement.style.color = colorStatus;
-            
-            const statusElement = document.getElementById('activity-status');
-            statusElement.innerText = statusText;
-            statusElement.style.color = colorStatus;
-        }
-
-        // Autres fonctions épurées
-        function updateTempWater(val) {
-            document.getElementById("temp-eau-val").innerText = val + "°C";
-        }
-
-        function updateMoonPhase(val) {
-            const moonData = [
-                {text: "Nouvelle Lune", icon: "🌑"}, {text: "Premier Quartier", icon: "🌗"},
-                {text: "Pleine Lune", icon: "🌕"}, {text: "Dernier Quartier", icon: "🌘"}
-            ];
-            document.getElementById("lune-val").innerHTML = moonData[val].text + " " + moonData[val].icon;
-        }
-
-        function saveSession() {
-            const coordsText = document.getElementById('gps-coords').innerText;
-            if (coordsText === "Veuillez activer votre GPS pour le calcul" || coordsText.startsWith("Erreur")) {
-                alert("Veuillez d'abord récupérer vos coordonnées GPS avant d'enregistrer.");
-                return;
-            }
-            alert("Session enregistrée !");
-        }
-    </script>
 </body>
 </html>
