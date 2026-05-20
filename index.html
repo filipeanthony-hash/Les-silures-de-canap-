@@ -199,9 +199,9 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
-        // Configuration Firebase validée
+        // CONFIGURATION CORRIGÉE (Clé API nettoyée)
         const firebaseConfig = { 
-            apiKey: "AIzaSyARnepyvwgwjbv97IBIMEA2UR28c-jVALM",
+            apiKey: "AIzaSyARnepyvwgwjbv97lBlMEA2UR28c-jVALM",
             authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
             projectId: "les-silures-de-canape-c90e6",
             storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
@@ -217,6 +217,7 @@
         let currentUser = "Membre";
         let knots = [];
         let chatMessages = [];
+        let firestoreActive = false; // Sécurité anti-plantage si Firestore n'est pas activé sur le compte
 
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', (e) => e.preventDefault());
@@ -235,6 +236,9 @@
                 knots.push({name: "Nœud de Cuillère", type: "Émérillons", desc: "Faire 5 tours autour du fil principal, repasser dans la première boucle puis serrer."});
                 renderKnots();
             }
+
+            // Lancement sécurisé de la base de données
+            initFirestoreDistant();
         }
 
         document.getElementById("btn-connexion").addEventListener("click", () => {
@@ -282,6 +286,12 @@
                 return;
             }
 
+            if (!firestoreActive) {
+                alert("Mode démo : Poisson ajouté localement (Activez Firestore sur votre console Firebase pour l'enregistrement permanent).");
+                ajouterPoissonLocal(species, length, weight, lure);
+                return;
+            }
+
             try {
                 await addDoc(collection(db, "catches"), {
                     species: species,
@@ -293,33 +303,60 @@
                 alert("Poisson ajouté !");
                 document.getElementById('catch-form').reset();
             } catch (e) {
-                alert("Erreur lors de l'enregistrement : " + e.message);
+                alert("Erreur base de données, sauvegarde locale temporaire.");
+                ajouterPoissonLocal(species, length, weight, lure);
             }
         });
 
-        onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
-            const container = document.getElementById('catch-list'); 
+        function ajouterPoissonLocal(species, length, weight, lure) {
+            const container = document.getElementById('catch-list');
             if (!container) return;
-            container.innerHTML = ''; 
-
-            if (snapshot.empty) {
-                container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée.</p>';
-                return;
-            }
-
-            snapshot.forEach((doc) => {
-                const c = doc.data();
-                container.innerHTML += `
-                    <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
-                        <img src="https://img.icons8.com/color/96/fish.png" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
-                        <div class="flex-1 min-w-0">
-                            <h5 class="text-xs font-bold text-white">${c.species || 'Inconnu'}</h5>
-                            <p class="text-[11px] text-slate-300">${c.length || '--'}cm • ${c.weight || '--'}kg • <span class="text-blue-300">${c.lure || 'Aucun'}</span></p>
-                        </div>
+            if (container.innerHTML.includes("Aucune prise")) container.innerHTML = '';
+            container.innerHTML += `
+                <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
+                    <img src="https://img.icons8.com/color/96/fish.png" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <h5 class="text-xs font-bold text-white">${species}</h5>
+                        <p class="text-[11px] text-slate-300">${length}cm • ${weight}kg • <span class="text-blue-300">${lure}</span></p>
                     </div>
-                `;
-            });
-        });
+                </div>
+            `;
+            document.getElementById('catch-form').reset();
+        }
+
+        function initFirestoreDistant() {
+            try {
+                onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
+                    firestoreActive = true;
+                    const container = document.getElementById('catch-list'); 
+                    if (!container) return;
+                    container.innerHTML = ''; 
+
+                    if (snapshot.empty) {
+                        container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée.</p>';
+                        return;
+                    }
+
+                    snapshot.forEach((doc) => {
+                        const c = doc.data();
+                        container.innerHTML += `
+                            <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
+                                <img src="https://img.icons8.com/color/96/fish.png" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
+                                <div class="flex-1 min-w-0">
+                                    <h5 class="text-xs font-bold text-white">${c.species || 'Inconnu'}</h5>
+                                    <p class="text-[11px] text-slate-300">${c.length || '--'}cm • ${c.weight || '--'}kg • <span class="text-blue-300">${c.lure || 'Aucun'}</span></p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }, (error) => {
+                    console.log("Firestore en attente d'activation sur la console Firebase.");
+                    document.getElementById('catch-list').innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Prêt pour l\'enregistrement local.</p>';
+                });
+            } catch(e) {
+                firestoreActive = false;
+            }
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
@@ -368,7 +405,7 @@
 
             chatMessages.push({ user: currentUser, text: text, time: timestamp });
             renderChat();
-            textInput.value = '';
+            textInputInput.value = '';
         });
 
         function renderKnots() {
