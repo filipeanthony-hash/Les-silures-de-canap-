@@ -191,98 +191,56 @@
     </div>
 
     <script>
-        // --- DONNÉES GLOBALES ---
-        let currentLatitude = null;
-        let targetSpecies = null;
-        const ring = document.getElementById('activity-ring');
-        let circumference = 0;
-
-        // Configuration de l'anneau de progression épuré (Activity ring)
-        if (ring) {
-            const radius = ring.r.baseVal.value;
-            circumference = radius * 2 * Math.PI;
-            ring.style.strokeDasharray = `${circumference} ${circumference}`;
-            ring.style.strokeDashoffset = circumference;
-        }
-
-        // Fonction pour se connecter épurée
-        document.getElementById("btn-login").addEventListener("click", (e) => {
-            e.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            if (email !== "" && password !== "") {
-                document.getElementById("login-page").classList.add("hidden");
-                document.getElementById("dashboard-page").classList.remove("hidden");
-                document.getElementById("dashboard-page").classList.add("flex");
-            } else {
-                alert("Veuillez remplir l'identifiant et le mot de passe (ceci est un test).");
-            }
-        });
-
-        // Dropdown Poisson style gris épuré (Image 4)
-        function toggleFishDropdown() {
-            document.getElementById("fish-options").classList.toggle("hidden");
-        }
-
-        function selectFish(fishName, iconType) {
-            targetSpecies = fishName;
-            let iconCode = `<i class="fas fa-${iconType} text-blue-300 mr-2.5"></i>`;
-            
-            // On gère l'anguille avec son petit poisson pour le sélecteur
-            if (fishName === "Anguille") {
-                iconCode = `<i class="fas fa-snake text-blue-300 mr-2"></i><i class="fas fa-fish text-xs text-blue-400 ml-[-5px] mr-1"></i>`;
-            }
-
-            document.getElementById("fish-selector").innerHTML = '<span>' + iconCode + fishName + '</span> <i class="fas fa-chevron-down text-blue-400"></i>';
-            document.getElementById("fish-options").classList.add("hidden");
-            
-            // Calcul automatique si le GPS est déjà présent
-            calculateActivityIndex();
-        }
-
-        // --- FONCTION GPS CORRIGÉE ET SÉCURISÉE ---
-        function getGPS() {
-            const gpsCoords = document.getElementById("gps-coords");
-            const gpsStatusBar = document.getElementById("gps-status-bar");
-
-            // Vérification si la géolocalisation est supportée
-            if (!navigator.geolocation) {
-                gpsCoords.innerText = "La géolocalisation n'est pas supportée par ce navigateur.";
-                alert("Erreur : Votre navigateur ne supporte pas le GPS.");
-                return;
-            }
-
-            // Options pour une meilleure précision
-            const options = {
-                enableHighAccuracy: true, // Demande la meilleure précision possible
-                timeout: 10000,           // Attend 10 secondes maximum
-                maximumAge: 0             // Ne pas utiliser de position en cache
-            };
-
-            gpsCoords.innerText = "Recherche de votre position...";
-
-            // Lancement de la demande de position
-            navigator.geolocation.getCurrentPosition(
-                // Succès
-                (position) => {
-                    currentLatitude = position.coords.latitude;
-                    const latVal = currentLatitude.toFixed(4);
-                    const lonVal = position.coords.longitude.toFixed(4);
-                    
-                    // Mise à jour de l'affichage
-                    gpsCoords.innerText = "Lat: " + latVal + " • Lon: " + lonVal;
-                    gpsStatusBar.innerText = "Lat: " + latVal + " • Lon: " + lonVal;
-                    
-                    // Lancement automatique du calcul
-                    
     // --- DONNÉES GLOBALES ---
     let currentLatitude = null;
     let targetSpecies = null;
     const ring = document.getElementById('activity-ring');
     let circumference = 0;
 
-    // Configuration de l'anneau de progression
+    // --- INITIALISATION ---
     if (ring) {
+        const radius = ring.r.baseVal.value;
+        circumference = radius * 2 * Math.PI;
+        ring.style.strokeDasharray = `${circumference} ${circumference}`;
+        ring.style.strokeDashoffset = circumference;
+    }
+
+    // --- CONNEXION ---
+    document.getElementById("btn-login").onclick = function() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        if (email !== "" && password !== "") {
+            document.getElementById("login-page").classList.add("hidden");
+            document.getElementById("dashboard-page").classList.remove("hidden");
+        } else {
+            alert("Veuillez remplir l'identifiant et le mot de passe.");
+        }
+    };
+
+    // --- FONCTIONS ---
+    function selectFish(fishName, iconType) {
+        targetSpecies = fishName;
+        document.getElementById("fish-selector").innerHTML = '<span><i class="fas fa-' + iconType + ' text-blue-300 mr-2"></i>' + fishName + '</span>';
+        document.getElementById("fish-options").classList.add("hidden");
+        calculateActivityIndex();
+    }
+
+    function getGPS() {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            currentLatitude = pos.coords.latitude;
+            document.getElementById("gps-coords").innerText = "Position activée";
+            calculateActivityIndex();
+        }, () => alert("GPS requis."));
+    }
+
+    function calculateActivityIndex() {
+        if (!currentLatitude || !targetSpecies) return;
+        ring.style.strokeDashoffset = circumference * 0.2; // Exemple 80%
+        document.getElementById('activity-percent').innerText = "80%";
+        document.getElementById('activity-status').innerText = "ACTIF";
+    }
+</script>
+
         const radius = ring.r.baseVal.value;
         circumference = radius * 2 * Math.PI;
         ring.style.strokeDasharray = `${circumference} ${circumference}`;
