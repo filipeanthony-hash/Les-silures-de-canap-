@@ -325,22 +325,22 @@
     // --- ÉCOUTEUR EN TEMPS RÉEL FIREBASE ( Firestore -> Interface ) ---
     // Dès que la base de données change, cette fonction se déclenche automatiquement
     onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
-        const container =
-        container.innerHTML = ''; // Vide la liste actuelle pour tout reconstruire
+        const container = document.getElementById('catches-list'); // <--- CORRIGÉ ICI
+        container.innerHTML = ''; 
 
         if (snapshot.empty) {
-            container.innerHTML = <p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée. Soyez le premier !</p>
+            container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée.</p>';
+        }
 
         snapshot.forEach((doc) => {
             const c = doc.data();
-            // Note: Pour les images Firebase, on utilise Storage, ici on garde une icône ou une image par défaut
-            const imgUrl = "https://img.icons8.com/color/96/fish.png"; // Icône temporaire
+            const imgUrl = "https://img.icons8.com/color/96/fish.png";
 
             container.innerHTML += `
                 <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
                     <img src="${imgUrl}" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
                     <div class="flex-1 min-w-0">
-                        <h5 class="text-xs font-bold text-white">${c.species}</h5>
+                        <h5 class="text-xs font-bold text-white">${c.species || 'Inconnu'}</h5>
                         <p class="text-[11px] text-slate-300">${c.length}cm • ${c.weight}kg • <span class="text-blue-300">${c.lure}</span></p>
                     </div>
                 </div>
