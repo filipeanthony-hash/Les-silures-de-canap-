@@ -58,9 +58,9 @@
                 <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
             </div>
 
-            <form id="auth-form" class="space-y-5">
+            <form id="auth-form" class="space-y-5" onsubmit="event.preventDefault();">
                 <div class="relative">
-                    <input id="username" type="text" required class="input-marine relative block w-full p-3 text-white bg-transparent border border-blue-500/30 rounded" placeholder="Identifiant (e-mail)">
+                    <input id="username" type="email" required class="input-marine relative block w-full p-3 text-white bg-transparent border border-blue-500/30 rounded" placeholder="Identifiant (e-mail)">
                 </div>
 
                 <div class="relative">
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="pt-2 space-y-3">
-                    <button type="button" onclick="seConnecter(document.getElementById('username').value, document.getElementById('password').value)" class="w-full py-3 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 transition-colors">
+                    <button id="btn-connexion" type="button" class="w-full py-3 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 transition-colors">
                         Se connecter
                     </button>
                     <button id="btn-inscrire" type="button" class="w-full py-3 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition-colors">
@@ -128,10 +128,6 @@
                 <p class="text-xs uppercase font-bold tracking-wider text-blue-300 mb-1">Météo & Prédictions GPS</p>
                 <h3 class="text-xl font-black text-white mb-2">Indice d'activité</h3>
                 
-                <div id="city-display" class="text-sm font-bold text-emerald-400 mb-4 bg-slate-900/30 py-1.5 px-3 rounded-full inline-flex items-center gap-1.5 border border-emerald-500/10 hidden">
-                    <i class="fas fa-map-marker-alt"></i> <span id="city-name">--</span>
-                </div>
-                
                 <div class="relative flex items-center justify-center h-28 w-28 mx-auto mb-2 bg-slate-900/40 rounded-full border border-blue-400/20 shadow-inner">
                     <div class="text-center">
                         <span id="bite-index" class="text-3xl font-black text-[#4ac7f2]">65%</span>
@@ -176,14 +172,6 @@
                         </div>
                         <input id="slider-temp" type="range" min="4" max="28" value="16" class="w-full accent-[#4ac7f2]">
                     </div>
-
-                    <div>
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="text-slate-300"><i class="fas fa-cloud-moon mr-1 text-indigo-300"></i> Phase Lunaire</span>
-                            <span id="val-lune" class="font-bold text-[#4ac7f2]">Premier Quartier 🌗</span>
-                        </div>
-                        <input id="slider-lune" type="range" min="1" max="4" value="2" class="w-full accent-[#4ac7f2]">
-                    </div>
                 </div>
             </div>
         </section>
@@ -192,24 +180,16 @@
             <div class="p-5 glass-card rounded-2xl shadow-xl">
                 <div class="flex items-center gap-3 mb-4 text-[#4ac7f2]">
                     <i class="fas fa-camera-retro text-xl"></i>
-                    <h3 class="text-base font-bold text-white">Ajouter une photo de nœud</h3>
+                    <h3 class="text-base font-bold text-white">Ajouter un nœud</h3>
                 </div>
-                <form id="knot-form" class="space-y-3" onsubmit="event.preventDefault(); saveKnot();">
+                <form id="knot-form" class="space-y-3" onsubmit="event.preventDefault();">
                     <div class="grid grid-cols-2 gap-3">
                         <input id="knot-name" type="text" placeholder="Nom du nœud" required class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
                         <input id="knot-type" type="text" placeholder="Usage (ex: Tresse)" required class="input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
                     </div>
                     <input id="knot-desc" type="text" placeholder="Astuce de montage..." class="input-marine w-full p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
                     
-                    <div class="relative">
-                        <label for="knot-image" class="input-marine flex items-center justify-center gap-2 p-2.5 rounded-xl text-xs text-blue-300/70 cursor-pointer hover:text-white transition-colors">
-                            <i class="fas fa-image text-sm text-[#4ac7f2]"></i>
-                            <span id="knot-file-label">Prendre / Choisir une photo</span>
-                        </label>
-                        <input id="knot-image" type="file" accept="image/*" class="hidden">
-                    </div>
-
-                    <button type="submit" class="w-full py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl transition-all shadow-md cursor-pointer">
+                    <button id="btn-save-knot" type="button" class="w-full py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl transition-all shadow-md cursor-pointer">
                         Enregistrer dans le guide
                     </button>
                 </form>
@@ -232,21 +212,11 @@
                 <div id="chat-box" class="flex-1 overflow-y-auto space-y-3 pr-1 no-scrollbar mb-3">
                     </div>
 
-                <form id="chat-form" onsubmit="event.preventDefault(); sendChatMessage();" class="space-y-2">
-                    <div class="flex gap-2">
-                        <input id="chat-input" type="text" placeholder="Votre message..." required class="flex-1 input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-xl text-xs font-bold transition-all active:scale-95">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="relative">
-                        <label for="chat-media" class="input-marine flex items-center justify-center gap-2 py-1.5 rounded-xl text-[11px] text-blue-300/70 cursor-pointer hover:text-white transition-colors">
-                            <i class="fas fa-paperclip text-[#4ac7f2]"></i>
-                            <span id="chat-file-label">Ajouter Photo ou Vidéo</span>
-                        </label>
-                        <input id="chat-media" type="file" accept="image/*,video/*" class="hidden">
-                    </div>
+                <form id="chat-form" onsubmit="event.preventDefault();" class="flex gap-2">
+                    <input id="chat-input" type="text" placeholder="Votre message..." required class="flex-1 input-marine p-2.5 rounded-xl text-xs text-white placeholder-blue-300/50 focus:outline-none">
+                    <button id="btn-send-chat" type="button" class="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-xl text-xs font-bold transition-all">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </form>
             </div>
         </section>
@@ -254,38 +224,30 @@
 
     <nav id="bottom-nav" class="hidden glass-card fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl border-b-0 border-x-0 shadow-[0_-8px_24px_rgba(0,0,0,0.3)]">
         <div class="max-w-md mx-auto flex justify-around py-2">
-            <button onclick="switchTab('carnet')" id="nav-carnet" class="flex flex-col items-center gap-1 text-[11px] font-medium text-[#4ac7f2] py-1 px-2">
+            <button id="nav-btn-carnet" class="flex flex-col items-center gap-1 text-[11px] font-medium text-[#4ac7f2] py-1 px-2">
                 <i class="fas fa-book-open text-sm"></i>
                 <span>Carnet</span>
             </button>
-            <button onclick="switchTab('meteo')" id="nav-meteo" class="flex flex-col items-center gap-1 text-[11px] font-medium text-slate-400 py-1 px-2">
+            <button id="nav-btn-meteo" class="flex flex-col items-center gap-1 text-[11px] font-medium text-slate-400 py-1 px-2">
                 <i class="fas fa-cloud-sun-rain text-sm"></i>
                 <span>Météo</span>
             </button>
-            <button onclick="switchTab('noeuds')" id="nav-noeuds" class="flex flex-col items-center gap-1 text-[11px] font-medium text-slate-400 py-1 px-2">
+            <button id="nav-btn-noeuds" class="flex flex-col items-center gap-1 text-[11px] font-medium text-slate-400 py-1 px-2">
                 <i class="fas fa-scroll text-sm"></i>
                 <span>Nœuds</span>
             </button>
-            <button onclick="switchTab('chat')" id="nav-chat" class="flex flex-col items-center gap-1 text-[11px] font-medium text-slate-400 py-1 px-2">
+            <button id="nav-btn-chat" class="flex flex-col items-center gap-1 text-[11px] font-medium text-slate-400 py-1 px-2">
                 <i class="fas fa-comments text-sm"></i>
                 <span>Chat</span>
             </button>
         </div>
     </nav>
 
-    <div id="lightbox" class="hidden fixed inset-0 z-[9999] bg-black/95 flex flex-col items-center justify-center p-4" onclick="this.classList.add('hidden')">
-        <div class="absolute top-4 right-4 text-white text-3xl p-2 cursor-pointer bg-black/40 rounded-full w-12 h-12 flex items-center justify-center">
-            <i class="fas fa-times"></i>
-        </div>
-        <img id="lightbox-img" src="" alt="Zoom" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
-        // CONFIGURATION FIREBASE SÉCURISÉE
         const firebaseConfig = { 
             apiKey: "AzaSyARnepyvwgwjbv97IBIMEA2UR28c-jVALM",
             authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
@@ -300,162 +262,12 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // VARIABLES D'ÉTATS DU RUNTIME
         let currentUser = "Membre";
         let knots = [];
         let chatMessages = [];
 
-        // SERVICES GLOBAL AUTHENTIFICATION
-        window.inscrire = (email, password) => {
-            createUserWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    alert("Compte membre créé avec succès !");
-                    window.tbgDashboard();
-                })
-                .catch((e) => alert("Erreur d'inscription : " + e.message));
-        };
-
-        window.seConnecter = (email, password) => {
-            signInWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    alert("Connexion réussie !");
-                    window.tbgDashboard();
-                })
-                .catch((e) => alert("Erreur de connexion : " + e.message));
-        };
-
-        // LIEN BOUTON INSCRIPTION 
-        document.getElementById("btn-inscrire").addEventListener("click", () => {
-            const email = document.getElementById("username").value.trim();
-            const password = document.getElementById("password").value.trim();
-            if (email && password) {
-                window.inscrire(email, password);
-            } else {
-                alert("Veuillez saisir un identifiant (email) et un mot de passe.");
-            }
-        });
-
-        // LIEN DIRECT ACTION FIRESTORE : AJOUT PRISES
-        document.getElementById("btn-ajouter").addEventListener("click", async () => {
-            const species = document.getElementById("fish-species").value.trim();
-            const length = document.getElementById("fish-length").value;
-            const weight = document.getElementById("fish-weight").value;
-            const lure = document.getElementById("fish-lure").value.trim();
-
-            if (!species || !length || !weight || !lure) {
-                alert("Merci de remplir toutes les informations sur la capture !");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "catches"), {
-                    species: species,
-                    length: length,
-                    weight: weight,
-                    lure: lure,
-                    timestamp: new Date()
-                });
-                alert("Félicitations, prise enregistrée !");
-                document.getElementById('catch-form').reset();
-            } catch (e) {
-                console.error("Erreur d'insertion Firestore : ", e);
-                alert("Erreur réseau lors de l'enregistrement : " + e.message);
-            }
-        });
-
-        // RÉCEPTION ET RENDU TEMPS RÉEL DEPUIS FIRESTORE
-        onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
-            const container = document.getElementById('catch-list'); 
-            if (!container) return;
-            container.innerHTML = ''; 
-
-            if (snapshot.empty) {
-                container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise dans le carnet pour le moment.</p>';
-                return;
-            }
-
-            snapshot.forEach((doc) => {
-                const c = doc.data();
-                const imgUrl = "https://img.icons8.com/color/96/fish.png";
-
-                container.innerHTML += `
-                    <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
-                        <img src="${imgUrl}" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
-                        <div class="flex-1 min-w-0">
-                            <h5 class="text-xs font-bold text-white">${c.species || 'Inconnu'}</h5>
-                            <p class="text-[11px] text-slate-300">${c.length || '--'} cm • ${c.weight || '--'} kg • <span class="text-blue-300">${c.lure || 'Inconnu'}</span></p>
-                        </div>
-                    </div>
-                `;
-            });
-        });
-
-        // ACTIONS DU LIVE CHAT (LOCAL TEMPORAIRE)
-        window.sendChatMessage = () => {
-            const textInput = document.getElementById('chat-input');
-            const text = textInput.value.trim();
-            const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-            if (!text) return;
-
-            chatMessages.push({
-                user: currentUser,
-                text: text,
-                time: timestamp
-            });
-            renderChat();
-            textInput.value = '';
-        };
-
-        function renderChat() {
-            const box = document.getElementById('chat-box');
-            if (!box) return;
-            box.innerHTML = '';
-            if (chatMessages.length === 0) {
-                box.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-4">Aucun message. Lancez la discussion !</p>';
-                return;
-            }
-            chatMessages.forEach((msg) => {
-                box.innerHTML += `
-                    <div class="bg-slate-900/50 p-2.5 rounded-xl border border-white/5 relative group">
-                        <span class="text-xs font-bold text-[#4ac7f2]">${msg.user}</span>
-                        <span class="text-[9px] text-slate-400 ml-1.5">${msg.time}</span>
-                        <p class="text-xs text-slate-200 mt-1 leading-relaxed">${msg.text}</p>
-                    </div>
-                `;
-            });
-            box.scrollTop = box.scrollHeight;
-        }
-
-        // SYSTEME DE CAPTURE COMPOSANT GUIDE DES NŒUDS
-        window.saveKnot = () => {
-            const name = document.getElementById('knot-name').value;
-            const type = document.getElementById('knot-type').value;
-            const desc = document.getElementById('knot-desc').value || 'Aucune consigne.';
-            const imgUrl = "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop";
-
-            knots.unshift({ name, type, desc, imgUrl });
-            renderKnots();
-            document.getElementById('knot-form').reset();
-        };
-
-        function renderKnots() {
-            const container = document.getElementById('knot-list');
-            if (!container) return;
-            container.innerHTML = '';
-            knots.forEach((k) => {
-                container.innerHTML += `
-                    <div class="bg-slate-900/40 border border-[#4ac7f2]/20 rounded-xl p-3 space-y-2">
-                        <h4 class="text-xs font-bold text-[#4ac7f2] uppercase"><i class="fas fa-bullseye mr-1"></i> ${k.name} (${k.type})</h4>
-                        <img src="${k.imgUrl}" alt="${k.name}" class="w-full h-36 object-cover rounded-lg cursor-pointer" onclick="window.openLightbox('${k.imgUrl}')">
-                        <p class="text-[11px] text-slate-300 leading-relaxed">${k.desc}</p>
-                    </div>
-                `;
-            });
-        }
-
-        // REDIRECTION INITIALISATION TABLEAU DE BORD
-        window.tbgDashboard = () => {
+        // INITIALISATION INTERFACE TABLEAU DE BORD
+        function tbgDashboard() {
             const userIn = document.getElementById('username').value.trim();
             currentUser = userIn ? userIn.split('@')[0] : "Membre";
 
@@ -468,10 +280,97 @@
                 knots.push({name: "Nœud de Cuillère", type: "Émérillons", desc: "Faire 5 tours autour du fil principal, repasser dans la première boucle puis serrer.", imgUrl: "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop"});
                 renderKnots();
             }
-        };
+        }
 
-        // GESTIONNAIRE D'ONGLETS
-        window.switchTab = (tabId) => {
+        // ÉCOUTEURS POUR L'AUTHENTIFICATION (Plus d'erreurs de fonctions manquantes)
+        document.getElementById("btn-connexion").addEventListener("click", () => {
+            const email = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            
+            if (!email || !password) {
+                alert("Veuillez remplir l'email et le mot de passe.");
+                return;
+            }
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    alert("Ravi de vous revoir !");
+                    tbgDashboard();
+                })
+                .catch((e) => alert("Erreur de connexion : " + e.message));
+        });
+
+        document.getElementById("btn-inscrire").addEventListener("click", () => {
+            const email = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            
+            if (!email || !password) {
+                alert("Veuillez remplir l'email et le mot de passe.");
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    alert("Compte créé avec succès !");
+                    tbgDashboard();
+                })
+                .catch((e) => alert("Erreur d'inscription : " + e.message));
+        });
+
+        // ENREGISTRER UNE PRISE
+        document.getElementById("btn-ajouter").addEventListener("click", async () => {
+            const species = document.getElementById("fish-species").value.trim();
+            const length = document.getElementById("fish-length").value;
+            const weight = document.getElementById("fish-weight").value;
+            const lure = document.getElementById("fish-lure").value.trim();
+
+            if (!species || !length || !weight || !lure) {
+                alert("Merci de remplir tous les champs !");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "catches"), {
+                    species: species,
+                    length: length,
+                    weight: weight,
+                    lure: lure,
+                    timestamp: new Date()
+                });
+                alert("Poisson ajouté !");
+                document.getElementById('catch-form').reset();
+            } catch (e) {
+                alert("Erreur lors de l'enregistrement : " + e.message);
+            }
+        });
+
+        // CHARGEMENT SYNCHRONISÉ DU FLUX FIRESTORE
+        onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
+            const container = document.getElementById('catch-list'); 
+            if (!container) return;
+            container.innerHTML = ''; 
+
+            if (snapshot.empty) {
+                container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée.</p>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const c = doc.data();
+                container.innerHTML += `
+                    <div class="p-3 glass-card rounded-xl flex items-center gap-3 border-l-4 border-l-[#4ac7f2]">
+                        <img src="https://img.icons8.com/color/96/fish.png" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="text-xs font-bold text-white">${c.species || 'Inconnu'}</h5>
+                            <p class="text-[11px] text-slate-300">${c.length || '--'}cm • ${c.weight || '--'}kg • <span class="text-blue-300">${c.lure || 'Aucun'}</span></p>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // NAVIGATION DES ONGLETS
+        function switchTab(tabId) {
             document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
             
@@ -479,17 +378,75 @@
                 btn.classList.remove('text-[#4ac7f2]');
                 btn.classList.add('text-slate-400');
             });
-            document.getElementById('nav-' + tabId).classList.add('text-[#4ac7f2]');
+            document.getElementById('nav-btn-' + tabId).classList.add('text-[#4ac7f2]');
 
             if (tabId === 'chat') { renderChat(); }
-        };
+        }
 
-        // GESTION LIGHTBOX ZOOM IMAGE
-        window.openLightbox = (src) => {
-            const lb = document.getElementById('lightbox');
-            document.getElementById('lightbox-img').src = src;
-            lb.classList.remove('hidden');
-        };
+        document.getElementById('nav-btn-carnet').addEventListener('click', () => switchTab('carnet'));
+        document.getElementById('nav-btn-meteo').addEventListener('click', () => switchTab('meteo'));
+        document.getElementById('nav-btn-noeuds').addEventListener('click', () => switchTab('noeuds'));
+        document.getElementById('nav-btn-chat').addEventListener('click', () => switchTab('chat'));
+
+        // CHAT LIVE SYSTEM
+        function renderChat() {
+            const box = document.getElementById('chat-box');
+            if (!box) return;
+            box.innerHTML = '';
+            if (chatMessages.length === 0) {
+                box.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-4">Aucun message. Lancez la discussion !</p>';
+                return;
+            }
+            chatMessages.forEach((msg) => {
+                box.innerHTML += `
+                    <div class="bg-slate-900/50 p-2.5 rounded-xl border border-white/5 relative">
+                        <span class="text-xs font-bold text-[#4ac7f2]">${msg.user}</span>
+                        <span class="text-[9px] text-slate-400 ml-1.5">${msg.time}</span>
+                        <p class="text-xs text-slate-200 mt-1 leading-relaxed">${msg.text}</p>
+                    </div>
+                `;
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        document.getElementById('btn-send-chat').addEventListener('click', () => {
+            const textInput = document.getElementById('chat-input');
+            const text = textInput.value.trim();
+            const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if (!text) return;
+
+            chatMessages.push({ user: currentUser, text: text, time: timestamp });
+            renderChat();
+            textInput.value = '';
+        });
+
+        // SYSTEME DE CONFIGURATION DES NOEUDS
+        function renderKnots() {
+            const container = document.getElementById('knot-list');
+            if (!container) return;
+            container.innerHTML = '';
+            knots.forEach((k) => {
+                container.innerHTML += `
+                    <div class="bg-slate-900/40 border border-[#4ac7f2]/20 rounded-xl p-3 space-y-2">
+                        <h4 class="text-xs font-bold text-[#4ac7f2] uppercase"><i class="fas fa-bullseye mr-1"></i> ${k.name} (${k.type})</h4>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">${k.desc}</p>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('btn-save-knot').addEventListener('click', () => {
+            const name = document.getElementById('knot-name').value.trim();
+            const type = document.getElementById('knot-type').value.trim();
+            const desc = document.getElementById('knot-desc').value.trim() || 'Aucune consigne.';
+
+            if(!name || !type) { alert('Veuillez remplir le nom et l\'usage du nœud.'); return; }
+
+            knots.unshift({ name, type, desc });
+            renderKnots();
+            document.getElementById('knot-form').reset();
+        });
     </script>
 </body>
 </html>
