@@ -1,109 +1,109 @@
-<!DOCTYPE html>
-<html lang="fr" class="h-full overflow-hidden">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Silures de Canapé</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .underwater-bg { background-image: linear-gradient(rgba(12, 26, 38, 0.6), rgba(12, 26, 38, 0.9)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; }
-        .glass-card { background: rgba(25, 59, 87, 0.25); backdrop-filter: blur(20px); border: 1px solid rgba(74, 199, 242, 0.15); border-radius: 2rem; box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5); }
-        .input-marine { background: rgba(10, 25, 41, 0.6); border: 1px solid rgba(74, 199, 242, 0.15); color: white; }
-        .progress-ring__circle { transition: stroke-dashoffset 0.3s; transform: rotate(-90deg); transform-origin: 50% 50%; }
-        #fish-options { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(74, 199, 242, 0.2); border-radius: 1rem; }
-    </style>
-</head>
-<body class="underwater-bg flex flex-col h-full antialiased text-white font-sans overflow-hidden">
+<script>
+    // --- DONNÉES GLOBALES ---
+    let currentLatitude = null;
+    let targetSpecies = null;
+    const ring = document.getElementById('activity-ring');
+    let circumference = 0;
 
-    <header class="glass-card text-white shadow-lg w-full fixed top-0 z-50 rounded-b-xl border-t-0 border-x-0">
-        <div class="max-w-md mx-auto flex items-center justify-between px-6 py-4">
-            <h1 class="text-2xl font-black tracking-tighter bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Les Silures de Canapé</h1>
-        </div>
-    </header>
+    // Configuration de l'anneau de progression
+    if (ring) {
+        const radius = ring.r.baseVal.value;
+        circumference = radius * 2 * Math.PI;
+        ring.style.strokeDasharray = `${circumference} ${circumference}`;
+        ring.style.strokeDashoffset = circumference;
+    }
 
-    <div id="login-page" class="flex flex-col items-center justify-center h-full px-6 pt-32 w-full max-w-md mx-auto">
-        <div class="w-full p-10 space-y-7 glass-card">
-            <form id="auth-form" class="space-y-6" onsubmit="event.preventDefault();">
-                <input id="email" type="email" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Identifiant (e-mail)">
-                <input id="password" type="password" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Mot de passe">
-                <button id="btn-login" type="submit" class="w-full py-4 bg-blue-600 text-white rounded-xl text-lg font-black hover:bg-blue-500 transition-colors">Se connecter</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="dashboard-page" class="hidden flex flex-col flex-1 pt-24 px-5 pb-24 space-y-5 overflow-y-auto w-full max-w-md mx-auto">
-        <section class="glass-card p-8 flex flex-col items-center">
-            <h2 class="text-3xl font-black mb-6">Indice d'activité</h2>
-            <div class="relative w-44 h-44 flex items-center justify-center mb-6">
-                <svg class="progress-ring" width="176" height="176">
-                    <circle class="progress-ring__circle" stroke="#1c4b72" stroke-width="12" fill="transparent" r="80" cx="88" cy="88"/>
-                    <circle id="activity-ring" class="progress-ring__circle" stroke="#4fd1c5" stroke-width="12" fill="transparent" r="80" cx="88" cy="88"/>
-                </svg>
-                <div class="absolute text-center">
-                    <p id="activity-percent" class="text-6xl font-black text-[#4fd1c5]">0%</p>
-                    <p id="activity-status" class="text-sm font-bold uppercase">EN ATTENTE GPS</p>
-                </div>
-            </div>
-            <p id="gps-status-bar" class="text-blue-200 font-bold">📍 En attente de localisation...</p>
-        </section>
-
-        <section class="glass-card p-6 space-y-5">
-            <div class="relative">
-                <button onclick="toggleFishDropdown()" id="fish-selector" class="input-marine w-full p-4 rounded-xl flex justify-between">
-                    <span>-- Choisir une espèce --</span>
-                </button>
-                <div id="fish-options" class="hidden absolute top-full left-0 right-0 z-20">
-                    <p class="p-3 cursor-pointer" onclick="selectFish('Silure', 'fish')"><i class="fas fa-fish mr-2"></i>Silure</p>
-                    <p class="p-3 cursor-pointer" onclick="selectFish('Anguille', 'snake')"><i class="fas fa-snake mr-2"></i>Anguille</p>
-                </div>
-            </div>
-            <button onclick="getGPS()" class="w-full py-2 bg-blue-900/50 text-blue-200 rounded-lg text-sm border border-blue-500/30">Actualiser GPS</button>
-            <p id="gps-coords" class="text-xs text-center italic text-blue-200">Cliquez pour localiser</p>
-        </section>
-    </div>
-
-    <script>
-        let currentLatitude = null;
-        let targetSpecies = null;
-        const ring = document.getElementById('activity-ring');
-        let circumference = 160 * Math.PI;
-
-        // Connexion
-        document.getElementById("btn-login").onclick = function() {
-            if (document.getElementById("email").value !== "" && document.getElementById("password").value !== "") {
-                document.getElementById("login-page").classList.add("hidden");
-                document.getElementById("dashboard-page").classList.remove("hidden");
-            } else { alert("Remplissez les champs."); }
-        };
-
-        function toggleFishDropdown() { document.getElementById("fish-options").classList.toggle("hidden"); }
-
-        function selectFish(name, icon) {
-            targetSpecies = name;
-            document.getElementById("fish-selector").innerHTML = '<span><i class="fas fa-' + icon + ' mr-2"></i>' + name + '</span>';
-            document.getElementById("fish-options").classList.add("hidden");
-            calculateActivityIndex();
+    // Gestion de la connexion
+    document.getElementById("btn-login").addEventListener("click", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        if (email !== "" && password !== "") {
+            document.getElementById("login-page").classList.add("hidden");
+            document.getElementById("dashboard-page").classList.remove("hidden");
+            document.getElementById("dashboard-page").classList.add("flex");
+        } else {
+            alert("Veuillez remplir l'identifiant et le mot de passe.");
         }
+    });
 
-        async function getGPS() {
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                currentLatitude = pos.coords.latitude;
-                let lon = pos.coords.longitude;
-                document.getElementById("gps-coords").innerText = "Lat: " + currentLatitude.toFixed(2);
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLatitude}&lon=${lon}`);
-                const data = await res.json();
-                document.getElementById("gps-status-bar").innerText = "📍 " + (data.address.city || "Zone inconnue");
+    // Gestion du menu espèce
+    function toggleFishDropdown() {
+        document.getElementById("fish-options").classList.toggle("hidden");
+    }
+
+    function selectFish(fishName, iconType) {
+        targetSpecies = fishName;
+        let iconCode = `<i class="fas fa-${iconType} text-blue-300 mr-2.5"></i>`;
+        if (fishName === "Anguille") {
+            iconCode = `<i class="fas fa-snake text-blue-300 mr-2"></i><i class="fas fa-fish text-xs text-blue-400 ml-[-5px] mr-1"></i>`;
+        }
+        document.getElementById("fish-selector").innerHTML = '<span>' + iconCode + fishName + '</span> <i class="fas fa-chevron-down text-blue-400"></i>';
+        document.getElementById("fish-options").classList.add("hidden");
+        calculateActivityIndex();
+    }
+
+    // --- NOUVELLE FONCTION : RÉCUPÉRATION DU NOM DE LA VILLE ---
+    async function getCityName(lat, lon) {
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+            const data = await response.json();
+            const city = data.address.city || data.address.town || data.address.village || "Zone de pêche";
+            document.getElementById("gps-status-bar").innerText = `📍 ${city}`;
+        } catch (error) {
+            console.error("Erreur ville:", error);
+        }
+    }
+
+    // --- FONCTION GPS AMÉLIORÉE ---
+    function getGPS() {
+        if (!navigator.geolocation) {
+            alert("GPS non supporté.");
+            return;
+        }
+        document.getElementById("gps-coords").innerText = "Recherche...";
+        
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                currentLatitude = position.coords.latitude;
+                let lon = position.coords.longitude;
+                
+                // 1. Afficher les coordonnées
+                document.getElementById("gps-coords").innerText = "Lat: " + currentLatitude.toFixed(4) + " • Lon: " + lon.toFixed(4);
+                
+                // 2. Récupérer le nom de la ville
+                getCityName(currentLatitude, lon);
+                
+                // 3. Lancer le calcul
                 calculateActivityIndex();
-            });
+            },
+            (error) => {
+                alert("Erreur GPS : Activez la localisation.");
+            },
+            { enableHighAccuracy: true }
+        );
+    }
+
+    // --- CALCUL DE L'ACTIVITÉ ---
+    function calculateActivityIndex() {
+        if (!currentLatitude || !targetSpecies) return;
+
+        let percent = 0;
+        switch (targetSpecies) {
+            case 'Silure': percent = 70; break;
+            case 'Carpe': percent = 60; break;
+            case 'Brochet': percent = 85; break;
+            case 'Anguille': percent = 40; break;
+            default: percent = 50;
         }
 
-        function calculateActivityIndex() {
-            if (!currentLatitude || !targetSpecies) return;
-            document.getElementById('activity-percent').innerText = "75%";
-            document.getElementById('activity-status').innerText = "ACTIF";
-            ring.style.strokeDashoffset = circumference * 0.25;
-        }
-    </script>
-</body>
-</html>
+        const offset = circumference - (percent / 100) * circumference;
+        ring.style.strokeDashoffset = offset;
+        document.getElementById('activity-percent').innerText = percent + "%";
+        document.getElementById('activity-status').innerText = "ACTIF";
+    }
+
+    function updateTempWater(val) { document.getElementById("temp-eau-val").innerText = val + "°C"; }
+    function updateMoonPhase(val) { /* ... logique phase lunaire ... */ }
+    function saveSession() { alert("Session enregistrée !"); }
+</script>
