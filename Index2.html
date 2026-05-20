@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Silures</title>
+    <title>Les Silures de Canapé</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-900 text-white p-6">
-
-    <div id="app" class="max-w-sm mx-auto p-6 bg-slate-800 rounded-xl shadow-lg">
-        <h1 class="text-xl font-bold mb-4">Connexion</h1>
-        <input id="email" type="email" placeholder="Email" class="w-full p-2 mb-2 text-black rounded">
-        <input id="password" type="password" placeholder="Mot de passe" class="w-full p-2 mb-4 text-black rounded">
-        <button id="btn-login" class="w-full py-2 bg-blue-600 rounded font-bold">Connexion</button>
-    </div>
-
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
+
+    <div id="login-container" class="w-full max-w-sm bg-slate-800 p-8 rounded-2xl shadow-xl">
+        <h1 class="text-center text-xl font-bold mb-6">Les Silures de Canapé</h1>
+        <input id="email" type="email" placeholder="Identifiant (e-mail)" class="w-full p-3 mb-4 rounded bg-slate-900 border border-blue-500">
+        <input id="password" type="password" placeholder="Mot de passe" class="w-full p-3 mb-6 rounded bg-slate-900 border border-blue-500">
+        <button id="btn-login" class="w-full py-3 mb-3 bg-blue-600 rounded font-bold hover:bg-blue-500">Se connecter</button>
+        <button id="btn-register" class="w-full py-2 bg-slate-700 rounded text-xs">Créer un compte</button>
+    </div>
 
     <script>
-        // 1. CONFIGURATION (Copiez vos lignes ici)
+        // --- CONFIGURATION FIREBASE ---
         const firebaseConfig = {
-            apiKey: "VOTRE_CLE_ICI",
+            apiKey: "VOTRE_CLE_API_ICI",
             authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
             projectId: "les-silures-de-canape-c90e6",
             storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
@@ -30,17 +30,25 @@
             appId: "1:1063082508513:web:1068368a1db2dff18377a0"
         };
 
-        // 2. INITIALISATION
+        // Initialisation
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // 3. LOGIQUE
+        // Fonction Connexion
         document.getElementById("btn-login").addEventListener("click", () => {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
-            
             auth.signInWithEmailAndPassword(email, password)
-                .then(() => alert("Connecté !"))
+                .then(() => alert("Connexion réussie !"))
+                .catch(err => alert("Erreur : " + err.message));
+        });
+
+        // Fonction Inscription
+        document.getElementById("btn-register").addEventListener("click", () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => alert("Compte créé avec succès !"))
                 .catch(err => alert("Erreur : " + err.message));
         });
     </script>
