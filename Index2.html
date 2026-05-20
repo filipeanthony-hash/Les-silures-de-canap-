@@ -1,56 +1,68 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-</head>
-<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .underwater-bg {
+            background-image: linear-gradient(rgba(12, 26, 38, 0.7), rgba(12, 26, 38, 0.9)), 
+                              url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
 
-    <div id="login-container" class="w-full max-w-sm bg-slate-800 p-8 rounded-2xl shadow-xl">
-        <h1 class="text-center text-xl font-bold mb-6">Les Silures de Canapé</h1>
-        <input id="email" type="email" placeholder="Identifiant (e-mail)" class="w-full p-3 mb-4 rounded bg-slate-900 border border-blue-500">
-        <input id="password" type="password" placeholder="Mot de passe" class="w-full p-3 mb-6 rounded bg-slate-900 border border-blue-500">
-        <button id="btn-login" class="w-full py-3 mb-3 bg-blue-600 rounded font-bold hover:bg-blue-500">Se connecter</button>
-        <button id="btn-register" class="w-full py-2 bg-slate-700 rounded text-xs">Créer un compte</button>
+        .glass-card {
+            background: rgba(25, 59, 87, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(74, 199, 242, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .input-marine {
+            background: rgba(10, 25, 41, 0.7);
+            border: 1px solid rgba(74, 199, 242, 0.2);
+            color: white;
+        }
+    </style>
+</head>
+<body class="underwater-bg flex flex-col min-h-full antialiased text-white">
+
+    <header class="glass-card text-white shadow-lg w-full fixed top-0 z-50 rounded-b-xl border-t-0 border-x-0">
+        <div class="max-w-md mx-auto flex items-center justify-between px-5 py-3">
+            <h1 class="text-xl font-bold">Les Silures de Canapé</h1>
+            <i class="fab fa-facebook text-2xl text-[#4ac7f2]"></i>
+        </div>
+    </header>
+
+    <div class="flex flex-col items-center justify-center flex-1 px-6 pt-32 w-full max-w-md mx-auto">
+        <div class="w-full p-8 space-y-6 glass-card rounded-2xl">
+            <div class="text-center">
+                <p class="text-xs uppercase text-blue-300 font-semibold">Espace Membres</p>
+                <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
+            </div>
+
+            <input id="email" type="email" class="input-marine w-full p-3 rounded" placeholder="Identifiant (e-mail)">
+            <input id="password" type="password" class="input-marine w-full p-3 rounded" placeholder="Mot de passe">
+            
+            <button id="btn-login" class="w-full py-3 bg-blue-500 rounded font-bold hover:bg-blue-600">Se connecter</button>
+            <button id="btn-register" class="w-full py-3 bg-blue-700 rounded font-bold hover:bg-blue-800">S'inscrire</button>
+        </div>
     </div>
 
     <script>
-        // --- CONFIGURATION FIREBASE ---
-        const firebaseConfig = {
-            apiKey: "VOTRE_CLE_API_ICI",
-            authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
-            projectId: "les-silures-de-canape-c90e6",
-            storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
-            messagingSenderId: "1063082508513",
-            appId: "1:1063082508513:web:1068368a1db2dff18377a0"
+        // Test simple sans Firebase
+        document.getElementById("btn-login").onclick = () => {
+            alert("Bouton Connexion cliqué ! Le design fonctionne.");
         };
 
-        // Initialisation
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-
-        // Fonction Connexion
-        document.getElementById("btn-login").addEventListener("click", () => {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => alert("Connexion réussie !"))
-                .catch(err => alert("Erreur : " + err.message));
-        });
-
-        // Fonction Inscription
-        document.getElementById("btn-register").addEventListener("click", () => {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(() => alert("Compte créé avec succès !"))
-                .catch(err => alert("Erreur : " + err.message));
-        });
+        document.getElementById("btn-register").onclick = () => {
+            alert("Bouton Inscrire cliqué ! Le design fonctionne.");
+        };
     </script>
 </body>
 </html>
