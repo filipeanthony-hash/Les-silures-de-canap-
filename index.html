@@ -68,14 +68,14 @@
                 </div>
 
                 <div class="pt-2 space-y-3">
-                    <button type="button" onclick="seConnecter(document.getElementById('username').value, document.getElementById('password').value)" class="w-full py-3 bg-blue-500 text-white rounded font-bold hover:bg-blue-600">
+                    <button type="button" onclick="seConnecter(document.getElementById('username').value, document.getElementById('password').value)" class="w-full py-3 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 transition-colors">
                         Se connecter
                     </button>
-                    <button id="btn-inscrire" type="button" class="w-full py-3 bg-blue-600 text-white rounded font-bold hover:bg-blue-700">
+                    <button id="btn-inscrire" type="button" class="w-full py-3 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition-colors">
                         S'inscrire
                     </button>
                     <p class="text-xs text-center text-slate-300 mt-2">
-                        Pas encore de compte ? Entrez vos identifiants puis cliquez sur S'inscrire.
+                        Pas encore de compte ? Entrez un e-mail et un mot de passe valides puis cliquez sur S'inscrire.
                     </p>
                 </div>
             </form>
@@ -108,7 +108,7 @@
                         <input id="fish-image" type="file" accept="image/*" class="hidden">
                     </div>
 
-                    <button type="button" id="btn-ajouter" class="w-full py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl transition-all shadow-md cursor-pointer">
+                    <button type="button" id="btn-ajouter" class="w-full py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl transition-all shadow-md hover:from-blue-600 hover:to-cyan-600 cursor-pointer">
                         Ajouter au carnet
                     </button>
                 </form>
@@ -140,7 +140,7 @@
                 </div>
 
                 <p id="gps-status" class="text-[11px] text-blue-300/80 mb-4 italic">
-                    <i class="fas fa-location-arrow mr-1"></i> Position GPS : Château-Thierry (02)
+                    <i class="fas fa-location-arrow mr-1"></i> Localisation : Château-Thierry (02)
                 </p>
 
                 <div class="space-y-4 text-left bg-slate-900/30 p-3.5 rounded-xl border border-white/5">
@@ -281,12 +281,11 @@
     </div>
 
     <script type="module">
-        // --- IMPORTS FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
-        // --- CONFIGURATION ---
+        // CONFIGURATION FIREBASE SÉCURISÉE
         const firebaseConfig = { 
             apiKey: "AzaSyARnepyvwgwjbv97IBIMEA2UR28c-jVALM",
             authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
@@ -301,16 +300,16 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- VARIABLES GLOBALES LOCALES ---
+        // VARIABLES D'ÉTATS DU RUNTIME
         let currentUser = "Membre";
         let knots = [];
         let chatMessages = [];
 
-        // --- FONCTIONS D'AUTHENTIFICATION ---
+        // SERVICES GLOBAL AUTHENTIFICATION
         window.inscrire = (email, password) => {
             createUserWithEmailAndPassword(auth, email, password)
                 .then(() => {
-                    alert("Compte créé avec succès !");
+                    alert("Compte membre créé avec succès !");
                     window.tbgDashboard();
                 })
                 .catch((e) => alert("Erreur d'inscription : " + e.message));
@@ -319,24 +318,24 @@
         window.seConnecter = (email, password) => {
             signInWithEmailAndPassword(auth, email, password)
                 .then(() => {
-                    alert("Ravi de vous revoir !");
+                    alert("Connexion réussie !");
                     window.tbgDashboard();
                 })
                 .catch((e) => alert("Erreur de connexion : " + e.message));
         };
 
-        // --- ÉCOUTEUR INSCRIPTION (BOUTON HTML) ---
+        // LIEN BOUTON INSCRIPTION 
         document.getElementById("btn-inscrire").addEventListener("click", () => {
             const email = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value.trim();
             if (email && password) {
                 window.inscrire(email, password);
             } else {
-                alert("Veuillez remplir l'email et le mot de passe.");
+                alert("Veuillez saisir un identifiant (email) et un mot de passe.");
             }
         });
 
-        // --- ENREGISTRER UNE PRISE DANS FIRESTORE ---
+        // LIEN DIRECT ACTION FIRESTORE : AJOUT PRISES
         document.getElementById("btn-ajouter").addEventListener("click", async () => {
             const species = document.getElementById("fish-species").value.trim();
             const length = document.getElementById("fish-length").value;
@@ -344,7 +343,7 @@
             const lure = document.getElementById("fish-lure").value.trim();
 
             if (!species || !length || !weight || !lure) {
-                alert("Merci de remplir tous les champs du poisson !");
+                alert("Merci de remplir toutes les informations sur la capture !");
                 return;
             }
 
@@ -356,21 +355,22 @@
                     lure: lure,
                     timestamp: new Date()
                 });
-                alert("Poisson ajouté au carnet avec succès !");
+                alert("Félicitations, prise enregistrée !");
                 document.getElementById('catch-form').reset();
             } catch (e) {
-                console.error("Erreur d'ajout dans Firestore : ", e);
-                alert("Erreur lors de l'enregistrement de la prise : " + e.message);
+                console.error("Erreur d'insertion Firestore : ", e);
+                alert("Erreur réseau lors de l'enregistrement : " + e.message);
             }
         });
 
-        // --- ÉCOUTEUR EN TEMPS RÉEL FIRESTORE (Affichage instantané) ---
+        // RÉCEPTION ET RENDU TEMPS RÉEL DEPUIS FIRESTORE
         onSnapshot(query(collection(db, "catches"), orderBy("timestamp", "desc")), (snapshot) => {
             const container = document.getElementById('catch-list'); 
+            if (!container) return;
             container.innerHTML = ''; 
 
             if (snapshot.empty) {
-                container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise enregistrée.</p>';
+                container.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-2">Aucune prise dans le carnet pour le moment.</p>';
                 return;
             }
 
@@ -383,14 +383,14 @@
                         <img src="${imgUrl}" alt="Poisson" class="w-14 h-14 object-cover rounded-lg bg-slate-800 flex-shrink-0">
                         <div class="flex-1 min-w-0">
                             <h5 class="text-xs font-bold text-white">${c.species || 'Inconnu'}</h5>
-                            <p class="text-[11px] text-slate-300">${c.length}cm • ${c.weight}kg • <span class="text-blue-300">${c.lure}</span></p>
+                            <p class="text-[11px] text-slate-300">${c.length || '--'} cm • ${c.weight || '--'} kg • <span class="text-blue-300">${c.lure || 'Inconnu'}</span></p>
                         </div>
                     </div>
                 `;
             });
         });
 
-        // --- LOGIQUE DISCUSSION (CHAT) ---
+        // ACTIONS DU LIVE CHAT (LOCAL TEMPORAIRE)
         window.sendChatMessage = () => {
             const textInput = document.getElementById('chat-input');
             const text = textInput.value.trim();
@@ -409,6 +409,7 @@
 
         function renderChat() {
             const box = document.getElementById('chat-box');
+            if (!box) return;
             box.innerHTML = '';
             if (chatMessages.length === 0) {
                 box.innerHTML = '<p class="text-xs text-slate-400 text-center italic mt-4">Aucun message. Lancez la discussion !</p>';
@@ -426,7 +427,7 @@
             box.scrollTop = box.scrollHeight;
         }
 
-        // --- LOGIQUE CONSTRUIRE LE GUIDE DES NŒUDS ---
+        // SYSTEME DE CAPTURE COMPOSANT GUIDE DES NŒUDS
         window.saveKnot = () => {
             const name = document.getElementById('knot-name').value;
             const type = document.getElementById('knot-type').value;
@@ -440,6 +441,7 @@
 
         function renderKnots() {
             const container = document.getElementById('knot-list');
+            if (!container) return;
             container.innerHTML = '';
             knots.forEach((k) => {
                 container.innerHTML += `
@@ -452,7 +454,7 @@
             });
         }
 
-        // --- ACTIVER LE DASHBOARD ---
+        // REDIRECTION INITIALISATION TABLEAU DE BORD
         window.tbgDashboard = () => {
             const userIn = document.getElementById('username').value.trim();
             currentUser = userIn ? userIn.split('@')[0] : "Membre";
@@ -462,30 +464,27 @@
             document.getElementById('dashboard-page').classList.add('flex');
             document.getElementById('bottom-nav').classList.remove('hidden');
             
-            // Premier nœud par défaut
             if (knots.length === 0) {
                 knots.push({name: "Nœud de Cuillère", type: "Émérillons", desc: "Faire 5 tours autour du fil principal, repasser dans la première boucle puis serrer.", imgUrl: "https://images.unsplash.com/photo-1611094303763-7e4d6d13d7e7?q=80&w=600&auto=format&fit=crop"});
                 renderKnots();
             }
         };
 
-        // --- NAVIGATION D'ONGLETS ---
+        // GESTIONNAIRE D'ONGLETS
         window.switchTab = (tabId) => {
             document.querySelectorAll('.dashboard-tab').forEach(tab => tab.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
             
-            // Retirer la couleur active sur tous les boutons du menu bas
             document.querySelectorAll('#bottom-nav button').forEach(btn => {
                 btn.classList.remove('text-[#4ac7f2]');
                 btn.classList.add('text-slate-400');
             });
-            // Activer la couleur sur le bouton cliqué
             document.getElementById('nav-' + tabId).classList.add('text-[#4ac7f2]');
 
             if (tabId === 'chat') { renderChat(); }
         };
 
-        // Zoom image globale
+        // GESTION LIGHTBOX ZOOM IMAGE
         window.openLightbox = (src) => {
             const lb = document.getElementById('lightbox');
             document.getElementById('lightbox-img').src = src;
