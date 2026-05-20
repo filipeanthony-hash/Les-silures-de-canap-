@@ -1,80 +1,103 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full">
+<html lang="fr" class="h-full overflow-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        .marine-bg { background: linear-gradient(rgba(12, 26, 38, 0.7), rgba(12, 26, 38, 0.9)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000'); background-size: cover; background-attachment: fixed; }
-        .glass-card { background: rgba(25, 59, 87, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(74, 199, 242, 0.3); }
-        .input-marine { background: rgba(10, 25, 41, 0.6); border: 1px solid rgba(74, 199, 242, 0.2); }
+        .underwater-bg { background-image: linear-gradient(rgba(12, 26, 38, 0.6), rgba(12, 26, 38, 0.9)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; }
+        .glass-card { background: rgba(25, 59, 87, 0.25); backdrop-filter: blur(20px); border: 1px solid rgba(74, 199, 242, 0.15); border-radius: 2rem; box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5); }
+        .input-marine { background: rgba(10, 25, 41, 0.6); border: 1px solid rgba(74, 199, 242, 0.15); color: white; transition: all 0.3s ease; }
+        .input-marine:focus { border-color: #4ac7f2; box-shadow: 0 0 12px rgba(74, 199, 242, 0.6); }
+        .progress-ring__circle { transition: stroke-dashoffset 0.3s; transform: rotate(-90deg); transform-origin: 50% 50%; }
+        #fish-options { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(74, 199, 242, 0.2); border-radius: 1rem; margin-top: 5px; overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); }
+        #fish-options p { padding: 12px 16px; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 12px; color: white; }
+        #fish-options p:hover { background: rgba(74, 199, 242, 0.1); }
+        .dashboard-tab { display: none; }
+        .dashboard-tab.active { display: block; }
     </style>
 </head>
-<body class="marine-bg text-white min-h-full pb-20">
+<body class="underwater-bg flex flex-col h-full antialiased text-white font-sans overflow-hidden">
 
-    <div id="login-page" class="flex flex-col items-center justify-center min-h-screen p-6">
-        <div class="glass-card p-8 rounded-2xl w-full max-w-sm text-center">
-            <h1 class="text-xl font-bold mb-6">Les Silures de Canapé</h1>
-            <input id="username" type="text" placeholder="Pseudo" class="input-marine w-full p-3 mb-3 rounded-xl text-sm">
-            <input id="password" type="password" placeholder="Code secret" class="input-marine w-full p-3 mb-6 rounded-xl text-sm">
-            <button onclick="tbgDashboard()" class="w-full py-3 bg-blue-500 rounded-xl font-bold">Connexion</button>
+    <header class="glass-card text-white shadow-lg w-full fixed top-0 z-50 rounded-b-xl border-t-0 border-x-0">
+        <div class="max-w-md mx-auto flex items-center justify-between px-6 py-4">
+            <h1 class="text-2xl font-black tracking-tighter bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Les Silures de Canapé</h1>
+            <a href="https://www.facebook.com/share/g/1Ev1UqzWWy/" target="_blank" class="text-[#4ac7f2] hover:text-white text-3xl"><i class="fab fa-facebook"></i></a>
+        </div>
+    </header>
+
+    <div id="login-page" class="flex flex-col items-center justify-center h-full px-6 pt-32 w-full max-w-md mx-auto">
+        <div class="w-full p-10 space-y-7 glass-card">
+            <form id="auth-form" onsubmit="event.preventDefault();">
+                <input id="email" type="email" required class="input-marine w-full p-4 mb-4 rounded-xl" placeholder="Identifiant">
+                <input id="password" type="password" required class="input-marine w-full p-4 mb-4 rounded-xl" placeholder="Mot de passe">
+                <button id="btn-login" class="w-full py-4 bg-blue-600 rounded-xl font-black">Se connecter</button>
+            </form>
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden max-w-md mx-auto p-4 pt-20">
-        <div id="tab-carnet" class="dashboard-tab">
-            <div class="glass-card p-5 rounded-2xl mb-4">
-                <h3 class="font-bold mb-3">Nouvelle Prise</h3>
-                <input id="fish-species" type="text" placeholder="Espèce" class="input-marine w-full p-2 mb-2 rounded-lg text-xs">
-                <input id="fish-length" type="number" placeholder="Taille (cm)" class="input-marine w-full p-2 mb-3 rounded-lg text-xs">
-                <button onclick="saveCatch()" class="w-full py-2 bg-blue-500 rounded-lg text-xs font-bold">Ajouter</button>
-            </div>
-            <div id="catch-list" class="space-y-2"></div>
-        </div>
+    <div id="dashboard-page" class="hidden flex flex-col flex-1 pt-24 px-5 pb-24 space-y-5 overflow-y-auto w-full max-w-md mx-auto">
         
-        <div id="tab-meteo" class="dashboard-tab hidden text-center">Météo (GPS activé)</div>
-        <div id="tab-noeuds" class="dashboard-tab hidden">Guide Nœuds</div>
-        <div id="tab-chat" class="dashboard-tab hidden">Chat Live</div>
+        <section id="tab-meteo" class="dashboard-tab active space-y-5">
+            <div class="glass-card p-8 flex flex-col items-center">
+                <h2 class="text-3xl font-black mb-6">Indice d'activité</h2>
+                <div class="relative w-44 h-44 flex items-center justify-center mb-6">
+                    <svg width="176" height="176"><circle class="progress-ring__circle" stroke="#1c4b72" stroke-width="12" fill="transparent" r="80" cx="88" cy="88"/><circle id="activity-ring" class="progress-ring__circle" stroke="#4fd1c5" stroke-width="12" fill="transparent" r="80" cx="88" cy="88"/></svg>
+                    <div class="absolute text-center"><p id="activity-percent" class="text-6xl font-black text-[#4fd1c5]">0%</p></div>
+                </div>
+            </div>
+            <section class="glass-card p-6 space-y-5">
+                <button onclick="getGPS()" class="w-full py-2 bg-blue-700/80 rounded-lg text-[13px] font-bold">Récupérer ma position GPS</button>
+                <p id="gps-coords" class="text-[10px] text-blue-300 text-center italic">Veuillez activer votre GPS</p>
+            </section>
+        </section>
+
+        <section id="tab-noeuds" class="dashboard-tab glass-card p-6 space-y-4">
+            <h3 class="text-lg font-bold text-blue-300"><i class="fas fa-scroll mr-2"></i>Partage de Nœuds</h3>
+            <div class="input-marine p-6 rounded-2xl text-center border-dashed border-2 border-blue-400/30 cursor-pointer">
+                <label for="knot-upload" class="cursor-pointer">
+                    <i class="fas fa-camera text-3xl text-blue-300 mb-2"></i>
+                    <p class="text-sm">Ajouter une photo de nœud</p>
+                    <input id="knot-upload" type="file" accept="image/*" class="hidden" onchange="previewKnot(this)">
+                </label>
+            </div>
+            <div id="knot-list" class="grid grid-cols-2 gap-3 mt-4"></div>
+        </section>
     </div>
 
-    <nav id="bottom-nav" class="hidden fixed bottom-0 w-full glass-card flex justify-around p-4 rounded-t-2xl">
-        <button onclick="switchTab('carnet')"><i class="fas fa-book"></i></button>
-        <button onclick="switchTab('meteo')"><i class="fas fa-cloud-sun"></i></button>
-        <button onclick="switchTab('noeuds')"><i class="fas fa-scroll"></i></button>
-        <button onclick="switchTab('chat')"><i class="fas fa-comments"></i></button>
+    <nav class="fixed bottom-0 w-full p-4 flex justify-around bg-slate-900/80 backdrop-blur-md rounded-t-3xl z-50">
+        <button onclick="showTab('tab-meteo')" class="text-blue-300"><i class="fas fa-cloud-sun text-2xl"></i></button>
+        <button onclick="showTab('tab-noeuds')" class="text-blue-300"><i class="fas fa-scroll text-2xl"></i></button>
     </nav>
 
     <script>
-        const ADMIN_CODE = "1985";
-        let catches = [];
+        document.getElementById("btn-login").addEventListener("click", () => {
+            document.getElementById("login-page").classList.add("hidden");
+            document.getElementById("dashboard-page").classList.remove("hidden");
+        });
 
-        function tbgDashboard() {
-            if (document.getElementById('password').value !== ADMIN_CODE) { alert("Code erroné"); return; }
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('dashboard-page').classList.remove('hidden');
-            document.getElementById('bottom-nav').classList.remove('hidden');
+        function showTab(tabId) {
+            document.querySelectorAll('.dashboard-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
         }
 
-        function switchTab(tab) {
-            document.querySelectorAll('.dashboard-tab').forEach(t => t.classList.add('hidden'));
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+        function previewKnot(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const knotList = document.getElementById('knot-list');
+                    const div = document.createElement('div');
+                    div.className = "glass-card p-1";
+                    div.innerHTML = `<img src="${e.target.result}" class="rounded-xl w-full h-24 object-cover">`;
+                    knotList.appendChild(div);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
-
-        function saveCatch() {
-            const s = document.getElementById('fish-species').value;
-            const l = document.getElementById('fish-length').value;
-            if(!s || !l) return;
-            catches.unshift({s, l});
-            renderCatches();
-        }
-
-        function renderCatches() {
-            document.getElementById('catch-list').innerHTML = catches.map(c => `
-                <div class="glass-card p-3 rounded-xl text-xs">${c.s} - ${c.l} cm</div>
-            `).join('');
-        }
+        // ... (Gardez vos autres fonctions existantes ici)
     </script>
 </body>
 </html>
