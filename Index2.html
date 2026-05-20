@@ -30,39 +30,37 @@
         }
     </style>
 </head>
-<body class="underwater-bg flex flex-col min-h-full antialiased text-white">
+<body class="underwater-bg min-h-screen text-white">
 
-    <header class="glass-card text-white shadow-lg w-full fixed top-0 z-50 rounded-b-xl border-t-0 border-x-0">
+    <header class="glass-card w-full fixed top-0 z-50 rounded-b-xl">
         <div class="max-w-md mx-auto flex items-center justify-between px-5 py-3">
             <h1 class="text-xl font-bold">Les Silures de Canapé</h1>
             <i class="fab fa-facebook text-2xl text-[#4ac7f2]"></i>
         </div>
     </header>
 
-    <div class="flex flex-col items-center justify-center flex-1 px-6 pt-32 w-full max-w-md mx-auto">
-        <div class="w-full p-8 space-y-6 glass-card rounded-2xl">
-            <div class="text-center">
-                <p class="text-xs uppercase text-blue-300 font-semibold">Espace Membres</p>
-                <p class="text-sm text-slate-200">Connectez-vous pour activer le Dashboard</p>
-            </div>
-
-            <input id="email" type="email" class="input-marine w-full p-3 rounded" placeholder="Identifiant (e-mail)">
-            <input id="password" type="password" class="input-marine w-full p-3 rounded" placeholder="Mot de passe">
-            
-            <button id="btn-login" class="w-full py-3 bg-blue-500 rounded font-bold hover:bg-blue-600">Se connecter</button>
-            <button id="btn-register" class="w-full py-3 bg-blue-700 rounded font-bold hover:bg-blue-800">S'inscrire</button>
+    <div id="login-page" class="flex flex-col items-center justify-center pt-32 px-6">
+        <div class="w-full max-w-md p-8 glass-card rounded-2xl">
+            <p class="text-xs uppercase text-blue-300 text-center">Espace Membres</p>
+            <input id="email" type="email" class="input-marine w-full p-3 mt-4 rounded" placeholder="Identifiant">
+            <input id="password" type="password" class="input-marine w-full p-3 mt-4 rounded" placeholder="Mot de passe">
+            <button id="btn-login" class="w-full py-3 mt-6 bg-blue-500 rounded font-bold">Se connecter</button>
         </div>
     </div>
 
-    <script>
-        // Test simple sans Firebase
-        document.getElementById("btn-login").onclick = () => {
-            alert("Bouton Connexion cliqué ! Le design fonctionne.");
-        };
+    <div id="dashboard-page" class="hidden pt-24 px-4 space-y-4">
+        <section id="tab-carnet" class="glass-card p-5 rounded-2xl">
+            <h3 class="font-bold mb-2">Mon Carnet</h3>
+            <button onclick="alert('Fonctionne !')" class="w-full py-2 bg-blue-500 rounded">Enregistrer</button>
+        </section>
+    </div>
 
-        document.getElementById("btn-register").onclick = () => {
-            alert("Bouton Inscrire cliqué ! Le design fonctionne.");
+    <script>
+        document.getElementById("btn-login").onclick = () => {
+            document.getElementById("login-page").classList.add("hidden");
+            document.getElementById("dashboard-page").classList.remove("hidden");
         };
     </script>
 </body>
+
 </html>
