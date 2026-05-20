@@ -128,6 +128,19 @@
                     </div>
             </div>
         </section>
+        <section id="tab-register" class="dashboard-tab hidden space-y-4">
+    <div class="p-5 glass-card rounded-2xl shadow-xl">
+        <h3 class="text-base font-bold text-white mb-4 text-[#4ac7f2]">Créer un compte</h3>
+        <div class="space-y-3">
+            <input id="reg-email" type="email" placeholder="E-mail" class="input-marine w-full p-2.5 rounded-xl text-xs text-white">
+            <input id="reg-pass" type="password" placeholder="Mot de passe" class="input-marine w-full p-2.5 rounded-xl text-xs text-white">
+            <button onclick="inscrireDirectFirebase()" class="w-full py-2.5 text-xs font-bold text-white bg-blue-600 rounded-xl">
+                S'inscrire
+            </button>
+        </div>
+    </div>
+</section>
+
 
         <section id="tab-meteo" class="dashboard-tab hidden space-y-4">
             <div class="p-5 glass-card rounded-2xl shadow-xl text-center relative overflow-hidden">
@@ -286,7 +299,8 @@
         <img id="lightbox-img" src="" alt="Zoom" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
     </div>
 
-    <script {nonce}>
+    <script type=""module">
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
         const ADMIN_CODE = "1985"; 
 
         let currentUser = "Anonyme";
@@ -295,8 +309,22 @@
         let chatMessages = [];
         let currentSpotType = 'riviere';
         let gpsLoaded = false;
+const auth = getAuth(); // Cela crée le lien avec Firebase
+      // Votre fonction inscription
+window.inscrireDirectFirebase = async () => {
+    const email = document.getElementById('reg-email').value;
+    const pass = document.getElementById('reg-pass').value;
+    try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        alert("Inscription réussie !");
+    } catch (error) {
+        alert("Erreur : " + error.message);
+    }
 
-        function tbgDashboard() {
+// Votre fonction dashboard (bien séparée)
+function tbgDashboard() {
+    const userIn = document.getElementById('username').value;
+    // ... le reste de votre code
             const userIn = document.getElementById('username').value.trim();
             currentUser = userIn ? userIn : "Membre";
 
