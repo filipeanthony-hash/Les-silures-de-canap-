@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Thème visuel sous-marin dépoli haute qualité (Style Image 3) */
+        /* Thème visuel sous-marin dépoli haute qualité */
         .underwater-bg {
             background-image: linear-gradient(rgba(12, 26, 38, 0.6), rgba(12, 26, 38, 0.9)), 
                               url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1000&auto=format&fit=crop');
@@ -18,13 +18,13 @@
             background-attachment: fixed;
         }
 
-        /* Carte verre dépoli épurée (Style Image 3) */
+        /* Carte verre dépoli épurée */
         .glass-card {
-            background: rgba(25, 59, 87, 0.25); /* Plus translucide pour le style épuré */
+            background: rgba(25, 59, 87, 0.25);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(74, 199, 242, 0.15); /* Bordure très fine */
-            border-radius: 2rem; /* Coins plus arrondis pour la beauté */
+            border: 1px solid rgba(74, 199, 242, 0.15);
+            border-radius: 2rem;
             box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
         }
 
@@ -39,16 +39,16 @@
             box-shadow: 0 0 12px rgba(74, 199, 242, 0.6);
         }
 
-        /* Styles spécifiques pour le Dashboard épuré (Style Image 3) */
+        /* Styles pour l'anneau de progression */
         .progress-ring__circle {
             transition: stroke-dashoffset 0.3s;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
         }
 
-        /* Style des options de poisson (Style Image 4 : fond gris et épuré) */
+        /* Style des options de poisson */
         #fish-options {
-            background: rgba(30, 41, 59, 0.95); /* Fond gris foncé épuré (Style Image 4) */
+            background: rgba(30, 41, 59, 0.95);
             border: 1px solid rgba(74, 199, 242, 0.2);
             border-radius: 1rem;
             margin-top: 5px;
@@ -60,15 +60,15 @@
             cursor: pointer;
             transition: background 0.2s;
             display: flex;
-            items-center: true;
+            align-items: center;
             gap: 12px;
-            color: white; /* Texte blanc sur fond gris */
+            color: white;
         }
         #fish-options p:hover {
-            background: rgba(74, 199, 242, 0.1); /* Surlignage subtil */
+            background: rgba(74, 199, 242, 0.1);
         }
 
-        /* Sliders horizontaux épurés (Style Image 3) */
+        /* Sliders horizontaux épurés */
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -95,6 +95,7 @@
         </div>
     </header>
 
+    <!-- ÉCRAN DE CONNEXION -->
     <div id="login-page" class="flex flex-col items-center justify-center h-full px-6 pt-32 w-full max-w-md mx-auto">
         <div class="w-full p-10 space-y-7 glass-card relative z-10">
             <div class="text-center space-y-1.5">
@@ -102,12 +103,12 @@
                 <p class="text-base text-slate-200">Connectez-vous pour activer le Dashboard</p>
             </div>
 
-            <form id="auth-form" class="space-y-6" onsubmit="event.preventDefault();">
+            <form id="auth-form" class="space-y-6" onsubmit="loginUser(event)">
                 <input id="email" type="email" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Identifiant (e-mail)">
                 <input id="password" type="password" required class="input-marine w-full p-4 rounded-xl text-lg" placeholder="Mot de passe">
 
                 <div class="pt-3 space-y-4">
-                    <button id="btn-login" type="submit" class="w-full py-4 bg-blue-600 text-white rounded-xl text-lg font-black hover:bg-blue-500 transition-colors">
+                    <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-xl text-lg font-black hover:bg-blue-500 transition-colors cursor-pointer">
                         Se connecter
                     </button>
                     <p class="text-sm text-center text-slate-400">
@@ -118,7 +119,8 @@
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden flex flex-col flex-1 pt-24 px-5 pb-24 space-y-5 overflow-y-auto w-full max-w-md mx-auto z-10 relative">
+    <!-- TABLEAU DE BORD (DASHBOARD) -->
+    <div id="dashboard-page" class="hidden flex-col flex-1 pt-24 px-5 pb-24 space-y-5 overflow-y-auto w-full max-w-md mx-auto z-10 relative">
         
         <section class="glass-card p-8 flex flex-col items-center">
             <p class="text-sm uppercase tracking-widest text-blue-300 font-bold mb-1.5">MÉTÉO & PRÉDICTIONS GPS</p>
@@ -142,11 +144,10 @@
         </section>
 
         <section class="glass-card p-6 space-y-5">
-            
             <div>
                 <label class="block text-sm font-bold text-blue-300 mb-2.5"><i class="fas fa-fish mr-2"></i>Poisson ciblé</label>
                 <div class="relative">
-                    <button onclick="toggleFishDropdown()" id="fish-selector" type="button" class="input-marine w-full p-4 rounded-xl flex items-center justify-between text-lg">
+                    <button onclick="toggleFishDropdown()" id="fish-selector" type="button" class="input-marine w-full p-4 rounded-xl flex items-center justify-between text-lg cursor-pointer">
                         <span><i class="fas fa-fish text-blue-300 mr-2.5"></i>-- Choisir une espèce --</span>
                         <i class="fas fa-chevron-down text-blue-400"></i>
                     </button>
@@ -161,7 +162,7 @@
                 </div>
             </div>
 
-            <button onclick="getGPS()" type="button" class="w-full py-2 bg-blue-700/80 text-white rounded-lg text-[13px] font-bold hover:bg-blue-600 transition-all active:scale-95 flex items-center justify-center gap-2">
+            <button onclick="getGPS()" type="button" class="w-full py-2 bg-blue-700/80 text-white rounded-lg text-[13px] font-bold hover:bg-blue-600 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
                 <i class="fas fa-satellite text-xs"></i> Récupérer ma position GPS
             </button>
             <p id="gps-coords" class="text-[10px] text-blue-300/70 text-center italic mt-1">
@@ -185,7 +186,7 @@
             </div>
         </section>
 
-        <!-- --- NOUVELLE CASE AJOUTÉE : NE / PHOTOS PROTEGÉES --- -->
+        <!-- --- CASE NE : ALBUM PHOTO SÉCURISÉ --- -->
         <section class="glass-card p-6 space-y-4">
             <div class="flex items-center justify-between border-b border-white/10 pb-2">
                 <h3 class="text-lg font-black text-white flex items-center gap-2">
@@ -203,7 +204,7 @@
             </div>
 
             <div id="knot-list" class="grid grid-cols-3 gap-3 pt-2">
-                <!-- Les photos ajoutées apparaîtront ici -->
+                <!-- Emplacement des photos -->
             </div>
         </section>
     </div>
@@ -212,35 +213,39 @@
         // --- DONNÉES GLOBALES ---
         let currentLatitude = null;
         let targetSpecies = null;
-        const ring = document.getElementById('activity-ring');
+        let ring = null;
         let circumference = 0;
-        
-        // Code secret requis pour supprimer une photo
-        const ADMIN_CODE = "1985"; 
+        const ADMIN_CODE = "1985"; // Ton code secret pour effacer
 
-        // Configuration de l'anneau de progression épuré (Activity ring)
-        if (ring) {
-            const radius = ring.r.baseVal.value;
-            circumference = radius * 2 * Math.PI;
-            ring.style.strokeDasharray = `${circumference} ${circumference}`;
-            ring.style.strokeDashoffset = circumference;
-        }
-
-        // Fonction pour se connecter épurée
-        document.getElementById("btn-login").addEventListener("click", (e) => {
-            e.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            if (email !== "" && password !== "") {
-                document.getElementById("login-page").classList.add("hidden");
-                document.getElementById("dashboard-page").classList.remove("hidden");
-                document.getElementById("dashboard-page").classList.add("flex");
-            } else {
-                alert("Veuillez remplir l'identifiant et le mot de passe (ceci est un test).");
+        // Initialisation après chargement de la page
+        window.addEventListener('DOMContentLoaded', () => {
+            ring = document.getElementById('activity-ring');
+            if (ring) {
+                const radius = ring.r.baseVal.value;
+                circumference = radius * 2 * Math.PI;
+                ring.style.strokeDasharray = `${circumference} ${circumference}`;
+                ring.style.strokeDashoffset = circumference;
             }
         });
 
-        // Dropdown Poisson style gris épuré (Image 4)
+        // --- CORRECTION DE LA FONCTION DE CONNEXION ---
+        window.loginUser = function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            
+            if (email !== "" && password !== "") {
+                document.getElementById("login-page").classList.add("hidden");
+                
+                const dashboard = document.getElementById("dashboard-page");
+                dashboard.classList.remove("hidden");
+                dashboard.classList.add("flex");
+            } else {
+                alert("Veuillez remplir l'identifiant et le mot de passe.");
+            }
+        };
+
+        // Dropdown Poisson
         function toggleFishDropdown() {
             document.getElementById("fish-options").classList.toggle("hidden");
         }
@@ -259,7 +264,7 @@
             calculateActivityIndex();
         }
 
-        // Fonction GPS épurée
+        // Fonction GPS
         function getGPS() {
             if (navigator.geolocation) {
                 document.getElementById("gps-coords").innerText = "Recherche en cours...";
@@ -285,13 +290,13 @@
             }
         }
 
-        // --- MOTEUR DE CALCUL INTELLIGENT ---
+        // Moteur de calcul d'activité
         function calculateActivityIndex() {
-            if (!currentLatitude || !targetSpecies) return;
+            if (!currentLatitude || !targetSpecies || !ring) return;
 
             let percent = 0;
             let statusText = "Faible";
-            let colorStatus = "#fb923c"; // Orange
+            let colorStatus = "#fb923c";
             const isNorth = currentLatitude > 48;
 
             switch (targetSpecies) {
@@ -333,38 +338,27 @@
             document.getElementById("lune-val").innerHTML = moonData[val].text + " " + moonData[val].icon;
         }
 
-        function saveSession() {
-            const coordsText = document.getElementById('gps-coords').innerText;
-            if (coordsText === "Veuillez activer votre GPS pour le calcul") {
-                alert("Veuillez d'abord récupérer vos coordonnées GPS avant d'enregistrer.");
-                return;
-            }
-            alert("Session enregistrée !");
-        }
-
-        // --- GESTION DES PHOTOS ET SECURISATION DU COMPTE "NE" ---
+        // --- GESTION DES PHOTOS DE LA CASE NE ---
         function previewKnot(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const knotList = document.getElementById('knot-list');
                     const div = document.createElement('div');
-                    // Combinaison carte dépolie + bouton d'effacement discret en haut à droite
                     div.className = "glass-card p-1 relative group overflow-hidden border border-white/5 aspect-square flex items-center justify-center";
                     div.innerHTML = `
                         <img src="${e.target.result}" class="rounded-2xl w-full h-full object-cover cursor-pointer" onclick="openLightbox('${e.target.result}')">
-                        <button onclick="deleteNePhoto(this)" class="absolute top-1.5 right-1.5 bg-black/70 text-rose-400 hover:text-white hover:bg-rose-600 text-[10px] w-5 h-5 rounded-full flex items-center justify-center transition-all opacity-80 group-hover:opacity-100" title="Supprimer">
+                        <button onclick="deleteNePhoto(this)" class="absolute top-1.5 right-1.5 bg-black/70 text-rose-400 hover:text-white hover:bg-rose-600 text-[10px] w-5 h-5 rounded-full flex items-center justify-center transition-all opacity-80 group-hover:opacity-100 cursor-pointer" title="Supprimer">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     `;
                     knotList.appendChild(div);
-                    input.value = ""; // Reset du champ de sélection
+                    input.value = "";
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // Restriction d'effacement de la case "Ne"
         function deleteNePhoto(buttonElement) {
             const code = prompt("🔒 Action Sécurisée : Entrez votre code secret pour effacer cette photo :");
             if (code === ADMIN_CODE) {
@@ -387,7 +381,7 @@
         }
     </script>
 
-    <!-- Fenêtre de Zoom (Lightbox) mise à jour pour s'adapter élégamment au mobile -->
+    <!-- Lightbox (Zoom photo) -->
     <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 cursor-pointer" onclick="closeLightbox()">
         <div class="absolute top-4 right-4 text-white text-2xl p-2 bg-white/10 rounded-full w-10 h-10 flex items-center justify-center">
             <i class="fas fa-times"></i>
