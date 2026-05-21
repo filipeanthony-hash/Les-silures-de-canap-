@@ -8,6 +8,7 @@
     <link rel="apple-touch-icon" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -18,6 +19,7 @@
         .btn-groupe { background-color: #064e3b !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
+        select option { font-weight: bold; }
     </style>
 </head>
 <body class="river-bg min-h-screen font-sans p-4" onload="initApp()">
@@ -29,26 +31,31 @@
             <div class="flex gap-2 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-3xl"><i class="fab fa-facebook"></i></button>
-                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
+                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
             </div>
         </div>
 
-        <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
+        <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800 space-y-2">
             <h3 class="text-[10px] font-bold uppercase mb-2">Gestion des Scores</h3>
             <div id="login-part" class="space-y-2">
-                <select id="groupe-select" class="w-full p-2 rounded text-xs"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option></select>
+                <select id="groupe-select" class="w-full p-2 rounded text-xs border"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option></select>
                 <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 rounded text-xs border">
                 <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded text-xs font-black">ENTRER</button>
             </div>
             <div id="counter-part" class="hidden text-center space-y-2">
                 <h4 id="group-title" class="font-bold text-xs"></h4>
                 <div class="text-3xl font-black" id="total-score">0 pts</div>
-                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-2 rounded font-black text-[10px]">+ 10 pts (Petit)</button>
-                <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 rounded text-xs border">
+                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-2 rounded font-black text-[10px]">+ 10 pts</button>
                 <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 rounded font-black text-[10px]">+ Poids (1g=1pt)</button>
+                <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 rounded text-xs border">
                 <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
             </div>
+        </div>
+
+        <div class="glass-card-river p-3 border-fb flex items-center gap-3">
+            <i class="fas fa-bell text-fb text-xl"></i>
+            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold" id="notif-bar">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
         </div>
 
         <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
@@ -62,7 +69,10 @@
         </div>
 
         <div class="glass-card-river p-4 space-y-4 border-fb">
-            <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full" oninput="calculateIndex()">
+            <div>
+                <div class="flex justify-between text-[10px] font-bold mb-2"><span>🌧️ Pluie</span><span>☀️ Beau Temps</span></div>
+                <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
+            </div>
             <div class="grid grid-cols-2 gap-2">
                 <input type="number" id="temp-slider" min="5" max="25" value="15" class="p-2 bg-white/50 rounded-lg text-center text-xs border border-fb" oninput="calculateIndex()">
                 <select id="moon-phase" onchange="calculateIndex()" class="p-2 bg-white/50 rounded-lg text-xs border border-fb">
@@ -76,23 +86,43 @@
         </div>
 
         <div class="glass-card-river overflow-hidden border-fb">
-            <table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table>
+            <table class="w-full text-xs text-center">
+                <thead><tr class="bg-blue-100"><th class="p-3">LIEU</th><th class="p-3">PROBABILITÉ</th></tr></thead>
+                <tbody id="prob-table"></tbody>
+            </table>
         </div>
         
-        <div class="mt-4 pb-6 w-full">
-            <img src="https://i.postimg.cc/k4G6V4Xy/1000021618.jpg" alt="Silure" class="w-full rounded-2xl border-4 border-white shadow-xl block">
+        <div class="mt-4 pb-6">
+            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
     </div>
 
     <script>
+        const firebaseConfig = { apiKey: "AIzaSyARnepyvwgwjbv97lBlMEA2UR28c-jVALM", authDomain: "les-silures-de-canape-c90e6.firebaseapp.com", projectId: "les-silures-de-canape-c90e6", storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app", messagingSenderId: "1063082508513", appId: "1:1063082508513:web:1068368a1db2dff18377a0", measurementId: "G-99MB1YMZR4" };
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
-        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026" };
+        const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
+        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77" };
         let currentGroup = "";
 
-        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); if(id === 'spots-section' && !document.getElementById('spots-section').classList.contains('hidden')) { document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-2 rounded text-[10px] font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join(''); } }
+        function toggleSection(id) { 
+            const section = document.getElementById(id);
+            section.classList.toggle('hidden');
+            if(id === 'spots-section' && !section.classList.contains('hidden')) {
+                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-2 rounded text-[10px] font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
+            }
+        }
 
-        function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); document.getElementById('total-score').innerText = (localStorage.getItem(g) || 0) + " pts"; } else { alert("Code incorrect"); } }
-        
+        function checkPass() {
+            const g = document.getElementById('groupe-select').value;
+            if(document.getElementById('pass').value === passwords[g]) {
+                currentGroup = g;
+                document.getElementById('login-part').classList.add('hidden');
+                document.getElementById('counter-part').classList.remove('hidden');
+                document.getElementById('group-title').innerText = g.toUpperCase();
+                document.getElementById('total-score').innerText = (localStorage.getItem(g) || 0) + " pts";
+            } else { alert("Code incorrect"); }
+        }
+
         function save(s) { localStorage.setItem(currentGroup, s); document.getElementById('total-score').innerText = s + " pts"; }
         function addSmallFish() { save(parseInt(localStorage.getItem(currentGroup)||0) + 10); }
         function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(p) save(parseInt(localStorage.getItem(currentGroup)||0) + p); }
@@ -105,13 +135,24 @@
             const fish = document.getElementById('fish-select').value;
             let score = Math.floor(((meteo < 50 ? 60 : 40) + (temp >= 12 && temp <= 18 ? 20 : 0)) * moon);
             document.getElementById('final-index').innerText = Math.min(100, score) + "%";
-            const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
-            const table = document.getElementById('prob-table'); table.innerHTML = "";
-            for (let lieu in fishData[fish]) { table.innerHTML += `<tr><td class="p-3">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`; }
+            document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
+            const table = document.getElementById('prob-table');
+            table.innerHTML = "";
+            for (let lieu in fishData[fish]) {
+                table.innerHTML += `<tr><td class="p-3">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
+            }
         }
 
         async function initApp() {
-            if (navigator.geolocation) { navigator.geolocation.getCurrentPosition(async (p) => { try { const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`); const d = await res.json(); document.getElementById('city-name').innerText = d.address.town || d.address.city || "Localisation"; } catch(e) { document.getElementById('city-name').innerText = "Paris"; } }); }
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (p) => {
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`);
+                        const d = await res.json();
+                        document.getElementById('city-name').innerText = d.address.town || d.address.city || "Localisation";
+                    } catch(e) { document.getElementById('city-name').innerText = "Paris"; }
+                });
+            }
             calculateIndex();
         }
     </script>
