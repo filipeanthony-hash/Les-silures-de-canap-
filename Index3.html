@@ -28,14 +28,16 @@
         <div class="flex justify-between items-center px-2">
             <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
             <div class="flex gap-2 items-center">
-                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
-                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-2xl"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-2xl"><i class="fab fa-facebook"></i></button>
+                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
+                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
             </div>
         </div>
 
         <div class="glass-card-river p-3 border-fb flex items-center gap-3">
             <i class="fas fa-bell text-fb text-xl"></i>
-            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold" id="notif-bar">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
+            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
         </div>
 
         <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
