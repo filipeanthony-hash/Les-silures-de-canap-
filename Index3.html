@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
     
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#b2dfdb">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Les Silures de Canapé","short_name":"Silures","icons":[{"src":"logo.png","sizes":"512x512","type":"image/png"}],"start_url":".","display":"standalone","background_color":"#b2dfdb","theme_color":"#b2dfdb"}'>
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Les Silures de Canapé","short_name":"Silures","icons":[{"src":"https://i.postimg.cc/yY1bXpD4/1779352785742.png","sizes":"512x512","type":"image/png"}],"start_url":".","display":"standalone","background_color":"#b2dfdb","theme_color":"#b2dfdb"}'>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -23,6 +23,7 @@
         .btn-photo { background-color: #f97316 !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
+        select option { font-weight: bold; }
     </style>
 </head>
 <body class="river-bg min-h-screen font-sans p-4" onload="initApp()">
@@ -41,7 +42,7 @@
 
         <div class="glass-card-river p-3 border-fb flex items-center gap-3">
             <i class="fas fa-bell text-fb text-xl"></i>
-            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
+            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold" id="notif-bar">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
         </div>
 
         <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
@@ -62,7 +63,7 @@
         <div class="glass-card-river p-4 space-y-4 border-fb">
             <div>
                 <div class="flex justify-between text-[10px] font-bold mb-2"><span>🌧️ Pluie</span><span>☀️ Beau Temps</span></div>
-                <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg" oninput="calculateIndex()">
+                <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
             </div>
             <div class="grid grid-cols-2 gap-2">
                 <input type="number" id="temp-slider" min="5" max="25" value="15" class="p-2 bg-white/50 rounded-lg text-center text-xs border border-fb" oninput="calculateIndex()">
@@ -84,12 +85,12 @@
         </div>
         
         <div class="mt-4 pb-6">
-            <img src="logo.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
+            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
     </div>
 
     <script>
-        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.google.com" }];
+        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://www.google.com/maps" }];
         const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
         const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
