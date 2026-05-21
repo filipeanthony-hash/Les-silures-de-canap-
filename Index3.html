@@ -43,13 +43,18 @@
                 <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 rounded text-xs border">
                 <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded text-xs font-black">ENTRER</button>
             </div>
-            <div id="counter-part" class="hidden text-center space-y-2">
-                <h4 id="group-title" class="font-bold text-xs"></h4>
-                <div class="text-3xl font-black" id="total-score">0 pts</div>
-                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-2 rounded font-black text-[10px]">+ 10 pts (Petit)</button>
-                <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 rounded text-xs border">
-                <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 rounded font-black text-[10px]">+ Poids (1g=1pt)</button>
-                <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
+            <div id="counter-part" class="hidden text-center space-y-4">
+                <h4 id="group-title" class="font-bold text-xs uppercase"></h4>
+                <div class="text-4xl font-black" id="total-score">0 pts</div>
+                
+                <button onclick="addFish()" class="w-full bg-orange-500 text-white p-3 rounded-lg font-black text-xs shadow-md">+ 1 POISSON (10 pts)</button>
+                
+                <div class="space-y-2 border-t pt-4">
+                    <input type="number" id="poids-input" placeholder="Poids en grammes (ex: 200)" class="w-full p-2 rounded text-xs border border-blue-400">
+                    <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-3 rounded-lg font-black text-xs shadow-md">+ AJOUTER CE POIDS AU TOTAL</button>
+                </div>
+                
+                <button onclick="resetScore()" class="w-full bg-red-600 text-white p-2 rounded text-[10px] uppercase font-bold mt-2">Remise à zéro</button>
             </div>
         </div>
 
@@ -121,14 +126,27 @@
                 document.getElementById('login-part').classList.add('hidden');
                 document.getElementById('counter-part').classList.remove('hidden');
                 document.getElementById('group-title').innerText = g.toUpperCase();
-                document.getElementById('total-score').innerText = (localStorage.getItem(g) || 0) + " pts";
+                document.getElementById('total-score').innerText = (parseInt(localStorage.getItem(g) || 0)) + " pts";
             } else { alert("Code incorrect"); }
         }
 
-        function save(s) { localStorage.setItem(currentGroup, s); document.getElementById('total-score').innerText = s + " pts"; }
-        function addSmallFish() { save(parseInt(localStorage.getItem(currentGroup)||0) + 10); }
-        function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(p) save(parseInt(localStorage.getItem(currentGroup)||0) + p); }
-        function resetScore() { if(confirm("Remise à zéro ?")) save(0); }
+        function updateDisplay(s) { localStorage.setItem(currentGroup, s); document.getElementById('total-score').innerText = s + " pts"; }
+        
+        function addFish() { 
+            let current = parseInt(localStorage.getItem(currentGroup) || 0);
+            updateDisplay(current + 10); 
+        }
+        
+        function addWeight() { 
+            const p = parseInt(document.getElementById('poids-input').value); 
+            if(!isNaN(p)) {
+                let current = parseInt(localStorage.getItem(currentGroup) || 0);
+                updateDisplay(current + p);
+                document.getElementById('poids-input').value = "";
+            }
+        }
+        
+        function resetScore() { if(confirm("Remise à zéro ?")) updateDisplay(0); }
 
         function calculateIndex() {
             const meteo = parseInt(document.getElementById('meteo-slider').value);
@@ -141,7 +159,7 @@
             const table = document.getElementById('prob-table');
             table.innerHTML = "";
             for (let lieu in fishData[fish]) {
-                table.innerHTML += `<tr><td class="p-3">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
+                table.innerHTML += `<tr><td class="p-3 font-bold text-blue-900">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
             }
         }
 
