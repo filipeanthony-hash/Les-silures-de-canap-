@@ -8,8 +8,17 @@
     <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Les Silures">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Silures">
+    <script type="application/manifest+json">
+    {
+      "name": "Les Silures de Canapé",
+      "short_name": "Silures",
+      "icons": [{"src": "https://i.postimg.cc/yY1bXpD4/1779352785742.png", "sizes": "512x512", "type": "image/png"}],
+      "start_url": ".",
+      "display": "standalone"
+    }
+    </script>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -81,18 +90,18 @@
                 <tbody id="prob-table"></tbody>
             </table>
         </div>
-
+        
         <div class="mt-4 pb-6">
             <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
     </div>
 
     <script>
-        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }, { name: "Nouveau Spot", url: "#" }];
+        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
         const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
         const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
-        function toggleSection(id) {
+        function toggleSection(id) { 
             const section = document.getElementById(id);
             section.classList.toggle('hidden');
             if(id === 'photo-section' && !section.classList.contains('hidden')) {
