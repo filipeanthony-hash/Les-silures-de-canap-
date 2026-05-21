@@ -3,94 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Silures de Canapé - Compteur</title>
+    <title>Les Silures de Canapé</title>
+    
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        body { overscroll-behavior-y: contain; }
         .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 1.5rem; border: 1px solid #1877F2; }
+        .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; }
+        body, body * { color: #000000 !important; }
+        .btn-fb { background-color: #1877F2 !important; color: white !important; }
+        .btn-photo { background-color: #f97316 !important; color: white !important; }
+        .btn-groupe { background-color: #064e3b !important; color: white !important; }
+        .border-fb { border-color: #1877F2 !important; }
+        .text-fb { color: #1877F2 !important; }
     </style>
 </head>
-<body class="river-bg min-h-screen p-4">
+<body class="river-bg min-h-screen font-sans p-4" onload="initApp()">
 
-    <div id="login-section" class="max-w-md mx-auto glass-card p-6 mt-10">
-        <h2 class="font-black text-xl mb-4 text-center">Connexion Groupe</h2>
-        <select id="groupe-select" class="w-full p-3 mb-4 rounded-lg border">
-            <option value="groupe1">Groupe 1</option>
-            <option value="groupe2">Groupe 2</option>
-            <option value="groupe3">Groupe 3</option>
-            <option value="groupe4">Groupe 4</option>
-            <option value="groupe5">Groupe 5</option>
-        </select>
-        <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-3 rounded-lg mb-4 border">
-        <button onclick="checkPass()" class="bg-blue-600 text-white w-full p-3 rounded-lg font-bold">ACCÉDER</button>
-    </div>
+    <div id="dashboard" class="w-full max-w-md mx-auto space-y-4">
+        
+        <div class="flex justify-between items-center px-2">
+            <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
+            <div class="flex gap-2 items-center">
+                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
+                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
+                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+            </div>
+        </div>
 
-    <div id="counter-section" class="hidden max-w-md mx-auto glass-card p-6 mt-10">
-        <h2 id="group-title" class="font-black text-center text-xl mb-6">Compteur</h2>
-        
-        <div class="bg-blue-600 text-white p-4 rounded-xl text-center mb-6 shadow-lg">
-            <p class="text-[10px] uppercase font-bold opacity-80">Total Général</p>
-            <div class="text-4xl font-black" id="total-score">0 pts</div>
-        </div>
-        
-        <div class="space-y-6">
-            <div class="p-4 border-2 border-orange-300 rounded-xl bg-orange-50">
-                <p class="text-xs font-bold mb-2 uppercase text-orange-600">Petit Poisson</p>
-                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-4 rounded-xl font-black">+ 10 points</button>
+        <div id="groupe-section" class="hidden glass-card-river p-4 space-y-4 border-2 border-green-800">
+            <h3 class="text-[10px] font-bold uppercase text-center">Gestion des Scores</h3>
+            <div id="login-part">
+                <select id="groupe-select" class="w-full p-2 mb-2 rounded border bg-white/50">
+                    <option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option>
+                    <option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option>
+                    <option value="groupe5">Groupe 5</option>
+                </select>
+                <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded border bg-white/50">
+                <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded font-black">ENTRER</button>
             </div>
-            
-            <div class="p-4 border-2 border-blue-300 rounded-xl bg-blue-50">
-                <p class="text-xs font-bold mb-2 uppercase text-blue-600">Gros Poisson (1g = 1pt)</p>
-                <input type="number" id="poids-input" placeholder="Poids en grammes" class="w-full p-3 mb-2 rounded-lg border">
-                <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-4 rounded-xl font-black">AJOUTER POIDS</button>
+            <div id="counter-part" class="hidden text-center">
+                <h4 id="group-title" class="font-bold mb-2"></h4>
+                <div class="text-4xl font-black my-4 text-green-900" id="total-score">0 pts</div>
+                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-2 mb-2 rounded font-black">+ 10 pts (Petit)</button>
+                <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 mb-2 rounded border bg-white/50">
+                <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 mb-2 rounded font-black">+ Grammes (1g=1pt)</button>
+                <button onclick="resetScore()" class="w-full bg-red-600 text-white p-2 rounded text-xs">RESET SCORE</button>
             </div>
-            
-            <button onclick="resetScore()" class="w-full bg-red-500 text-white p-2 rounded-xl text-xs font-bold">RÉINITIALISER SCORE</button>
         </div>
-        <button onclick="location.reload()" class="mt-6 text-xs underline text-gray-500 w-full">Retour aux groupes</button>
+
+        <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
+            <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
+            <div id="spots-list" class="space-y-2"></div>
+        </div>
+
+        <div id="photo-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
+            <h3 class="text-[10px] font-bold uppercase mb-2">Galerie Photos</h3>
+            <div id="gallery" class="grid grid-cols-2 gap-2"></div>
+        </div>
+
+        <div class="glass-card-river p-6 text-center border-2 border-fb">
+            <div id="final-index" class="text-5xl font-black">0%</div>
+            <p id="weather-status" class="text-[10px] mt-2 italic">Calcul en cours...</p>
+        </div>
+
+        <div class="glass-card-river p-4 space-y-4 border-fb">
+            <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg" oninput="calculateIndex()">
+            <div class="grid grid-cols-2 gap-2">
+                <div class="flex items-center gap-2">
+                    <input type="number" id="temp-slider" min="5" max="25" value="15" class="w-2/3 p-2 bg-white/50 rounded-lg text-center text-xs border border-fb" oninput="calculateIndex()">
+                    <span class="text-[12px] font-black text-fb">°C</span>
+                </div>
+                <select id="moon-phase" onchange="calculateIndex()" class="p-2 bg-white/50 rounded-lg text-xs border border-fb">
+                    <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
+                </select>
+            </div>
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
+                <option value="Silure">Silure</option><option value="Truite">Truite</option>
+                <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
+            </select>
+        </div>
+
+        <div class="glass-card-river overflow-hidden border-fb">
+            <table class="w-full text-xs text-center">
+                <thead><tr class="bg-blue-100"><th class="p-3">LIEU</th><th class="p-3">PROBABILITÉ</th></tr></thead>
+                <tbody id="prob-table"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        const passwords = {
-            "groupe1": "pass123", "groupe2": "silureA", "groupe3": "brochet77", "groupe4": "canap2026", "groupe5": "pecheur99"
-        };
+        // --- DONNÉES ORIGINALES ---
+        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://www.google.com/maps" }];
+        const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
+        const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
+        // --- LOGIQUE GROUPES & POINTS ---
+        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         let currentGroup = "";
+
+        function toggleSection(id) { 
+            const section = document.getElementById(id);
+            section.classList.toggle('hidden');
+            if(id === 'photo-section' && !section.classList.contains('hidden')) {
+                document.getElementById('gallery').innerHTML = mesPhotos.map(p => `<img src="photos/${p}" class="rounded-lg w-full h-24 object-cover border border-white">`).join('');
+            }
+            if(id === 'spots-section' && !section.classList.contains('hidden')) {
+                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-2 rounded text-[10px] font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
+            }
+        }
 
         function checkPass() {
             const group = document.getElementById('groupe-select').value;
-            const input = document.getElementById('pass').value;
-            if(input === passwords[group]) {
+            if(document.getElementById('pass').value === passwords[group]) {
                 currentGroup = group;
-                document.getElementById('group-title').innerText = "Compteur : " + group.toUpperCase();
+                document.getElementById('login-part').classList.add('hidden');
+                document.getElementById('counter-part').classList.remove('hidden');
+                document.getElementById('group-title').innerText = group.toUpperCase();
                 document.getElementById('total-score').innerText = (localStorage.getItem(group) || 0) + " pts";
-                document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('counter-section').classList.remove('hidden');
-            } else { alert('Mot de passe incorrect !'); }
+            } else { alert("Code incorrect"); }
         }
 
-        function addSmallFish() {
-            let currentScore = parseInt(localStorage.getItem(currentGroup) || 0);
-            saveAndShow(currentScore + 10);
+        function addSmallFish() { saveScore(parseInt(localStorage.getItem(currentGroup) || 0) + 10); }
+        function addWeight() { 
+            const p = parseInt(document.getElementById('poids-input').value);
+            if(p) saveScore(parseInt(localStorage.getItem(currentGroup) || 0) + p);
         }
+        function saveScore(s) { localStorage.setItem(currentGroup, s); document.getElementById('total-score').innerText = s + " pts"; }
+        function resetScore() { if(confirm("Remise à zéro ?")) saveScore(0); }
 
-        function addWeight() {
-            const poids = parseInt(document.getElementById('poids-input').value);
-            if(!poids) return;
-            let currentScore = parseInt(localStorage.getItem(currentGroup) || 0);
-            saveAndShow(currentScore + poids);
-            document.getElementById('poids-input').value = "";
-        }
-
-        function saveAndShow(score) {
-            localStorage.setItem(currentGroup, score);
-            document.getElementById('total-score').innerText = score + " pts";
-        }
-
-        function resetScore() {
-            if(confirm("Remise à zéro du score ?")) {
-                saveAndShow(0);
+        // --- LOGIQUE ORIGINALE ---
+        function calculateIndex() {
+            const meteo = parseInt(document.getElementById('meteo-slider').value);
+            const temp = parseInt(document.getElementById('temp-slider').value);
+            const moon = parseFloat(document.getElementById('moon-phase').value);
+            const fish = document.getElementById('fish-select').value;
+            let score = Math.floor(((meteo < 50 ? 60 : 40) + (temp >= 12 && temp <= 18 ? 20 : 0)) * moon);
+            document.getElementById('final-index').innerText = Math.min(100, score) + "%";
+            document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
+            const table = document.getElementById('prob-table');
+            table.innerHTML = "";
+            for (let lieu in fishData[fish]) {
+                table.innerHTML += `<tr><td class="p-3">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
             }
+        }
+
+        async function initApp() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (p) => {
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`);
+                        const d = await res.json();
+                        document.getElementById('city-name').innerText = d.address.town || d.address.city || "Localisation";
+                    } catch(e) { document.getElementById('city-name').innerText = "Paris"; }
+                });
+            }
+            calculateIndex();
         }
     </script>
 </body>
