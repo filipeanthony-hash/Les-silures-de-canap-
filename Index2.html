@@ -23,6 +23,10 @@
         <div class="flex justify-between items-center px-2 pt-2">
             <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
             <div class="flex gap-2 items-center">
+                <div class="bg-orange-500 text-white px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 shadow">
+                    <i class="fas fa-fish"></i>
+                    <span id="global-fish-counter">0</span>
+                </div>
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-3xl"><i class="fab fa-facebook"></i></button>
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
@@ -63,9 +67,29 @@
         </div>
 
         <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
-            <option value="Silure">Silure</option><option value="Brochet">Brochet</option><option value="Black Bass">Black Bass</option>
-            <option value="Sandre">Sandre</option><option value="Truite">Truite</option><option value="Carpe">Carpe</option>
+            <option value="Silure">Silure</option>
+            <option value="Brochet">Brochet</option>
+            <option value="Black Bass">Black Bass</option>
+            <option value="Sandre">Sandre</option>
+            <option value="Goujon">Goujon</option>
             <option value="Perche commune">Perche commune</option>
+            <option value="Brème">Brème</option>
+            <option value="Ablette">Ablette</option>
+            <option value="Vairon">Vairon</option>
+            <option value="Gardon">Gardon</option>
+            <option value="Chevesne">Chevesne</option>
+            <option value="Tanche">Tanche</option>
+            <option value="Carpe">Carpe</option>
+            <option value="Rotengle">Rotengle</option>
+            <option value="Anguille">Anguille</option>
+            <option value="Ide mélanote">Ide mélanote</option>
+            <option value="Carassin">Carassin</option>
+            <option value="Barbeau">Barbeau</option>
+            <option value="Truite">Truite</option>
+            <option value="Truite arc-en-ciel">Truite arc-en-ciel</option>
+            <option value="Poisson-chat">Poisson-chat</option>
+            <option value="Perche-soleil">Perche-soleil</option>
+            <option value="Bouvière">Bouvière</option>
         </select>
 
         <div class="glass-card-river overflow-hidden border-fb">
@@ -74,18 +98,50 @@
                 <tbody id="prob-table"></tbody>
             </table>
         </div>
+
+        <div class="pt-4 flex justify-center">
+            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Silure" class="w-3/4 rounded-full border-4 border-fb shadow-xl">
+        </div>
+
     </div>
 
     <script>
-        const API_KEY = "4b4496c76203ee1d238e2ea8c121830f"; 
+        // --- COLIEZ VOTRE CLÉ API ICI ---
+        const API_KEY = "VOTRE_CLE_OPENWEATHERMAP_ICI"; 
+        // ----------------------------------------
+
         let weatherData = { temp: 15, clouds: 50 };
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.google.com" }];
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
+        
+        // Stats complètes pour les 22 espèces
         const fishStats = {
-            "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 },
-            "Sandre": { base: 55, pref: "p", ideal: 14 }, "Truite": { base: 70, pref: "s", ideal: 10 },
-            "Carpe": { base: 45, pref: "s", ideal: 21 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }
+            "Silure": { base: 65, pref: "p", ideal: 20 },
+            "Brochet": { base: 50, pref: "s", ideal: 12 },
+            "Black Bass": { base: 45, pref: "s", ideal: 22 },
+            "Sandre": { base: 55, pref: "p", ideal: 14 },
+            "Goujon": { base: 35, pref: "s", ideal: 15 },
+            "Perche commune": { base: 55, pref: "s", ideal: 16 },
+            "Brème": { base: 45, pref: "s", ideal: 18 },
+            "Ablette": { base: 50, pref: "s", ideal: 17 },
+            "Vairon": { base: 40, pref: "s", ideal: 12 },
+            "Gardon": { base: 55, pref: "s", ideal: 15 },
+            "Chevesne": { base: 45, pref: "s", ideal: 16 },
+            "Tanche": { base: 40, pref: "s", ideal: 19 },
+            "Carpe": { base: 45, pref: "s", ideal: 21 },
+            "Rotengle": { base: 45, pref: "s", ideal: 18 },
+            "Anguille": { base: 60, pref: "p", ideal: 17 },
+            "Ide mélanote": { base: 35, pref: "s", ideal: 15 },
+            "Carassin": { base: 40, pref: "s", ideal: 18 },
+            "Barbeau": { base: 50, pref: "s", ideal: 17 },
+            "Truite": { base: 70, pref: "s", ideal: 10 },
+            "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 },
+            "Poisson-chat": { base: 50, pref: "s", ideal: 22 },
+            "Perche-soleil": { base: 45, pref: "s", ideal: 20 },
+            "Bouvière": { base: 30, pref: "s", ideal: 14 }
         };
+
+        let currentGroup = null;
 
         // Fonctions Groupes & Spots
         function toggleSection(id) { 
@@ -102,17 +158,54 @@
                 document.getElementById('login-part').classList.add('hidden');
                 document.getElementById('counter-part').classList.remove('hidden');
                 document.getElementById('group-title').innerText = g.toUpperCase();
-                document.getElementById('total-score').innerText = (parseInt(localStorage.getItem(g) || 0)) + " pts";
+                updateGroupDisplay();
             } else { alert("Code incorrect"); }
         }
 
-        function updateDisplay(s) { localStorage.setItem(currentGroup, s); document.getElementById('total-score').innerText = s + " pts"; }
-        function addFish() { updateDisplay(parseInt(localStorage.getItem(currentGroup) || 0) + 5); }
-        function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p)) { updateDisplay(parseInt(localStorage.getItem(currentGroup) || 0) + p); document.getElementById('poids-input').value = ""; } }
-        function resetScore() { if(confirm("Remise à zéro ?")) updateDisplay(0); }
+        function updateGroupDisplay() {
+            const groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0, "fish":0}');
+            document.getElementById('total-score').innerText = groupData.points + " pts";
+            updateGlobalCounter();
+        }
+
+        function addFish() {
+            let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0, "fish":0}');
+            groupData.points += 5;
+            groupData.fish += 1;
+            localStorage.setItem(currentGroup, JSON.stringify(groupData));
+            updateGroupDisplay();
+        }
+
+        function addWeight() {
+            const p = parseInt(document.getElementById('poids-input').value);
+            if(!isNaN(p) && p > 0) {
+                let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0, "fish":0}');
+                groupData.points += p;
+                localStorage.setItem(currentGroup, JSON.stringify(groupData));
+                document.getElementById('poids-input').value = "";
+                updateGroupDisplay();
+            }
+        }
+
+        function resetScore() {
+            if(confirm("Remise à zéro pour ce groupe ?")) {
+                localStorage.removeItem(currentGroup);
+                updateGroupDisplay();
+            }
+        }
+
+        function updateGlobalCounter() {
+            let totalFish = 0;
+            for (let i = 1; i <= 5; i++) {
+                const groupData = JSON.parse(localStorage.getItem('groupe'+i) || '{"points":0, "fish":0}');
+                totalFish += groupData.fish;
+            }
+            document.getElementById('global-fish-counter').innerText = totalFish;
+        }
 
         // Calcul météo automatique
         async function initApp() {
+            updateGlobalCounter(); // Initialiser le compteur global
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
@@ -127,7 +220,11 @@
                         weatherData.clouds = dWeather.clouds.all;
                         calculateIndex();
                     }
+                }, () => {
+                    document.getElementById('weather-status').innerText = "❌ Géoloc refusée";
                 });
+            } else {
+                document.getElementById('weather-status').innerText = "❌ GPS non supporté";
             }
         }
 
@@ -135,8 +232,11 @@
             const fish = document.getElementById('fish-select').value;
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
+            
+            // Calcul automatique basé sur les données réelles
             let bonusMeteo = (stats.pref === "s" && isSunny) ? 12 : (stats.pref === "p" && !isSunny) ? 12 : 0;
             let bonusTemp = 8 - Math.abs(weatherData.temp - stats.ideal);
+            
             let prob = Math.floor(stats.base + bonusMeteo + bonusTemp);
             prob = Math.min(99, Math.max(10, prob));
 
