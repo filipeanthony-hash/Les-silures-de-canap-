@@ -74,56 +74,37 @@
         </select>
 
         <div class="glass-card-river overflow-hidden border-fb">
-            <table class="w-full text-xs text-center">
-                <thead><tr class="bg-blue-100"><th class="p-2">LIEU</th><th class="p-2">PROBABILITÉ</th></tr></thead>
-                <tbody id="prob-table"></tbody>
-            </table>
+            <table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table>
         </div>
 
         <div class="glass-card-river overflow-hidden border-2 border-orange-500 mt-2">
-            <table class="w-full text-xs text-center">
-                <thead><tr class="bg-orange-100"><th class="p-2 text-orange-900 uppercase font-bold">Total Poissons Pêchés</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td class="p-4 text-5xl font-black text-orange-600" id="global-fish-counter">0</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="bg-orange-100 p-2 text-orange-900 uppercase font-bold text-xs text-center">Total Poissons Pêchés</div>
+            <div class="p-4 text-center">
+                <div class="text-5xl font-black text-orange-600 mb-3" id="global-fish-counter">0</div>
+                <div class="flex gap-2">
+                    <button onclick="addGlobalFish()" class="flex-1 bg-orange-500 text-white p-3 rounded-lg font-black text-xs">+1 POISSON</button>
+                    <button onclick="resetGlobal()" class="bg-red-600 text-white p-3 rounded-lg font-black text-xs">RESET</button>
+                </div>
+            </div>
         </div>
 
         <div class="pt-4 flex justify-center pb-6">
             <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-fb shadow-xl">
         </div>
-
     </div>
 
     <script>
-        // --- COLIEZ VOTRE CLÉ API ICI ---
         const API_KEY = "4b4496c76203ee1d238e2ea8c121830f"; 
-        // ----------------------------------------
-
         let weatherData = { temp: 15, clouds: 50 };
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.google.com" }];
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
-        const fishStats = {
-            "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 },
-            "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 },
-            "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 },
-            "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 },
-            "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 },
-            "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 },
-            "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 },
-            "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 }
-        };
+        
+        // Stats poissons
+        const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
         let currentGroup = null;
 
-        function toggleSection(id) { 
-            const section = document.getElementById(id); section.classList.toggle('hidden');
-            if(id === 'spots-section' && !section.classList.contains('hidden')) {
-                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-3 rounded text-sm font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
-            }
-        }
-
+        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
+        
         function checkPass() {
             const g = document.getElementById('groupe-select').value;
             if(document.getElementById('pass').value === passwords[g]) {
@@ -135,23 +116,37 @@
             } else { alert("Code incorrect"); }
         }
 
+        // Gestion compteur global
+        function addGlobalFish() {
+            let total = parseInt(localStorage.getItem('globalFish') || 0);
+            localStorage.setItem('globalFish', total + 1);
+            document.getElementById('global-fish-counter').innerText = total + 1;
+        }
+
+        function resetGlobal() {
+            if(confirm("Voulez-vous confirmer le reset du compteur global ?")) {
+                localStorage.setItem('globalFish', 0);
+                document.getElementById('global-fish-counter').innerText = 0;
+            }
+        }
+
         function updateGroupDisplay() {
-            const groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0, "fish":0}');
+            const groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}');
             document.getElementById('total-score').innerText = groupData.points + " pts";
-            updateGlobalCounter();
         }
 
         function addFish() {
-            let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0, "fish":0}');
-            groupData.points += 5; groupData.fish += 1;
+            let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}');
+            groupData.points += 5;
             localStorage.setItem(currentGroup, JSON.stringify(groupData));
             updateGroupDisplay();
+            addGlobalFish(); // Ajoute aussi au global
         }
 
         function addWeight() {
             const p = parseInt(document.getElementById('poids-input').value);
             if(!isNaN(p) && p > 0) {
-                let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0, "fish":0}');
+                let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}');
                 groupData.points += p;
                 localStorage.setItem(currentGroup, JSON.stringify(groupData));
                 document.getElementById('poids-input').value = "";
@@ -161,23 +156,11 @@
 
         function resetScore() { if(confirm("Remise à zéro pour ce groupe ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
 
-        function updateGlobalCounter() {
-            let totalFish = 0;
-            for (let i = 1; i <= 5; i++) {
-                const groupData = JSON.parse(localStorage.getItem('groupe'+i) || '{"points":0, "fish":0}');
-                totalFish += groupData.fish;
-            }
-            document.getElementById('global-fish-counter').innerText = totalFish;
-        }
-
         async function initApp() {
-            updateGlobalCounter();
+            document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
-                    const resCity = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-                    const dCity = await resCity.json();
-                    document.getElementById('city-name').innerText = "📍 " + (dCity.address.town || dCity.address.city || "Localisation");
                     const resWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
                     const dWeather = await resWeather.json();
                     if(dWeather.main) {
@@ -192,9 +175,7 @@
             const fish = document.getElementById('fish-select').value;
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
-            let bonusMeteo = (stats.pref === "s" && isSunny) ? 12 : (stats.pref === "p" && !isSunny) ? 12 : 0;
-            let bonusTemp = 8 - Math.abs(weatherData.temp - stats.ideal);
-            let prob = Math.floor(stats.base + bonusMeteo + bonusTemp);
+            let prob = Math.floor(stats.base + ((stats.pref === "s" && isSunny) ? 12 : 0) + (8 - Math.abs(weatherData.temp - stats.ideal)));
             prob = Math.min(99, Math.max(10, prob));
             document.getElementById('final-index').innerText = prob + "%";
             document.getElementById('weather-status').innerText = (isSunny ? "☀️ " : "🌧️ ") + weatherData.temp.toFixed(1) + "°C";
