@@ -38,19 +38,36 @@
             </a>
         </div>
         
-        <p class="text-center text-xs text-slate-500 mt-8">*Données stockées localement sur votre appareil.</p>
+        <p class="text-center text-xs text-slate-500 mt-8">*Stocké localement. <button onclick="logout()" class="underline">Déconnexion</button></p>
     </div>
 
     <script>
+        // Vérifie si déjà connecté au chargement
+        window.onload = function() {
+            if (localStorage.getItem("isLoggedIn") === "true") {
+                showDashboard();
+            }
+        };
+
         function checkPass() {
             const p = document.getElementById('pass').value;
-            // CHANGEZ '1234' par votre mot de passe secret
+            // REMPLACEZ '1234' par votre mot de passe
             if (p === "1234") {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
+                localStorage.setItem("isLoggedIn", "true");
+                showDashboard();
             } else {
                 alert("Mot de passe incorrect");
             }
+        }
+
+        function showDashboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            location.reload();
         }
     </script>
 </body>
