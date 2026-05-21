@@ -95,7 +95,6 @@
 
     <script>
         const API_KEY = "VOTRE_CLE_OPENWEATHERMAP_ICI"; 
-        
         let weatherData = { temp: 15, clouds: 50 };
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
@@ -107,26 +106,25 @@
             if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); }
         }
         
-        // --- LOGIQUE GLOBALE (Indépendante) ---
         function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
         function resetGlobal() { if(confirm("Voulez-vous confirmer le reset du compteur global ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
 
-        // --- LOGIQUE GROUPE (Indépendante) ---
         function updateGroupDisplay() { const groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = groupData.points + " pts"; }
+        
         function addFishToGroupOnly() { 
             let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); 
             groupData.points += 5; 
             localStorage.setItem(currentGroup, JSON.stringify(groupData)); 
             updateGroupDisplay(); 
         }
+
         function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); groupData.points += p; localStorage.setItem(currentGroup, JSON.stringify(groupData)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
         function resetScore() { if(confirm("Remise à zéro pour ce groupe ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
 
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
-            // ... reste du code météo ...
+            // ... (logique météo inchangée)
         }
-        // ... (fonction calculateIndex et autres restent identiques)
     </script>
 </body>
 </html>
