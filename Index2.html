@@ -47,6 +47,11 @@
             </div>
         </div>
 
+        <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
+            <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
+            <p class="text-xs font-bold">36 Rue René Leblond, 77220 Tournan-en-Brie</p>
+        </div>
+
         <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
             <option value="Silure">Silure</option><option value="Brochet">Brochet</option><option value="Black Bass">Black Bass</option>
             <option value="Sandre">Sandre</option><option value="Goujon">Goujon</option><option value="Perche commune">Perche commune</option>
@@ -60,7 +65,7 @@
 
         <div class="glass-card-river p-4 text-center border-2 border-fb">
             <div id="final-index" class="text-4xl font-black">--%</div>
-            <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation...</p>
+            <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation GPS...</p>
         </div>
         <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
 
@@ -104,6 +109,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
+                    document.getElementById('city-name').innerText = "LAT: " + lat.toFixed(2) + " LON: " + lon.toFixed(2);
                     const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
                     const d = await res.json();
                     if(d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
