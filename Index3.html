@@ -4,71 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
-    
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
-        .underwater-bg { background: radial-gradient(circle at center, #0c1a26 0%, #050a0f 100%); }
-        .glass-card { background: rgba(25, 59, 87, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(74, 199, 242, 0.2); border-radius: 1.5rem; }
+        .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
+        .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; }
+        body, body * { color: #000000 !important; }
+        .btn-fb { background-color: #1877F2 !important; color: white !important; }
+        .btn-photo { background-color: #f97316 !important; color: white !important; }
+        .border-fb { border-color: #1877F2 !important; }
+        .text-fb { color: #1877F2 !important; }
     </style>
 </head>
-<body class="underwater-bg h-full text-white font-sans flex items-center justify-center p-4">
+<body class="river-bg min-h-screen font-sans p-4" onload="initApp()">
 
-    <div id="login-screen" class="w-full max-w-sm p-8 glass-card text-center shadow-2xl">
-        <h2 class="text-2xl font-black mb-6 text-blue-300 uppercase tracking-widest">Accès Membres</h2>
-        <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-4 rounded-xl bg-slate-900 border border-blue-500/50 mb-6 text-center focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <button onclick="checkPass()" class="w-full py-4 bg-blue-600 rounded-xl font-black hover:bg-blue-500 transition-all shadow-lg">SE CONNECTER</button>
-    </div>
-
-    <div id="dashboard" class="hidden w-full max-w-md space-y-6">
-        <h2 class="text-center text-xl font-bold text-blue-200">Mes Raccourcis Sécurisés</h2>
+    <div id="dashboard" class="w-full max-w-md mx-auto space-y-4">
         
-        <div class="grid grid-cols-2 gap-4">
-            <a href="https://www.facebook.com/share/g/1Fe5eQhNqP/" target="_blank" class="glass-card p-6 flex flex-col items-center hover:bg-blue-900/40 transition-all">
-                <i class="fab fa-facebook text-4xl text-blue-500 mb-3"></i>
-                <span class="text-sm font-bold">Facebook Groupe</span>
-            </a>
-            
-            <a href="https://www.twitch.tv" target="_blank" class="glass-card p-6 flex flex-col items-center hover:bg-purple-900/40 transition-all">
-                <i class="fab fa-twitch text-4xl text-purple-500 mb-3"></i>
-                <span class="text-sm font-bold">Twitch Pêche</span>
-            </a>
+        <div class="flex justify-between items-center px-2">
+            <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
+            <div class="flex gap-2 items-center">
+                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
+                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+            </div>
         </div>
-        
-        <p class="text-center text-xs text-slate-500 mt-8">*Stocké localement. <button onclick="logout()" class="underline">Déconnexion</button></p>
+
+        <div class="glass-card-river p-3 border-fb flex items-center gap-3">
+            <i class="fas fa-bell text-fb text-xl"></i>
+            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold" id="notif-bar">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
+        </div>
+
+        <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
+            <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
+            <div id="spots-list" class="space-y-2"></div>
+        </div>
+
+        <div id="photo-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
+            <h3 class="text-[10px] font-bold uppercase mb-2">Galerie Photos</h3>
+            <div id="gallery" class="grid grid-cols-2 gap-2"></div>
+        </div>
+
+        <div class="glass-card-river p-6 text-center border-2 border-fb">
+            <div id="final-index" class="text-5xl font-black">0%</div>
+            <p id="weather-status" class="text-[10px] mt-2 italic">Calcul en cours...</p>
+        </div>
+
+        <div class="glass-card-river p-4 space-y-4 border-fb">
+            <div>
+                <div class="flex justify-between text-[10px] font-bold mb-2"><span>🌧️ Pluie</span><span>☀️ Beau Temps</span></div>
+                <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <input type="number" id="temp-slider" min="5" max="25" value="15" class="p-2 bg-white/50 rounded-lg text-center text-xs border border-fb" oninput="calculateIndex()">
+                <select id="moon-phase" onchange="calculateIndex()" class="p-2 bg-white/50 rounded-lg text-xs border border-fb">
+                    <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
+                </select>
+            </div>
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs">
+                <option value="Silure">Silure</option><option value="Truite">Truite</option>
+                <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
+            </select>
+        </div>
+
+        <div class="glass-card-river overflow-hidden border-fb">
+            <table class="w-full text-xs text-center">
+                <thead><tr class="bg-blue-100"><th class="p-3">LIEU</th><th class="p-3">PROBABILITÉ</th></tr></thead>
+                <tbody id="prob-table"></tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 pb-6">
+            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
+        </div>
     </div>
 
     <script>
-        window.onload = function() {
-            if (localStorage.getItem("isLoggedIn") === "true") {
-                showDashboard();
-            }
-        };
+        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }, { name: "Nouveau Spot", url: "#" }];
+        const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
+        const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
-        function checkPass() {
-            const p = document.getElementById('pass').value;
-            // REMPLACEZ '1234' par votre mot de passe
-            if (p === "1234") {
-                localStorage.setItem("isLoggedIn", "true");
-                showDashboard();
-            } else {
-                alert("Mot de passe incorrect");
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('hidden');
+            if(id === 'photo-section' && !section.classList.contains('hidden')) {
+                document.getElementById('gallery').innerHTML = mesPhotos.map(p => `<img src="photos/${p}" class="rounded-lg w-full h-24 object-cover border border-white">`).join('');
+            }
+            if(id === 'spots-section' && !section.classList.contains('hidden')) {
+                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-2 rounded text-[10px] font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
             }
         }
 
-        function showDashboard() {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
+        function calculateIndex() {
+            const meteo = parseInt(document.getElementById('meteo-slider').value);
+            const temp = parseInt(document.getElementById('temp-slider').value);
+            const moon = parseFloat(document.getElementById('moon-phase').value);
+            const fish = document.getElementById('fish-select').value;
+            let score = Math.floor(((meteo < 50 ? 60 : 40) + (temp >= 12 && temp <= 18 ? 20 : 0)) * moon);
+            document.getElementById('final-index').innerText = Math.min(100, score) + "%";
+            document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
+            const table = document.getElementById('prob-table');
+            table.innerHTML = "";
+            for (let lieu in fishData[fish]) {
+                table.innerHTML += `<tr><td class="p-3">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
+            }
         }
 
-        function logout() {
-            localStorage.removeItem("isLoggedIn");
-            location.reload();
+        async function initApp() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (p) => {
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`);
+                        const d = await res.json();
+                        document.getElementById('city-name').innerText = d.address.town || d.address.city || "Localisation";
+                    } catch(e) { document.getElementById('city-name').innerText = "Paris"; }
+                });
+            }
+            calculateIndex();
         }
     </script>
 </body>
