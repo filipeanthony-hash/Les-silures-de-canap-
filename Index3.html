@@ -62,7 +62,8 @@
             <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
             <div class="grid grid-cols-2 gap-2">
                 <input type="number" id="temp-slider" min="5" max="25" value="15" class="p-2 bg-white/50 rounded-lg text-center text-xs border border-fb" oninput="calculateIndex()">
-                <select id="moon-phase" onchange="calculateIndex()" class="p-2 bg-white/50 rounded-lg text-xs border border-fb">
+                <div id="temp-display" class="p-2 bg-white/50 rounded-lg text-center text-xs font-bold border border-fb">15°</div>
+                <select id="moon-phase" onchange="calculateIndex()" class="col-span-2 p-2 bg-white/50 rounded-lg text-xs border border-fb">
                     <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
                 </select>
             </div>
@@ -74,6 +75,10 @@
 
         <div class="glass-card-river overflow-hidden border-fb">
             <table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table>
+        </div>
+
+        <div class="mt-4 pb-6">
+            <img src="https://i.postimg.cc/k4G6V4Xy/1000021618.jpg" alt="Silure" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
     </div>
 
@@ -109,6 +114,8 @@
         function calculateIndex() {
             const meteo = parseInt(document.getElementById('meteo-slider').value);
             const temp = parseInt(document.getElementById('temp-slider').value);
+            // Mise à jour de l'affichage température
+            document.getElementById('temp-display').innerText = temp + "°";
             const moon = parseFloat(document.getElementById('moon-phase').value);
             const fish = document.getElementById('fish-select').value;
             let score = Math.floor(((meteo < 50 ? 60 : 40) + (temp >= 12 && temp <= 18 ? 20 : 0)) * moon);
