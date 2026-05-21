@@ -19,7 +19,6 @@
         .btn-photo { background-color: #f97316 !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
-        /* Style pour forcer le gras dans le select */
         select option { font-weight: bold; }
     </style>
 </head>
@@ -32,16 +31,16 @@
             <div class="flex gap-4 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-4xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-4xl"><i class="fab fa-facebook"></i></button>
-                <div class="flex flex-col gap-1">
-                    <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
-                    <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+                <div class="flex flex-col gap-2">
+                    <button onclick="toggleSection('photo-section')" class="btn-photo px-8 py-3 rounded-xl text-[12px] font-black uppercase shadow-lg">PHOTOS</button>
+                    <button onclick="toggleSection('spots-section')" class="btn-fb px-8 py-3 rounded-xl text-[12px] font-black uppercase shadow-lg">SPOTS</button>
                 </div>
             </div>
         </div>
 
         <div class="glass-card-river p-3 border-fb flex items-center gap-3">
             <i class="fas fa-bell text-fb text-xl"></i>
-            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
+            <marquee behavior="scroll" direction="left" class="text-[11px] font-bold" id="notif-bar">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
         </div>
 
         <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
@@ -70,7 +69,7 @@
                     <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
                 </select>
             </div>
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-4 rounded-xl bg-white/50 border border-fb text-sm font-black">
                 <option value="Silure">Silure</option><option value="Truite">Truite</option>
                 <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
             </select>
@@ -82,9 +81,9 @@
                 <tbody id="prob-table"></tbody>
             </table>
         </div>
-
+        
         <div class="mt-4 pb-6">
-            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
+            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Les Silures de Canapé" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
     </div>
 
@@ -93,7 +92,7 @@
         const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
         const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
-        function toggleSection(id) {
+        function toggleSection(id) { 
             const section = document.getElementById(id);
             section.classList.toggle('hidden');
             if(id === 'photo-section' && !section.classList.contains('hidden')) {
