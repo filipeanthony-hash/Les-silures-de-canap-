@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
+    
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -32,7 +34,7 @@
                 <span class="text-sm font-bold">Facebook Groupe</span>
             </a>
             
-            <a href="#" target="_blank" class="glass-card p-6 flex flex-col items-center hover:bg-purple-900/40 transition-all">
+            <a href="https://www.twitch.tv" target="_blank" class="glass-card p-6 flex flex-col items-center hover:bg-purple-900/40 transition-all">
                 <i class="fab fa-twitch text-4xl text-purple-500 mb-3"></i>
                 <span class="text-sm font-bold">Twitch Pêche</span>
             </a>
@@ -42,7 +44,6 @@
     </div>
 
     <script>
-        // Vérifie si déjà connecté au chargement
         window.onload = function() {
             if (localStorage.getItem("isLoggedIn") === "true") {
                 showDashboard();
