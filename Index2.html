@@ -34,12 +34,12 @@
             </div>
         </div>
 
-        <div class="glass-card-river p-3 border-fb flex items-center gap-3 border">
+        <div class="glass-card-river p-3 border-fb flex items-center gap-3">
             <i class="fas fa-bell text-fb text-xl"></i>
             <marquee behavior="scroll" direction="left" class="text-[11px] font-bold" id="notif-bar">Bienvenue sur le groupe Les Silures de Canapé !</marquee>
         </div>
 
-        <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb border">
+        <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
             <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
             <div id="spots-list" class="space-y-2"></div>
         </div>
@@ -49,7 +49,7 @@
             <p id="weather-status" class="text-[10px] mt-2 italic">Calcul en cours...</p>
         </div>
 
-        <div class="glass-card-river p-4 space-y-4 border-fb border">
+        <div class="glass-card-river p-4 space-y-4 border-fb">
             <div>
                 <div class="flex justify-between text-[10px] font-bold mb-2"><span>🌧️ Pluie</span><span>☀️ Beau Temps</span></div>
                 <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
@@ -66,7 +66,7 @@
             </select>
         </div>
 
-        <div class="glass-card-river overflow-hidden border-fb border">
+        <div class="glass-card-river overflow-hidden border-fb">
             <table class="w-full text-xs text-center">
                 <thead><tr class="bg-blue-100"><th class="p-3">LIEU</th><th class="p-3">PROBABILITÉ</th></tr></thead>
                 <tbody id="prob-table"></tbody>
@@ -74,4 +74,59 @@
         </div>
         
         <div class="mt-4 pb-6">
-            <img src="
+            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyARnepyvwgwjbv97lBlMEA2UR28c-jVALM",
+          authDomain: "les-silures-de-canape-c90e6.firebaseapp.com",
+          projectId: "les-silures-de-canape-c90e6",
+          storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app",
+          messagingSenderId: "1063082508513",
+          appId: "1:1063082508513:web:1068368a1db2dff18377a0",
+          measurementId: "G-99MB1YMZR4"
+        };
+
+        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
+        const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
+
+        function toggleSection(id) { 
+            const section = document.getElementById(id);
+            section.classList.toggle('hidden');
+            if(id === 'spots-section' && !section.classList.contains('hidden')) {
+                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-2 rounded text-[10px] font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
+            }
+        }
+
+        function calculateIndex() {
+            const meteo = parseInt(document.getElementById('meteo-slider').value);
+            const temp = parseInt(document.getElementById('temp-slider').value);
+            const moon = parseFloat(document.getElementById('moon-phase').value);
+            const fish = document.getElementById('fish-select').value;
+            let score = Math.floor(((meteo < 50 ? 60 : 40) + (temp >= 12 && temp <= 18 ? 20 : 0)) * moon);
+            document.getElementById('final-index').innerText = Math.min(100, score) + "%";
+            document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
+            const table = document.getElementById('prob-table');
+            table.innerHTML = "";
+            for (let lieu in fishData[fish]) {
+                table.innerHTML += `<tr><td class="p-3">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
+            }
+        }
+
+        async function initApp() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (p) => {
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`);
+                        const d = await res.json();
+                        document.getElementById('city-name').innerText = d.address.town || d.address.city || "Localisation";
+                    } catch(e) { document.getElementById('city-name').innerText = "Paris"; }
+                });
+            }
+            calculateIndex();
+        }
+    </script>
+</body>
+</html>
