@@ -19,6 +19,8 @@
         .btn-photo { background-color: #f97316 !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
+        /* Style pour forcer le gras dans le select */
+        select option { font-weight: bold; }
     </style>
 </head>
 <body class="river-bg min-h-screen font-sans p-4" onload="initApp()">
@@ -27,11 +29,13 @@
         
         <div class="flex justify-between items-center px-2">
             <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
-            <div class="flex gap-2 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-2xl"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-2xl"><i class="fab fa-facebook"></i></button>
-                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
-                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+            <div class="flex gap-4 items-center">
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-4xl"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-4xl"><i class="fab fa-facebook"></i></button>
+                <div class="flex flex-col gap-1">
+                    <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
+                    <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-1 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+                </div>
             </div>
         </div>
 
@@ -66,7 +70,7 @@
                     <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
                 </select>
             </div>
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs">
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
                 <option value="Silure">Silure</option><option value="Truite">Truite</option>
                 <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
             </select>
