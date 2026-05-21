@@ -15,7 +15,6 @@
         .btn-groupe { background-color: #064e3b !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
-        select option { font-weight: bold; }
     </style>
 </head>
 <body class="river-bg h-screen font-sans p-2 overflow-hidden" onload="initApp()">
@@ -103,15 +102,16 @@
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         
+        // Base = proba moyenne, pref = s (soleil) ou p (pluie), ideal = température optimale
         const fishStats = {
-            "Silure": { base: 65, pref: "pluie" }, "Brochet": { base: 50, pref: "soleil" }, "Black Bass": { base: 40, pref: "soleil" },
-            "Sandre": { base: 60, pref: "pluie" }, "Goujon": { base: 35, pref: "soleil" }, "Perche commune": { base: 55, pref: "soleil" },
-            "Brème": { base: 45, pref: "soleil" }, "Ablette": { base: 50, pref: "soleil" }, "Vairon": { base: 40, pref: "soleil" },
-            "Gardon": { base: 55, pref: "soleil" }, "Chevesne": { base: 45, pref: "soleil" }, "Tanche": { base: 35, pref: "soleil" },
-            "Carpe": { base: 40, pref: "soleil" }, "Rotengle": { base: 45, pref: "soleil" }, "Anguille": { base: 70, pref: "pluie" },
-            "Ide mélanote": { base: 30, pref: "soleil" }, "Carassin": { base: 35, pref: "soleil" }, "Barbeau": { base: 45, pref: "soleil" },
-            "Truite": { base: 65, pref: "soleil" }, "Truite arc-en-ciel": { base: 60, pref: "soleil" },
-            "Poisson-chat": { base: 50, pref: "soleil" }, "Perche-soleil": { base: 40, pref: "soleil" }, "Bouvière": { base: 25, pref: "soleil" }
+            "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 },
+            "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 },
+            "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 },
+            "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 },
+            "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 },
+            "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 },
+            "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 },
+            "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 }
         };
 
         function toggleSection(id) { 
@@ -140,19 +140,22 @@
 
         function calculateIndex() {
             const meteo = parseInt(document.getElementById('meteo-slider').value);
+            const temp = parseInt(document.getElementById('temp-slider').value);
             const moon = parseFloat(document.getElementById('moon-phase').value);
             const fish = document.getElementById('fish-select').value;
-            const stats = fishStats[fish] || { base: 50, pref: "soleil" };
+            const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             
-            let bonusMeteo = stats.pref === "soleil" ? (meteo - 50) / 2 : (50 - meteo) / 2;
-            let prob = Math.floor((stats.base + bonusMeteo) * moon);
+            // Calcul : Base + Bonus Météo + Bonus Température + Bonus Lune
+            let bonusMeteo = stats.pref === "s" ? (meteo - 50) / 4 : (50 - meteo) / 4;
+            let bonusTemp = 5 - Math.abs(temp - stats.ideal);
+            let prob = Math.floor((stats.base + bonusMeteo + bonusTemp) * moon);
             prob = Math.min(99, Math.max(10, prob));
             
             document.getElementById('final-index').innerText = prob + "%";
             document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
             
             const table = document.getElementById('prob-table');
-            table.innerHTML = `<tr><td class="p-2 font-bold text-blue-900">RIVIÈRE</td><td class="p-2 font-bold">${Math.min(99, prob + 12)}%</td></tr>
+            table.innerHTML = `<tr><td class="p-2 font-bold text-blue-900">RIVIÈRE</td><td class="p-2 font-bold">${Math.min(99, prob + 10)}%</td></tr>
                                <tr><td class="p-2 font-bold text-blue-900">LAC</td><td class="p-2 font-bold">${prob}%</td></tr>`;
         }
 
@@ -163,7 +166,7 @@
                         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`);
                         const d = await res.json();
                         document.getElementById('city-name').innerText = d.address.town || d.address.city || "Localisation";
-                    } catch(e) { document.getElementById('city-name').innerText = "Paris"; }
+                    } catch(e) { document.getElementById('city-name').innerText = "Château-Thierry"; }
                 });
             }
             calculateIndex();
