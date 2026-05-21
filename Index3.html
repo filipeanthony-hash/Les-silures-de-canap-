@@ -74,9 +74,9 @@
                 <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
             </div>
             <div class="grid grid-cols-2 gap-2">
-                <div class="relative">
+                <div class="relative flex items-center">
                     <input type="number" id="temp-slider" min="5" max="25" value="15" class="w-full p-2 bg-white/50 rounded-lg text-center text-xs border border-fb" oninput="calculateIndex()">
-                    <span class="absolute right-2 top-2 text-[10px] font-bold">°</span>
+                    <span class="absolute right-3 text-xs font-bold pointer-events-none">°</span>
                 </div>
                 <select id="moon-phase" onchange="calculateIndex()" class="p-2 bg-white/50 rounded-lg text-xs border border-fb">
                     <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
@@ -101,8 +101,8 @@
     </div>
 
     <script>
-        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
+        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
         let currentGroup = "";
 
@@ -110,7 +110,7 @@
             const section = document.getElementById(id);
             section.classList.toggle('hidden');
             if(id === 'spots-section' && !section.classList.contains('hidden')) {
-                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-2 rounded text-[10px] font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
+                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-3 rounded text-sm font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
             }
         }
 
