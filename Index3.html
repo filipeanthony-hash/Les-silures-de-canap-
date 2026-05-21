@@ -47,7 +47,7 @@
                 <h4 id="group-title" class="font-bold text-xs uppercase"></h4>
                 <div class="text-4xl font-black" id="total-score">0 pts</div>
                 
-                <button onclick="addFish()" class="w-full bg-orange-500 text-white p-3 rounded-lg font-black text-xs shadow-md">+ 1 POISSON (10 pts)</button>
+                <button onclick="addFish()" class="w-full bg-orange-500 text-white p-3 rounded-lg font-black text-xs shadow-md">+ 1 POISSON (5 pts)</button>
                 
                 <div class="space-y-2 border-t pt-4">
                     <input type="number" id="poids-input" placeholder="Poids en grammes (ex: 200)" class="w-full p-2 rounded text-xs border border-blue-400">
@@ -134,7 +134,7 @@
         
         function addFish() { 
             let current = parseInt(localStorage.getItem(currentGroup) || 0);
-            updateDisplay(current + 10); 
+            updateDisplay(current + 5); 
         }
         
         function addWeight() { 
