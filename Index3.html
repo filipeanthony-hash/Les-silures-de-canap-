@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full">
+<html lang="fr" class="h-full overflow-hidden">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Les Silures de Canapé</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
@@ -12,6 +12,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Empêche le défilement et force l'occupation de tout l'écran */
+        html, body { 
+            height: 100%; 
+            overflow: hidden; 
+            touch-action: none;
+        }
         .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
         .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; }
         body, body * { color: #000000 !important; }
@@ -22,11 +28,11 @@
         select option { font-weight: bold; }
     </style>
 </head>
-<body class="river-bg min-h-screen font-sans p-4" onload="initApp()">
+<body class="river-bg h-screen font-sans p-2 overflow-hidden" onload="initApp()">
 
-    <div id="dashboard" class="w-full max-w-md mx-auto space-y-4">
+    <div id="dashboard" class="w-full max-w-md mx-auto h-full flex flex-col space-y-2 overflow-y-auto pb-10">
         
-        <div class="flex justify-between items-center px-2">
+        <div class="flex justify-between items-center px-2 pt-2">
             <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
             <div class="flex gap-2 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
@@ -43,18 +49,13 @@
                 <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 rounded text-xs border">
                 <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded text-xs font-black">ENTRER</button>
             </div>
-            <div id="counter-part" class="hidden text-center space-y-4">
+            <div id="counter-part" class="hidden text-center space-y-2">
                 <h4 id="group-title" class="font-bold text-xs uppercase"></h4>
                 <div class="text-4xl font-black" id="total-score">0 pts</div>
-                
-                <button onclick="addFish()" class="w-full bg-orange-500 text-white p-3 rounded-lg font-black text-xs shadow-md">+ 1 POISSON (5 pts)</button>
-                
-                <div class="space-y-2 border-t pt-4">
-                    <input type="number" id="poids-input" placeholder="Poids en grammes (ex: 200)" class="w-full p-2 rounded text-xs border border-blue-400">
-                    <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-3 rounded-lg font-black text-xs shadow-md">+ AJOUTER CE POIDS AU TOTAL</button>
-                </div>
-                
-                <button onclick="resetScore()" class="w-full bg-red-600 text-white p-2 rounded text-[10px] uppercase font-bold mt-2">Remise à zéro</button>
+                <button onclick="addFish()" class="w-full bg-orange-500 text-white p-2 rounded-lg font-black text-xs">+ 1 POISSON (5 pts)</button>
+                <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 rounded text-xs border">
+                <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 rounded-lg font-black text-xs">+ AJOUTER POIDS</button>
+                <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
             </div>
         </div>
 
@@ -68,16 +69,13 @@
             <div id="spots-list" class="space-y-2"></div>
         </div>
 
-        <div class="glass-card-river p-6 text-center border-2 border-fb">
-            <div id="final-index" class="text-5xl font-black">0%</div>
-            <p id="weather-status" class="text-[10px] mt-2 italic">Calcul en cours...</p>
+        <div class="glass-card-river p-4 text-center border-2 border-fb">
+            <div id="final-index" class="text-4xl font-black">0%</div>
+            <p id="weather-status" class="text-[9px] mt-1 italic">Calcul en cours...</p>
         </div>
 
-        <div class="glass-card-river p-4 space-y-4 border-fb">
-            <div>
-                <div class="flex justify-between text-[10px] font-bold mb-2"><span>🌧️ Pluie</span><span>☀️ Beau Temps</span></div>
-                <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
-            </div>
+        <div class="glass-card-river p-3 space-y-3 border-fb">
+            <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
             <div class="flex items-center gap-2">
                 <div class="flex items-center bg-white/50 rounded-lg border border-fb px-2 w-full">
                     <input type="number" id="temp-slider" min="5" max="25" value="15" class="w-12 p-2 bg-transparent text-right text-xs font-bold" oninput="calculateIndex()">
@@ -87,20 +85,26 @@
                     <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
                 </select>
             </div>
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
-                <option value="Silure">Silure</option><option value="Truite">Truite</option>
-                <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-2 rounded-xl bg-white/50 border border-fb text-xs font-black">
+                <option value="Brochet">Brochet</option><option value="Black Bass">Black Bass</option><option value="Sandre">Sandre</option>
+                <option value="Goujon">Goujon</option><option value="Perche commune">Perche commune</option><option value="Silure">Silure</option>
+                <option value="Brème">Brème</option><option value="Ablette">Ablette</option><option value="Vairon">Vairon</option>
+                <option value="Gardon">Gardon</option><option value="Chevesne">Chevesne</option><option value="Tanche">Tanche</option>
+                <option value="Carpe">Carpe</option><option value="Rotengle">Rotengle</option><option value="Anguille">Anguille</option>
+                <option value="Ide mélanote">Ide mélanote</option><option value="Carassin">Carassin</option><option value="Barbeau">Barbeau</option>
+                <option value="Truite">Truite</option><option value="Truite arc-en-ciel">Truite arc-en-ciel</option>
+                <option value="Poisson-chat">Poisson-chat</option><option value="Perche-soleil">Perche-soleil</option><option value="Bouvière">Bouvière</option>
             </select>
         </div>
 
         <div class="glass-card-river overflow-hidden border-fb">
             <table class="w-full text-xs text-center">
-                <thead><tr class="bg-blue-100"><th class="p-3">LIEU</th><th class="p-3">PROBABILITÉ</th></tr></thead>
+                <thead><tr class="bg-blue-100"><th class="p-2">LIEU</th><th class="p-2">PROBABILITÉ</th></tr></thead>
                 <tbody id="prob-table"></tbody>
             </table>
         </div>
         
-        <div class="mt-4 pb-6">
+        <div class="pb-6">
             <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
     </div>
@@ -108,7 +112,7 @@
     <script>
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
-        const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
+        const fishData = { "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Silure": { "Rivière": "80%", "Lac": "60%" }, "Perche commune": { "Rivière": "70%", "Lac": "75%" }, "Truite": { "Rivière": "90%", "Lac": "30%" } };
         let currentGroup = "";
 
         function toggleSection(id) { 
@@ -131,21 +135,11 @@
         }
 
         function updateDisplay(s) { localStorage.setItem(currentGroup, s); document.getElementById('total-score').innerText = s + " pts"; }
-        
-        function addFish() { 
-            let current = parseInt(localStorage.getItem(currentGroup) || 0);
-            updateDisplay(current + 5); 
-        }
-        
+        function addFish() { updateDisplay(parseInt(localStorage.getItem(currentGroup) || 0) + 5); }
         function addWeight() { 
             const p = parseInt(document.getElementById('poids-input').value); 
-            if(!isNaN(p)) {
-                let current = parseInt(localStorage.getItem(currentGroup) || 0);
-                updateDisplay(current + p);
-                document.getElementById('poids-input').value = "";
-            }
+            if(!isNaN(p)) { updateDisplay(parseInt(localStorage.getItem(currentGroup) || 0) + p); document.getElementById('poids-input').value = ""; }
         }
-        
         function resetScore() { if(confirm("Remise à zéro ?")) updateDisplay(0); }
 
         function calculateIndex() {
@@ -158,8 +152,9 @@
             document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
             const table = document.getElementById('prob-table');
             table.innerHTML = "";
-            for (let lieu in fishData[fish]) {
-                table.innerHTML += `<tr><td class="p-3 font-bold text-blue-900">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
+            const data = fishData[fish] || { "Rivière": "50%", "Lac": "50%" };
+            for (let lieu in data) {
+                table.innerHTML += `<tr><td class="p-2 font-bold text-blue-900">${lieu}</td><td class="p-2 font-bold">${data[lieu]}</td></tr>`;
             }
         }
 
