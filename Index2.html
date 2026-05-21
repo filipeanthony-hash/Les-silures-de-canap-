@@ -23,8 +23,6 @@
         <div class="flex justify-between items-center px-2 pt-2">
             <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
             <div class="flex gap-2 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-3xl"><i class="fab fa-facebook"></i></button>
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
             </div>
@@ -33,48 +31,22 @@
         <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
             <h3 class="text-[10px] font-bold uppercase mb-2">Gestion des Scores</h3>
             <div id="login-part" class="space-y-2">
-                <select id="groupe-select" class="w-full p-2 rounded text-xs"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option></select>
+                <select id="groupe-select" class="w-full p-2 rounded text-xs">
+                    <option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option>
+                    <option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option>
+                    <option value="groupe5">Groupe 5</option>
+                </select>
                 <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 rounded text-xs border">
                 <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded text-xs font-black">ENTRER</button>
             </div>
             <div id="counter-part" class="hidden text-center space-y-2">
                 <h4 id="group-title" class="font-bold text-xs uppercase"></h4>
                 <div class="text-4xl font-black" id="total-score">0 pts</div>
-                <button onclick="addFishToGroupOnly()" class="w-full bg-orange-500 text-white p-2 rounded-lg font-black text-xs">+ 1 POISSON (5 pts)</button>
+                <button onclick="addFishToGroup()" class="w-full bg-orange-500 text-white p-2 rounded-lg font-black text-xs">+ 1 POISSON (5 pts)</button>
                 <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 rounded text-xs border">
                 <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 rounded-lg font-black text-xs">+ AJOUTER POIDS</button>
                 <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
             </div>
-        </div>
-
-        <div class="glass-card-river p-3 border-fb flex items-center gap-3">
-            <i class="fas fa-bell text-fb text-xl"></i>
-            <marquee behavior="scroll" direction="left" class="text-[14px] font-black uppercase">Bienvenue sur Les Silures de Canapé !</marquee>
-        </div>
-
-        <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
-            <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
-            <div id="spots-list" class="space-y-2"></div>
-        </div>
-
-        <div class="glass-card-river p-4 text-center border-2 border-fb">
-            <div id="final-index" class="text-4xl font-black">--%</div>
-            <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation...</p>
-        </div>
-
-        <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
-            <option value="Silure">Silure</option><option value="Brochet">Brochet</option><option value="Black Bass">Black Bass</option>
-            <option value="Sandre">Sandre</option><option value="Goujon">Goujon</option><option value="Perche commune">Perche commune</option>
-            <option value="Brème">Brème</option><option value="Ablette">Ablette</option><option value="Vairon">Vairon</option>
-            <option value="Gardon">Gardon</option><option value="Chevesne">Chevesne</option><option value="Tanche">Tanche</option>
-            <option value="Carpe">Carpe</option><option value="Rotengle">Rotengle</option><option value="Anguille">Anguille</option>
-            <option value="Ide mélanote">Ide mélanote</option><option value="Carassin">Carassin</option><option value="Barbeau">Barbeau</option>
-            <option value="Truite">Truite</option><option value="Truite arc-en-ciel">Truite arc-en-ciel</option>
-            <option value="Poisson-chat">Poisson-chat</option><option value="Perche-soleil">Perche-soleil</option><option value="Bouvière">Bouvière</option>
-        </select>
-
-        <div class="glass-card-river overflow-hidden border-fb">
-            <table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table>
         </div>
 
         <div class="glass-card-river overflow-hidden border-2 border-fb mt-2">
@@ -94,36 +66,59 @@
     </div>
 
     <script>
-        const API_KEY = "4b4496c76203ee1d238e2ea8c121830f"; 
-        let weatherData = { temp: 15, clouds: 50 };
+        const API_KEY = "VOTRE_CLE_OPENWEATHERMAP_ICI"; 
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
-        const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
         let currentGroup = null;
 
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
+        
         function checkPass() {
             const g = document.getElementById('groupe-select').value;
-            if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); }
-        }
-        
-        function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
-        function resetGlobal() { if(confirm("Voulez-vous confirmer le reset du compteur global ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
-
-        function updateGroupDisplay() { const groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = groupData.points + " pts"; }
-        
-        function addFishToGroupOnly() { 
-            let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); 
-            groupData.points += 5; 
-            localStorage.setItem(currentGroup, JSON.stringify(groupData)); 
-            updateGroupDisplay(); 
+            if(document.getElementById('pass').value === passwords[g]) { 
+                currentGroup = g; 
+                document.getElementById('login-part').classList.add('hidden'); 
+                document.getElementById('counter-part').classList.remove('hidden'); 
+                document.getElementById('group-title').innerText = g.toUpperCase(); 
+                updateGroupDisplay(); 
+            } else { alert("Code incorrect"); }
         }
 
-        function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); groupData.points += p; localStorage.setItem(currentGroup, JSON.stringify(groupData)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
-        function resetScore() { if(confirm("Remise à zéro pour ce groupe ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
+        // --- LOGIQUE GROUPE ---
+        function updateGroupDisplay() {
+            const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}');
+            document.getElementById('total-score').innerText = data.points + " pts";
+        }
 
-        async function initApp() {
+        function addFishToGroup() {
+            let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}');
+            data.points += 5;
+            localStorage.setItem(currentGroup, JSON.stringify(data));
+            updateGroupDisplay(); // Force la mise à jour visuelle
+        }
+
+        function addWeight() {
+            const p = parseInt(document.getElementById('poids-input').value);
+            if(!isNaN(p) && p > 0) {
+                let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}');
+                data.points += p;
+                localStorage.setItem(currentGroup, JSON.stringify(data));
+                document.getElementById('poids-input').value = "";
+                updateGroupDisplay();
+            }
+        }
+
+        function resetScore() { if(confirm("Vider les points ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
+
+        // --- LOGIQUE GLOBALE ---
+        function addGlobalFish() {
+            let total = parseInt(localStorage.getItem('globalFish') || 0);
+            localStorage.setItem('globalFish', total + 1);
+            document.getElementById('global-fish-counter').innerText = total + 1;
+        }
+        function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
+
+        function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
-            // ... (logique météo inchangée)
         }
     </script>
 </body>
