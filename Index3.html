@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Silures de Canapé</title>
+    
     <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,10 +33,8 @@
             <div class="flex gap-2 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-3xl"><i class="fab fa-facebook"></i></button>
-                <div class="flex flex-col gap-1">
-                    <button onclick="toggleSection('photo-section')" class="btn-photo px-6 py-1.5 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
-                    <button onclick="toggleSection('spots-section')" class="btn-fb px-6 py-1.5 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
-                </div>
+                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
+                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
             </div>
         </div>
 
@@ -70,7 +69,7 @@
                     <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
                 </select>
             </div>
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-4 rounded-xl bg-white/50 border border-fb text-sm font-black">
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
                 <option value="Silure">Silure</option><option value="Truite">Truite</option>
                 <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
             </select>
@@ -82,7 +81,7 @@
                 <tbody id="prob-table"></tbody>
             </table>
         </div>
-        
+
         <div class="mt-4 pb-6">
             <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
@@ -93,7 +92,7 @@
         const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
         const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
-        function toggleSection(id) { 
+        function toggleSection(id) {
             const section = document.getElementById(id);
             section.classList.toggle('hidden');
             if(id === 'photo-section' && !section.classList.contains('hidden')) {
@@ -112,7 +111,6 @@
             let score = Math.floor(((meteo < 50 ? 60 : 40) + (temp >= 12 && temp <= 18 ? 20 : 0)) * moon);
             document.getElementById('final-index').innerText = Math.min(100, score) + "%";
             document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
-            
             const table = document.getElementById('prob-table');
             table.innerHTML = "";
             for (let lieu in fishData[fish]) {
