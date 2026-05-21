@@ -31,24 +31,24 @@
             <div class="flex gap-2 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-3xl"><i class="fab fa-facebook"></i></button>
-                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
+                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
             </div>
         </div>
 
-        <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800 space-y-2">
+        <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
             <h3 class="text-[10px] font-bold uppercase mb-2">Gestion des Scores</h3>
             <div id="login-part" class="space-y-2">
-                <select id="groupe-select" class="w-full p-2 rounded text-xs border"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option></select>
+                <select id="groupe-select" class="w-full p-2 rounded text-xs"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option></select>
                 <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 rounded text-xs border">
                 <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded text-xs font-black">ENTRER</button>
             </div>
             <div id="counter-part" class="hidden text-center space-y-2">
                 <h4 id="group-title" class="font-bold text-xs"></h4>
                 <div class="text-3xl font-black" id="total-score">0 pts</div>
-                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-2 rounded font-black text-[10px]">+ 10 pts</button>
-                <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 rounded font-black text-[10px]">+ Poids (1g=1pt)</button>
+                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-2 rounded font-black text-[10px]">+ 10 pts (Petit)</button>
                 <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 rounded text-xs border">
+                <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 rounded font-black text-[10px]">+ Poids (1g=1pt)</button>
                 <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
             </div>
         </div>
@@ -101,17 +101,17 @@
     </div>
 
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyARnepyvwgwjbv97lBlMEA2UR28c-jVALM", authDomain: "les-silures-de-canape-c90e6.firebaseapp.com", projectId: "les-silures-de-canape-c90e6", storageBucket: "les-silures-de-canape-c90e6.firebasestorage.app", messagingSenderId: "1063082508513", appId: "1:1063082508513:web:1068368a1db2dff18377a0", measurementId: "G-99MB1YMZR4" };
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
+        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
-        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77" };
         let currentGroup = "";
 
         function toggleSection(id) { 
             const section = document.getElementById(id);
             section.classList.toggle('hidden');
             if(id === 'spots-section' && !section.classList.contains('hidden')) {
-                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-2 rounded text-[10px] font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
+                // Taille augmentée ici (text-sm font-bold)
+                document.getElementById('spots-list').innerHTML = mySpots.map(s => `<div onclick="window.open('${s.url}', '_blank')" class="bg-blue-50 p-3 rounded text-sm font-bold cursor-pointer hover:bg-blue-100">${s.name}</div>`).join('');
             }
         }
 
