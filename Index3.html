@@ -28,13 +28,11 @@
         
         <div class="flex justify-between items-center px-2">
             <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
-            <div class="flex gap-4 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-4xl"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-4xl"><i class="fab fa-facebook"></i></button>
-                <div class="flex flex-col gap-2">
-                    <button onclick="toggleSection('photo-section')" class="btn-photo px-8 py-3 rounded-xl text-[12px] font-black uppercase shadow-lg">PHOTOS</button>
-                    <button onclick="toggleSection('spots-section')" class="btn-fb px-8 py-3 rounded-xl text-[12px] font-black uppercase shadow-lg">SPOTS</button>
-                </div>
+            <div class="flex gap-2 items-center">
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-3xl"><i class="fab fa-facebook"></i></button>
+                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
+                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
             </div>
         </div>
 
@@ -69,7 +67,7 @@
                     <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
                 </select>
             </div>
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-4 rounded-xl bg-white/50 border border-fb text-sm font-black">
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
                 <option value="Silure">Silure</option><option value="Truite">Truite</option>
                 <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
             </select>
@@ -83,12 +81,12 @@
         </div>
         
         <div class="mt-4 pb-6">
-            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Les Silures de Canapé" class="w-full rounded-2xl border-4 border-white shadow-xl">
+            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-white shadow-xl">
         </div>
     </div>
 
     <script>
-        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }, { name: "Nouveau Spot", url: "#" }];
+        const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
         const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
         const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
