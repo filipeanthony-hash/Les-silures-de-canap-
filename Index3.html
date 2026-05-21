@@ -6,8 +6,9 @@
     <title>Les Silures de Canapé</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/yY1bXpD4/1779352785742.png">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Silures">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -31,8 +32,10 @@
             <div class="flex gap-2 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-3xl"><i class="fab fa-facebook"></i></button>
-                <button onclick="toggleSection('photo-section')" class="btn-photo px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
-                <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+                <div class="flex flex-col gap-1">
+                    <button onclick="toggleSection('photo-section')" class="btn-photo px-6 py-1.5 rounded-lg text-[9px] font-black uppercase shadow-lg">PHOTOS</button>
+                    <button onclick="toggleSection('spots-section')" class="btn-fb px-6 py-1.5 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
+                </div>
             </div>
         </div>
 
@@ -57,27 +60,11 @@
         </div>
 
         <div class="glass-card-river p-4 space-y-4 border-fb">
-            <div>
-                <div class="flex justify-between text-[10px] font-bold mb-2"><span>🌧️ Pluie</span><span>☀️ Beau Temps</span></div>
-                <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <input type="number" id="temp-slider" min="5" max="25" value="15" class="p-2 bg-white/50 rounded-lg text-center text-xs border border-fb" oninput="calculateIndex()">
-                <select id="moon-phase" onchange="calculateIndex()" class="p-2 bg-white/50 rounded-lg text-xs border border-fb">
-                    <option value="0.8">🌑 Nouvelle</option><option value="1.0">🌗 Quartier</option><option value="1.4">🌕 Pleine</option>
-                </select>
-            </div>
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
+            <input type="range" id="meteo-slider" min="0" max="100" value="50" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" oninput="calculateIndex()">
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-4 rounded-xl bg-white/50 border border-fb text-sm font-black">
                 <option value="Silure">Silure</option><option value="Truite">Truite</option>
                 <option value="Brochet">Brochet</option><option value="Perche">Perche</option>
             </select>
-        </div>
-
-        <div class="glass-card-river overflow-hidden border-fb">
-            <table class="w-full text-xs text-center">
-                <thead><tr class="bg-blue-100"><th class="p-3">LIEU</th><th class="p-3">PROBABILITÉ</th></tr></thead>
-                <tbody id="prob-table"></tbody>
-            </table>
         </div>
         
         <div class="mt-4 pb-6">
@@ -88,7 +75,6 @@
     <script>
         const mySpots = [{ name: "36 Rue René Leblond, 77220 Tournan-en-Brie", url: "https://maps.app.goo.gl/yryjv1H6Ko4PFoSZA?g_st=ac" }];
         const mesPhotos = ["silure1.jpg", "silure2.jpg"]; 
-        const fishData = { "Silure": { "Rivière": "80%", "Lac": "60%" }, "Truite": { "Rivière": "90%", "Lac": "30%" }, "Brochet": { "Rivière": "60%", "Lac": "85%" }, "Perche": { "Rivière": "70%", "Lac": "75%" } };
 
         function toggleSection(id) { 
             const section = document.getElementById(id);
@@ -103,31 +89,9 @@
 
         function calculateIndex() {
             const meteo = parseInt(document.getElementById('meteo-slider').value);
-            const temp = parseInt(document.getElementById('temp-slider').value);
-            const moon = parseFloat(document.getElementById('moon-phase').value);
-            const fish = document.getElementById('fish-select').value;
-            let score = Math.floor(((meteo < 50 ? 60 : 40) + (temp >= 12 && temp <= 18 ? 20 : 0)) * moon);
-            document.getElementById('final-index').innerText = Math.min(100, score) + "%";
-            document.getElementById('weather-status').innerText = meteo < 50 ? "🌧️ Tendance Pluvieuse" : "☀️ Tendance Ensoleillée";
-            const table = document.getElementById('prob-table');
-            table.innerHTML = "";
-            for (let lieu in fishData[fish]) {
-                table.innerHTML += `<tr><td class="p-3">${lieu}</td><td class="p-3 font-bold">${fishData[fish][lieu]}</td></tr>`;
-            }
+            document.getElementById('final-index').innerText = (meteo < 50 ? 60 : 40) + "%";
         }
-
-        async function initApp() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (p) => {
-                    try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`);
-                        const d = await res.json();
-                        document.getElementById('city-name').innerText = d.address.town || d.address.city || "Localisation";
-                    } catch(e) { document.getElementById('city-name').innerText = "Paris"; }
-                });
-            }
-            calculateIndex();
-        }
+        function initApp() { calculateIndex(); }
     </script>
 </body>
 </html>
