@@ -31,12 +31,12 @@
         <div class="space-y-4">
             <input type="number" id="poids-input" placeholder="Poids en grammes" class="w-full p-3 rounded-lg border">
             <button onclick="addCatch()" class="w-full bg-orange-500 text-white p-4 rounded-xl font-black">AJOUTER PRISE</button>
+            <button onclick="resetScore()" class="w-full bg-red-500 text-white p-2 rounded-xl text-xs font-bold">RÉINITIALISER LE SCORE</button>
         </div>
         <button onclick="location.reload()" class="mt-6 text-xs underline text-gray-500 w-full">Retour aux groupes</button>
     </div>
 
     <script>
-        // Mots de passe (À modifier dans le code source)
         const passwords = {
             "groupe1": "pass123",
             "groupe2": "silureA",
@@ -45,12 +45,16 @@
             "groupe5": "pecheur99"
         };
 
-        let score = 0;
+        let currentGroup = "";
+
         function checkPass() {
             const group = document.getElementById('groupe-select').value;
             const input = document.getElementById('pass').value;
             if(input === passwords[group]) {
+                currentGroup = group;
                 document.getElementById('group-title').innerText = "Compteur : " + group.toUpperCase();
+                // Charger le score depuis la mémoire
+                document.getElementById('total-score').innerText = (localStorage.getItem(group) || 0) + " pts";
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('counter-section').classList.remove('hidden');
             } else { alert('Mot de passe incorrect !'); }
@@ -59,10 +63,20 @@
         function addCatch() {
             const poids = parseInt(document.getElementById('poids-input').value);
             if(!poids) return;
-            // Calcul : 1g = 1pt + 10pts par poisson
-            score += (poids + 10);
-            document.getElementById('total-score').innerText = score + " pts";
+            
+            let currentScore = parseInt(localStorage.getItem(currentGroup) || 0);
+            let newScore = currentScore + (poids + 10);
+            
+            localStorage.setItem(currentGroup, newScore);
+            document.getElementById('total-score').innerText = newScore + " pts";
             document.getElementById('poids-input').value = "";
+        }
+
+        function resetScore() {
+            if(confirm("Voulez-vous remettre le score à zéro ?")) {
+                localStorage.setItem(currentGroup, 0);
+                document.getElementById('total-score').innerText = "0 pts";
+            }
         }
     </script>
 </body>
