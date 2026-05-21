@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Silures de Canapé - Groupes</title>
+    <title>Silures de Canapé - Compteur</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
@@ -22,27 +22,37 @@
             <option value="groupe5">Groupe 5</option>
         </select>
         <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-3 rounded-lg mb-4 border">
-        <button onclick="checkPass()" class="bg-blue-600 text-white w-full p-3 rounded-lg font-bold">ACCÉDER AU COMPTEUR</button>
+        <button onclick="checkPass()" class="bg-blue-600 text-white w-full p-3 rounded-lg font-bold">ACCÉDER</button>
     </div>
 
     <div id="counter-section" class="hidden max-w-md mx-auto glass-card p-6 mt-10">
         <h2 id="group-title" class="font-black text-center text-xl mb-6">Compteur</h2>
-        <div class="text-center text-4xl font-black mb-6" id="total-score">0 pts</div>
-        <div class="space-y-4">
-            <input type="number" id="poids-input" placeholder="Poids en grammes" class="w-full p-3 rounded-lg border">
-            <button onclick="addCatch()" class="w-full bg-orange-500 text-white p-4 rounded-xl font-black">AJOUTER PRISE</button>
-            <button onclick="resetScore()" class="w-full bg-red-500 text-white p-2 rounded-xl text-xs font-bold">RÉINITIALISER LE SCORE</button>
+        
+        <div class="bg-blue-600 text-white p-4 rounded-xl text-center mb-6 shadow-lg">
+            <p class="text-[10px] uppercase font-bold opacity-80">Total Général</p>
+            <div class="text-4xl font-black" id="total-score">0 pts</div>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="p-4 border-2 border-orange-300 rounded-xl bg-orange-50">
+                <p class="text-xs font-bold mb-2 uppercase text-orange-600">Petit Poisson</p>
+                <button onclick="addSmallFish()" class="w-full bg-orange-500 text-white p-4 rounded-xl font-black">+ 10 points</button>
+            </div>
+            
+            <div class="p-4 border-2 border-blue-300 rounded-xl bg-blue-50">
+                <p class="text-xs font-bold mb-2 uppercase text-blue-600">Gros Poisson (1g = 1pt)</p>
+                <input type="number" id="poids-input" placeholder="Poids en grammes" class="w-full p-3 mb-2 rounded-lg border">
+                <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-4 rounded-xl font-black">AJOUTER POIDS</button>
+            </div>
+            
+            <button onclick="resetScore()" class="w-full bg-red-500 text-white p-2 rounded-xl text-xs font-bold">RÉINITIALISER SCORE</button>
         </div>
         <button onclick="location.reload()" class="mt-6 text-xs underline text-gray-500 w-full">Retour aux groupes</button>
     </div>
 
     <script>
         const passwords = {
-            "groupe1": "pass123",
-            "groupe2": "silureA",
-            "groupe3": "brochet77",
-            "groupe4": "canap2026",
-            "groupe5": "pecheur99"
+            "groupe1": "pass123", "groupe2": "silureA", "groupe3": "brochet77", "groupe4": "canap2026", "groupe5": "pecheur99"
         };
 
         let currentGroup = "";
@@ -53,29 +63,33 @@
             if(input === passwords[group]) {
                 currentGroup = group;
                 document.getElementById('group-title').innerText = "Compteur : " + group.toUpperCase();
-                // Charger le score depuis la mémoire
                 document.getElementById('total-score').innerText = (localStorage.getItem(group) || 0) + " pts";
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('counter-section').classList.remove('hidden');
             } else { alert('Mot de passe incorrect !'); }
         }
 
-        function addCatch() {
+        function addSmallFish() {
+            let currentScore = parseInt(localStorage.getItem(currentGroup) || 0);
+            saveAndShow(currentScore + 10);
+        }
+
+        function addWeight() {
             const poids = parseInt(document.getElementById('poids-input').value);
             if(!poids) return;
-            
             let currentScore = parseInt(localStorage.getItem(currentGroup) || 0);
-            let newScore = currentScore + (poids + 10);
-            
-            localStorage.setItem(currentGroup, newScore);
-            document.getElementById('total-score').innerText = newScore + " pts";
+            saveAndShow(currentScore + poids);
             document.getElementById('poids-input').value = "";
         }
 
+        function saveAndShow(score) {
+            localStorage.setItem(currentGroup, score);
+            document.getElementById('total-score').innerText = score + " pts";
+        }
+
         function resetScore() {
-            if(confirm("Voulez-vous remettre le score à zéro ?")) {
-                localStorage.setItem(currentGroup, 0);
-                document.getElementById('total-score').innerText = "0 pts";
+            if(confirm("Remise à zéro du score ?")) {
+                saveAndShow(0);
             }
         }
     </script>
