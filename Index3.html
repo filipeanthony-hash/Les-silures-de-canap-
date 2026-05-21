@@ -21,7 +21,7 @@
 
     <div id="dashboard" class="w-full max-w-md mx-auto h-full flex flex-col space-y-2 overflow-y-auto pb-10">
         <div class="flex justify-between items-center px-2 pt-2">
-            <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
+            <h2 class="text-[10px] font-bold uppercase" id="city-name">LOCALISATION...</h2>
             <div class="flex gap-2 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-2xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-2xl"><i class="fab fa-facebook"></i></button>
@@ -70,7 +70,7 @@
 
         <div class="glass-card-river p-4 text-center border-2 border-fb">
             <div id="final-index" class="text-4xl font-black">--%</div>
-            <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation...</p>
+            <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation GPS...</p>
         </div>
         <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
 
@@ -113,11 +113,14 @@
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const lat = pos.coords.latitude, lon = pos.coords.longitude;
-                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
-                    const d = await res.json();
-                    if(d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
-                    if(d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    try {
+                        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
+                        const d = await res.json();
+                        if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
+                        if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
+                    } catch (e) { console.error("Erreur météo", e); }
                 });
             }
         }
