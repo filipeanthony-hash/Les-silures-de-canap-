@@ -95,7 +95,7 @@
 
     <script>
         // --- COLLE ICI TA NOUVELLE CLÉ ---
-        const API_KEY = "4b4496c76203ee1d238e2ea8c121830f"; 
+        const API_KEY = "VOTRE_CLE_OPENWEATHERMAP_ICI"; 
         // ---------------------------------
         
         let weatherData = { temp: 15, clouds: 50 };
@@ -112,7 +112,15 @@
         function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
         function resetGlobal() { if(confirm("Voulez-vous confirmer le reset du compteur global ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
         function updateGroupDisplay() { const groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = groupData.points + " pts"; }
-        function addFish() { let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); groupData.points += 5; localStorage.setItem(currentGroup, JSON.stringify(groupData)); updateGroupDisplay(); addGlobalFish(); }
+        
+        function addFish() { 
+            let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); 
+            groupData.points += 5; 
+            localStorage.setItem(currentGroup, JSON.stringify(groupData)); 
+            updateGroupDisplay(); 
+            addGlobalFish(); 
+        }
+
         function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let groupData = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); groupData.points += p; localStorage.setItem(currentGroup, JSON.stringify(groupData)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
         function resetScore() { if(confirm("Remise à zéro pour ce groupe ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
 
