@@ -84,8 +84,7 @@
             </div>
 
             <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase">
-                <option value="" disabled selected>choisissez votre poisson</option>
-                <option value="Silure">SILURE</option>
+                <option value="Silure">SILURE - indice de probabilité</option>
                 <option value="Brochet">BROCHET</option>
                 <option value="Black Bass">BLACK BASS</option>
                 <option value="Sandre">SANDRE</option>
@@ -155,6 +154,7 @@
         function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
+            calculateIndex();
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
@@ -162,7 +162,7 @@
                         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
                         const d = await res.json();
                         if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
-                        if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; }
+                        if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
                     } catch (e) { document.getElementById('city-name').innerText = "LAT: " + lat.toFixed(2); }
                 });
             }
