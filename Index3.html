@@ -85,14 +85,29 @@
 
             <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase">
                 <option value="" disabled selected>choisissez votre poisson</option>
-                <option value="Silure">SILURE</option><option value="Brochet">BROCHET</option><option value="Black Bass">BLACK BASS</option>
-                <option value="Sandre">SANDRE</option><option value="Goujon">GOUJON</option><option value="Perche commune">PERCHE COMMUNE</option>
-                <option value="Brème">BRÈME</option><option value="Ablette">ABLETTE</option><option value="Vairon">VAIRON</option>
-                <option value="Gardon">GARDON</option><option value="Chevesne">CHEVESNE</option><option value="Tanche">TANCHE</option>
-                <option value="Carpe">CARPE</option><option value="Rotengle">ROTENGLE</option><option value="Anguille">ANGUILLE</option>
-                <option value="Ide mélanote">IDE MÉLANOTE</option><option value="Carassin">CARASSIN</option><option value="Barbeau">BARBEAU</option>
-                <option value="Truite">TRUITE</option><option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option>
-                <option value="Poisson-chat">POISSON-CHAT</option><option value="Perche-soleil">PERCHE-SOLEIL</option><option value="Bouvière">BOUVIÈRE</option>
+                <option value="Silure">SILURE</option>
+                <option value="Brochet">BROCHET</option>
+                <option value="Black Bass">BLACK BASS</option>
+                <option value="Sandre">SANDRE</option>
+                <option value="Goujon">GOUJON</option>
+                <option value="Perche commune">PERCHE COMMUNE</option>
+                <option value="Brème">BRÈME</option>
+                <option value="Ablette">ABLETTE</option>
+                <option value="Vairon">VAIRON</option>
+                <option value="Gardon">GARDON</option>
+                <option value="Chevesne">CHEVESNE</option>
+                <option value="Tanche">TANCHE</option>
+                <option value="Carpe">CARPE</option>
+                <option value="Rotengle">ROTENGLE</option>
+                <option value="Anguille">ANGUILLE</option>
+                <option value="Ide mélanote">IDE MÉLANOTE</option>
+                <option value="Carassin">CARASSIN</option>
+                <option value="Barbeau">BARBEAU</option>
+                <option value="Truite">TRUITE</option>
+                <option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option>
+                <option value="Poisson-chat">POISSON-CHAT</option>
+                <option value="Perche-soleil">PERCHE-SOLEIL</option>
+                <option value="Bouvière">BOUVIÈRE</option>
             </select>
 
             <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
@@ -140,7 +155,6 @@
         function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
-            // Ne pas appeler calculateIndex ici pour éviter le calcul automatique au démarrage sans sélection
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
