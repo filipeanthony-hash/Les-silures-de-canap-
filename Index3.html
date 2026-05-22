@@ -13,6 +13,7 @@
         body, body * { color: #000000 !important; }
         .btn-fb { background-color: #1877F2 !important; color: white !important; }
         .btn-groupe { background-color: #064e3b !important; color: white !important; }
+        .btn-refresh { background-color: #ef4444 !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
     </style>
@@ -21,10 +22,13 @@
 
     <div id="dashboard" class="w-full max-w-md mx-auto h-full flex flex-col space-y-2 overflow-y-auto pb-10">
         <div class="flex justify-between items-center px-2 pt-2">
-            <h2 class="text-[10px] font-bold uppercase" id="city-name">LOCALISATION...</h2>
+            <div class="flex items-center gap-2">
+                <button onclick="window.location.reload()" class="btn-refresh w-6 h-6 rounded flex items-center justify-center text-[10px]"><i class="fas fa-sync"></i></button>
+                <h2 class="text-[10px] font-bold uppercase" id="city-name">LOCALISATION...</h2>
+            </div>
             <div class="flex gap-2 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-2xl"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-2xl"><i class="fab fa-facebook"></i></button>
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-xl"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-xl"><i class="fab fa-facebook"></i></button>
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-3 py-2 rounded-lg text-[9px] font-black uppercase shadow-lg">SPOTS</button>
             </div>
@@ -70,7 +74,7 @@
 
         <div class="glass-card-river p-4 text-center border-2 border-fb">
             <div id="final-index" class="text-4xl font-black">--%</div>
-            <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation GPS...</p>
+            <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation...</p>
         </div>
         <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
 
