@@ -20,8 +20,7 @@
         .btn-gps { background-color: #57534e !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
-        /* Style spécial pour les boutons réseaux sociaux agrandis */
-        .btn-social { padding: 8px; font-size: 20px; display: flex; align-items: center; justify-content: center; }
+        .btn-social { padding: 10px; font-size: 24px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body class="river-bg font-sans p-2" onload="initApp()">
@@ -34,7 +33,7 @@
                 <h2 class="text-[8px] font-bold uppercase truncate max-w-[50px]" id="city-name">GPS...</h2>
             </div>
             
-            <div class="flex gap-1 items-center">
+            <div class="flex gap-0.5 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-social text-green-600"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-social text-fb"><i class="fab fa-facebook"></i></button>
                 
@@ -84,15 +83,16 @@
                 </div>
             </div>
 
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
-                <option value="Silure">Silure</option><option value="Brochet">Brochet</option><option value="Black Bass">Black Bass</option>
-                <option value="Sandre">Sandre</option><option value="Goujon">Goujon</option><option value="Perche commune">Perche commune</option>
-                <option value="Brème">Brème</option><option value="Ablette">Ablette</option><option value="Vairon">Vairon</option>
-                <option value="Gardon">Gardon</option><option value="Chevesne">Chevesne</option><option value="Tanche">Tanche</option>
-                <option value="Carpe">Carpe</option><option value="Rotengle">Rotengle</option><option value="Anguille">Anguille</option>
-                <option value="Ide mélanote">Ide mélanote</option><option value="Carassin">Carassin</option><option value="Barbeau">Barbeau</option>
-                <option value="Truite">Truite</option><option value="Truite arc-en-ciel">Truite arc-en-ciel</option>
-                <option value="Poisson-chat">Poisson-chat</option><option value="Perche-soleil">Perche-soleil</option><option value="Bouvière">Bouvière</option>
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase">
+                <option value="" disabled selected>choisissez votre poisson</option>
+                <option value="Silure">SILURE</option><option value="Brochet">BROCHET</option><option value="Black Bass">BLACK BASS</option>
+                <option value="Sandre">SANDRE</option><option value="Goujon">GOUJON</option><option value="Perche commune">PERCHE COMMUNE</option>
+                <option value="Brème">BRÈME</option><option value="Ablette">ABLETTE</option><option value="Vairon">VAIRON</option>
+                <option value="Gardon">GARDON</option><option value="Chevesne">CHEVESNE</option><option value="Tanche">TANCHE</option>
+                <option value="Carpe">CARPE</option><option value="Rotengle">ROTENGLE</option><option value="Anguille">ANGUILLE</option>
+                <option value="Ide mélanote">IDE MÉLANOTE</option><option value="Carassin">CARASSIN</option><option value="Barbeau">BARBEAU</option>
+                <option value="Truite">TRUITE</option><option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option>
+                <option value="Poisson-chat">POISSON-CHAT</option><option value="Perche-soleil">PERCHE-SOLEIL</option><option value="Bouvière">BOUVIÈRE</option>
             </select>
 
             <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
@@ -140,7 +140,7 @@
         function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
-            calculateIndex();
+            // Ne pas appeler calculateIndex ici pour éviter le calcul automatique au démarrage sans sélection
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
@@ -148,13 +148,14 @@
                         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
                         const d = await res.json();
                         if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
-                        if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
+                        if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; }
                     } catch (e) { document.getElementById('city-name').innerText = "LAT: " + lat.toFixed(2); }
                 });
             }
         }
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
+            if(!fish) return;
             document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/160";
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
