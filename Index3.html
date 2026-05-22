@@ -62,7 +62,7 @@
         </div>
 
         <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black">
-            <option value="https://i.postimg.cc/WpCfhwvh/png-clipart-wels-catfish-oily-fish-carp-hazard-graphe-animals-photography-thumbnail.png">Silure</option><option value="Brochet">Brochet</option><option value="Black Bass">Black Bass</option>
+            <option value="Silure">Silure</option><option value="Brochet">Brochet</option><option value="Black Bass">Black Bass</option>
             <option value="Sandre">Sandre</option><option value="Goujon">Goujon</option><option value="Perche commune">Perche commune</option>
             <option value="Brème">Brème</option><option value="Ablette">Ablette</option><option value="Vairon">Vairon</option>
             <option value="Gardon">Gardon</option><option value="Chevesne">Chevesne</option><option value="Tanche">Tanche</option>
@@ -111,6 +111,8 @@
             "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, 
             "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } 
         };
+        
+        // Liste des images : Colle tes liens ici
         const fishImages = {
             "Silure": "", "Brochet": "", "Black Bass": "", "Sandre": "", "Goujon": "", "Perche commune": "", "Brème": "", "Ablette": "", "Vairon": "", "Gardon": "", "Chevesne": "", "Tanche": "", "Carpe": "", "Rotengle": "", "Anguille": "", "Ide mélanote": "", "Carassin": "", "Barbeau": "", "Truite": "", "Truite arc-en-ciel": "", "Poisson-chat": "", "Perche-soleil": "", "Bouvière": ""
         };
@@ -143,6 +145,7 @@
         }
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
+            // Affiche l'image si elle existe, sinon une image par défaut
             document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/80";
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
