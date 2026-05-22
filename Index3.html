@@ -20,6 +20,8 @@
         .btn-gps { background-color: #57534e !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
+        /* Style spécial pour les boutons réseaux sociaux agrandis */
+        .btn-social { padding: 8px; font-size: 20px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body class="river-bg font-sans p-2" onload="initApp()">
@@ -27,17 +29,18 @@
     <div id="main-container" class="w-full max-w-md mx-auto">
         <div class="flex justify-between items-center px-1 pt-2 pb-1 flex-shrink-0">
             <div class="flex items-center gap-1">
-                <button onclick="window.location.reload()" class="btn-refresh w-6 h-6 rounded flex items-center justify-center text-[10px]"><i class="fas fa-sync"></i></button>
-                <button onclick="disableGPS()" class="btn-gps w-6 h-6 rounded flex items-center justify-center text-[10px]"><i class="fas fa-location-slash"></i></button>
-                <h2 class="text-[8px] font-bold uppercase truncate max-w-[60px]" id="city-name">GPS...</h2>
+                <button onclick="window.location.reload()" class="btn-refresh w-7 h-7 rounded flex items-center justify-center text-[10px]"><i class="fas fa-sync"></i></button>
+                <button onclick="disableGPS()" class="btn-gps w-7 h-7 rounded flex items-center justify-center text-[10px]"><i class="fas fa-location-slash"></i></button>
+                <h2 class="text-[8px] font-bold uppercase truncate max-w-[50px]" id="city-name">GPS...</h2>
             </div>
             
             <div class="flex gap-1 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-lg"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-fb text-lg"><i class="fab fa-facebook"></i></button>
-                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-1.5 rounded-lg text-[8px] font-black uppercase shadow-lg">GROUPES</button>
-                <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-1.5 rounded-lg text-[8px] font-black uppercase shadow-lg">SPOTS</button>
-                <button onclick="toggleSection('concours-section')" class="btn-concours px-2 py-1.5 rounded-lg text-[8px] font-black uppercase shadow-lg">CONCOURS</button>
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-social text-green-600"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-social text-fb"><i class="fab fa-facebook"></i></button>
+                
+                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">GROUPES</button>
+                <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">SPOTS</button>
+                <button onclick="toggleSection('concours-section')" class="btn-concours px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">CONCOURS</button>
             </div>
         </div>
 
