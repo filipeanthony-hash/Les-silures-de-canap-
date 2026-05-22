@@ -77,18 +77,15 @@
                 <option value="Poisson-chat">Poisson-chat</option><option value="Perche-soleil">Perche-soleil</option><option value="Bouvière">Bouvière</option>
             </select>
 
-            <div class="glass-card-river p-4 border-none flex items-center justify-start gap-6">
-                <div class="text-left">
-                    <div id="final-index" class="text-4xl font-black">--%</div>
-                    <p id="weather-status" class="text-xs mt-1 italic font-bold">...</p>
+            <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
+                <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-24 h-24 rounded-xl object-cover">
+                <div class="text-right pl-4">
+                    <div id="final-index" class="text-2xl font-black">--%</div>
+                    <p id="weather-status" class="text-[8px] italic font-bold">...</p>
                 </div>
             </div>
             
             <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
-
-            <div class="w-full rounded-2xl overflow-hidden shadow-xl">
-                <img id="fish-img" src="https://via.placeholder.com/400x200" alt="Poisson" class="w-full object-cover">
-            </div>
 
             <div id="points-counter-card" class="glass-card-river overflow-hidden border-2 border-fb">
                 <div class="bg-blue-100 p-2 text-blue-900 uppercase font-bold text-xs text-center border-b border-fb">Total Poissons Pêchés</div>
@@ -142,7 +139,7 @@
         }
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
-            document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/400x200";
+            document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/160";
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
             let prob = Math.floor(stats.base + ((stats.pref === "s" && isSunny) ? 12 : 0) + (8 - Math.abs(weatherData.temp - stats.ideal)));
