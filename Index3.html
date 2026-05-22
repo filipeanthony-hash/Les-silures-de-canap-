@@ -9,6 +9,8 @@
     <style>
         html, body { height: 100%; overflow: hidden; touch-action: none; }
         .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
+        /* Augmentation du padding en bas pour éviter la coupure */
+        .dashboard-scroll { overflow-y: auto; height: 100%; padding-bottom: 80px; }
         .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; }
         body, body * { color: #000000 !important; }
         .btn-fb { background-color: #1877F2 !important; color: white !important; }
@@ -20,7 +22,8 @@
 </head>
 <body class="river-bg h-screen font-sans p-2 overflow-hidden" onload="initApp()">
 
-    <div id="dashboard" class="w-full max-w-md mx-auto h-full flex flex-col space-y-2 overflow-y-auto pb-10">
+    <div id="dashboard" class="w-full max-w-md mx-auto dashboard-scroll flex flex-col space-y-2">
+        
         <div class="flex justify-between items-center px-2 pt-2">
             <div class="flex items-center gap-2">
                 <button onclick="window.location.reload()" class="btn-refresh w-6 h-6 rounded flex items-center justify-center text-[10px]"><i class="fas fa-sync"></i></button>
@@ -79,21 +82,21 @@
                 <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation...</p>
             </div>
         </div>
-
+        
         <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
 
-        <div class="glass-card-river overflow-hidden border-2 border-fb mt-2">
+        <div class="glass-card-river overflow-hidden border-2 border-fb">
             <div class="bg-blue-100 p-2 text-blue-900 uppercase font-bold text-xs text-center border-b border-fb">Total Poissons Pêchés</div>
             <div class="p-4 text-center">
-                <div class="text-5xl font-black text-blue-900 mb-3" id="global-fish-counter">0</div>
+                <div class="text-4xl font-black text-blue-900 mb-2" id="global-fish-counter">0</div>
                 <div class="flex gap-2">
-                    <button onclick="addGlobalFish()" class="flex-1 btn-fb p-3 rounded-lg font-black text-xs text-white">+1 POISSON</button>
-                    <button onclick="resetGlobal()" class="bg-red-600 text-white p-3 rounded-lg font-black text-xs">RESET</button>
+                    <button onclick="addGlobalFish()" class="flex-1 btn-fb p-3 rounded-lg font-black text-xs text-white">AJOUTER</button>
+                    <button onclick="resetGlobal()" class="bg-red-600 text-white px-3 rounded-lg font-black text-xs">RESET</button>
                 </div>
             </div>
         </div>
 
-        <div class="pt-4 flex justify-center pb-6">
+        <div class="pt-2 flex justify-center pb-10">
             <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-fb shadow-xl">
         </div>
     </div>
@@ -102,19 +105,13 @@
         const API_KEY = "000000"; 
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
-        
-        const fishImages = {
-            "Silure": "", "Brochet": "", "Black Bass": "", "Sandre": "", "Goujon": "", "Perche commune": "", "Brème": "", "Ablette": "", "Vairon": "", "Gardon": "", "Chevesne": "", "Tanche": "", "Carpe": "", "Rotengle": "", "Anguille": "", "Ide mélanote": "", "Carassin": "", "Barbeau": "", "Truite": "", "Truite arc-en-ciel": "", "Poisson-chat": "", "Perche-soleil": "", "Bouvière": ""
-        };
+        const fishImages = { "Silure": "", "Brochet": "", "Black Bass": "", "Sandre": "", "Goujon": "", "Perche commune": "", "Brème": "", "Ablette": "", "Vairon": "", "Gardon": "", "Chevesne": "", "Tanche": "", "Carpe": "", "Rotengle": "", "Anguille": "", "Ide mélanote": "", "Carassin": "", "Barbeau": "", "Truite": "", "Truite arc-en-ciel": "", "Poisson-chat": "", "Perche-soleil": "", "Bouvière": "" };
 
         let currentGroup = null;
         let weatherData = { temp: 15, clouds: 50 };
 
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function checkPass() {
-            const g = document.getElementById('groupe-select').value;
-            if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); }
-        }
+        function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
         function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
         function addFishToGroup() { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += 5; localStorage.setItem(currentGroup, JSON.stringify(data)); updateGroupDisplay(); }
         function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += p; localStorage.setItem(currentGroup, JSON.stringify(data)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
@@ -132,14 +129,13 @@
                         const d = await res.json();
                         if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
                         if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
-                    } catch (e) { document.getElementById('city-name').innerText = "LAT: " + lat.toFixed(2) + " LON: " + lon.toFixed(2); }
+                    } catch (e) { document.getElementById('city-name').innerText = "LAT: " + lat.toFixed(2); }
                 });
             }
         }
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
             document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/80";
-            
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
             let prob = Math.floor(stats.base + ((stats.pref === "s" && isSunny) ? 12 : 0) + (8 - Math.abs(weatherData.temp - stats.ideal)));
