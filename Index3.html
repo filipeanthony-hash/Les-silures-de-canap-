@@ -118,8 +118,9 @@
                         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
                         const d = await res.json();
                         if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
+                        else { document.getElementById('city-name').innerText = lat.toFixed(2) + ", " + lon.toFixed(2); }
                         if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
-                    } catch (e) { console.error("Erreur API", e); }
+                    } catch (e) { document.getElementById('city-name').innerText = "ERREUR GPS"; }
                 });
             }
         }
