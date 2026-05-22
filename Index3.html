@@ -51,11 +51,6 @@
             </div>
         </div>
 
-        <div class="glass-card-river p-3 border-fb flex items-center gap-3">
-            <i class="fas fa-bell text-fb text-xl"></i>
-            <marquee behavior="scroll" direction="left" class="text-[14px] font-black uppercase">Bienvenue sur Les Silures de Canapé !</marquee>
-        </div>
-
         <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
             <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
             <p class="text-xs font-bold">36 Rue René Leblond, 77220 Tournan-en-Brie</p>
@@ -86,15 +81,9 @@
             <div class="bg-blue-100 p-2 text-blue-900 uppercase font-bold text-xs text-center border-b border-fb">Total Poissons Pêchés</div>
             <div class="p-4 text-center">
                 <div class="text-5xl font-black text-blue-900 mb-3" id="global-fish-counter">0</div>
-                <div class="flex gap-2">
-                    <button onclick="addGlobalFish()" class="flex-1 btn-fb p-3 rounded-lg font-black text-xs text-white">+1 POISSON</button>
-                    <button onclick="resetGlobal()" class="bg-red-600 text-white p-3 rounded-lg font-black text-xs">RESET</button>
-                </div>
+                <button onclick="addGlobalFish()" class="w-full btn-fb p-3 rounded-lg font-black text-xs text-white mb-2">+1 POISSON</button>
+                <button onclick="resetGlobal()" class="bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
             </div>
-        </div>
-
-        <div class="pt-4 flex justify-center pb-6">
-            <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-fb shadow-xl">
         </div>
     </div>
 
@@ -112,11 +101,34 @@
             "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } 
         };
         
-        // Liste des images : Colle tes liens ici
+        // --- TABLEAU DES IMAGES ---
         const fishImages = {
-            "Silure": "", "Brochet": "", "Black Bass": "", "Sandre": "", "Goujon": "", "Perche commune": "", "Brème": "", "Ablette": "", "Vairon": "", "Gardon": "", "Chevesne": "", "Tanche": "", "Carpe": "", "Rotengle": "", "Anguille": "", "Ide mélanote": "", "Carassin": "", "Barbeau": "", "Truite": "", "Truite arc-en-ciel": "", "Poisson-chat": "", "Perche-soleil": "", "Bouvière": ""
+            "Silure": "COLLER_LIEN_SILURE_ICI",
+            "Brochet": "COLLER_LIEN_BROCHET_ICI",
+            "Black Bass": "COLLER_LIEN_BLACK_BASS_ICI",
+            "Sandre": "COLLER_LIEN_SANDRE_ICI",
+            "Goujon": "COLLER_LIEN_GOUJON_ICI",
+            "Perche commune": "COLLER_LIEN_PERCHE_COMMUNE_ICI",
+            "Brème": "COLLER_LIEN_BREME_ICI",
+            "Ablette": "COLLER_LIEN_ABLETTE_ICI",
+            "Vairon": "COLLER_LIEN_VAIRON_ICI",
+            "Gardon": "COLLER_LIEN_GARDON_ICI",
+            "Chevesne": "COLLER_LIEN_CHEVESNE_ICI",
+            "Tanche": "COLLER_LIEN_TANCHE_ICI",
+            "Carpe": "COLLER_LIEN_CARPE_ICI",
+            "Rotengle": "COLLER_LIEN_ROTENGLE_ICI",
+            "Anguille": "COLLER_LIEN_ANGUILLE_ICI",
+            "Ide mélanote": "COLLER_LIEN_IDE_MELANOTE_ICI",
+            "Carassin": "COLLER_LIEN_CARASSIN_ICI",
+            "Barbeau": "COLLER_LIEN_BARBEAU_ICI",
+            "Truite": "COLLER_LIEN_TRUITE_ICI",
+            "Truite arc-en-ciel": "COLLER_LIEN_TRUITE_ARC_EN_CIEL_ICI",
+            "Poisson-chat": "COLLER_LIEN_POISSON_CHAT_ICI",
+            "Perche-soleil": "COLLER_LIEN_PERCHE_SOLEIL_ICI",
+            "Bouvière": "COLLER_LIEN_BOUVIERE_ICI"
         };
 
+        // --- LOGIQUE DE L'APPLICATION ---
         let currentGroup = null;
         let weatherData = { temp: 15, clouds: 50 };
 
@@ -145,7 +157,6 @@
         }
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
-            // Affiche l'image si elle existe, sinon une image par défaut
             document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/80";
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
