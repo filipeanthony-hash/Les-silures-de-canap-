@@ -7,23 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Correction Mobile : Hauteur dynamique */
         html, body { height: 100vh; height: -webkit-fill-available; overflow: hidden; display: flex; flex-direction: column; }
-        
         .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
-        
-        /* Conteneur principal qui s'adapte parfaitement à l'écran */
         #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
-
-        /* Zone de défilement uniquement pour les cartes */
-        .cards-scroll-area { flex: 1; overflow-y: auto; padding-right: 5px; } /* padding-right pour la barre de défilement */
-        
+        .cards-scroll-area { flex: 1; overflow-y: auto; padding-right: 5px; }
         .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; flex-shrink: 0; }
-        
         body, body * { color: #000000 !important; }
         .btn-fb { background-color: #1877F2 !important; color: white !important; }
         .btn-groupe { background-color: #064e3b !important; color: white !important; }
         .btn-refresh { background-color: #ef4444 !important; color: white !important; }
+        .btn-gps { background-color: #57534e !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
     </style>
@@ -31,11 +24,11 @@
 <body class="river-bg font-sans p-2" onload="initApp()">
 
     <div id="main-container" class="w-full max-w-md mx-auto">
-        
         <div class="flex justify-between items-center px-2 pt-2 pb-1 flex-shrink-0">
             <div class="flex items-center gap-2">
                 <button onclick="window.location.reload()" class="btn-refresh w-6 h-6 rounded flex items-center justify-center text-[10px]"><i class="fas fa-sync"></i></button>
-                <h2 class="text-[10px] font-bold uppercase" id="city-name">Localisation...</h2>
+                <button onclick="disableGPS()" class="btn-gps w-6 h-6 rounded flex items-center justify-center text-[10px]"><i class="fas fa-location-slash"></i></button>
+                <h2 class="text-[9px] font-bold uppercase truncate max-w-[120px]" id="city-name">GPS...</h2>
             </div>
             <div class="flex gap-2 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-2xl"><i class="fab fa-whatsapp"></i></button>
@@ -46,7 +39,6 @@
         </div>
 
         <div class="cards-scroll-area flex flex-col space-y-2">
-            
             <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
                 <h3 class="text-[10px] font-bold uppercase mb-2">Gestion des Scores</h3>
                 <div id="login-part" class="space-y-2">
@@ -85,10 +77,10 @@
                 <option value="Poisson-chat">Poisson-chat</option><option value="Perche-soleil">Perche-soleil</option><option value="Bouvière">Bouvière</option>
             </select>
 
-            <div class="glass-card-river p-4 border-2 border-fb flex items-center justify-between">
-                <img id="fish-img" src="https://via.placeholder.com/80" alt="Poisson" class="w-20 h-20 rounded-full border-2 border-fb object-cover flex-shrink-0">
-                <div class="text-center">
-                    <div id="final-index" class="text-4xl font-black">--%</div>
+            <div class="glass-card-river p-3 border-2 border-fb flex items-center justify-between">
+                <img id="fish-img" src="https://via.placeholder.com/80" alt="Poisson" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                <div class="text-center pl-2">
+                    <div id="final-index" class="text-3xl font-black">--%</div>
                     <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation...</p>
                 </div>
             </div>
@@ -110,7 +102,6 @@
                 <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-4 border-fb shadow-xl max-h-[150px] object-contain">
             </div>
         </div>
-
     </div>
 
     <script>
@@ -122,6 +113,7 @@
         let currentGroup = null;
         let weatherData = { temp: 15, clouds: 50 };
 
+        function disableGPS() { if(confirm("Désactiver le GPS et passer en manuel ?")) { document.getElementById('city-name').innerText = "MANUEL"; weatherData = { temp: 20, clouds: 20 }; calculateIndex(); } }
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
         function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
         function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
