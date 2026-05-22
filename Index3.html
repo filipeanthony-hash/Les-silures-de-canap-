@@ -77,9 +77,9 @@
                 <option value="Poisson-chat">Poisson-chat</option><option value="Perche-soleil">Perche-soleil</option><option value="Bouvière">Bouvière</option>
             </select>
 
-            <div class="glass-card-river p-4 border-2 border-fb flex items-center justify-between">
-                <img id="fish-img" src="https://via.placeholder.com/120" alt="Poisson" class="w-32 h-32 rounded-xl object-cover flex-shrink-0 border-none">
-                <div class="text-center pl-4 flex-grow flex flex-col justify-center items-center">
+            <div class="glass-card-river p-4 border-2 border-fb flex flex-col items-center">
+                <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-40 h-40 rounded-xl object-cover border-none shadow-lg">
+                <div class="text-center mt-3">
                     <div id="final-index" class="text-3xl font-black">--%</div>
                     <p id="weather-status" class="text-[9px] mt-1 italic font-bold">Initialisation...</p>
                 </div>
@@ -139,7 +139,7 @@
         }
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
-            document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/120";
+            document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/160";
             const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
             const isSunny = weatherData.clouds < 50;
             let prob = Math.floor(stats.base + ((stats.pref === "s" && isSunny) ? 12 : 0) + (8 - Math.abs(weatherData.temp - stats.ideal)));
