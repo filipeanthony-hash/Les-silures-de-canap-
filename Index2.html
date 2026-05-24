@@ -17,7 +17,6 @@
         .btn-groupe { background-color: #064e3b !important; color: white !important; }
         .btn-concours { background-color: #9333ea !important; color: white !important; }
         .btn-refresh { background-color: #ef4444 !important; color: white !important; }
-        /* Style bouton GPS */
         .btn-gps-active { background-color: #16a34a !important; color: white !important; }
         .btn-gps-inactive { background-color: #dc2626 !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
@@ -38,7 +37,6 @@
             <div class="flex gap-0.5 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-social text-green-600"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-social text-fb"><i class="fab fa-facebook"></i></button>
-                
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">SPOTS</button>
                 <button onclick="toggleSection('concours-section')" class="btn-concours px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">CONCOURS</button>
@@ -164,10 +162,67 @@
             "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png",
             "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png"
         };
-
         const API_KEY = "000000000000"; 
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
-        
         let currentGroup = null;
-        let weatherData = { temp: 15, clouds
+        let weatherData = { temp: 15, clouds: 50 };
+        let isGpsEnabled = true;
+
+        function toggleGPS() {
+            if (isGpsEnabled) {
+                if(confirm("Désactiver le GPS et passer en manuel ?")) {
+                    isGpsEnabled = false;
+                    const btn = document.getElementById('gps-btn');
+                    btn.classList.remove('btn-gps-active');
+                    btn.classList.add('btn-gps-inactive');
+                    document.getElementById('city-name').innerText = "MANUEL";
+                    weatherData = { temp: 20, clouds: 20 };
+                    calculateIndex();
+                }
+            } else {
+                isGpsEnabled = true;
+                const btn = document.getElementById('gps-btn');
+                btn.classList.remove('btn-gps-inactive');
+                btn.classList.add('btn-gps-active');
+                initApp();
+            }
+        }
+        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
+        function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
+        function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
+        function addFishToGroup() { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += 5; localStorage.setItem(currentGroup, JSON.stringify(data)); updateGroupDisplay(); }
+        function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += p; localStorage.setItem(currentGroup, JSON.stringify(data)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
+        function resetScore() { if(confirm("Vider les points ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
+        function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
+        function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
+        async function initApp() {
+            document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
+            calculateIndex();
+            if (isGpsEnabled && navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+                    try {
+                        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
+                        const d = await res.json();
+                        if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
+                        if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
+                    } catch (e) { document.getElementById('city-name').innerText = "LAT: " + lat.toFixed(2); }
+                });
+            }
+        }
+        function calculateIndex() {
+            const fish = document.getElementById('fish-select').value;
+            if(!fish) return;
+            document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/160";
+            const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
+            const isSunny = weatherData.clouds < 50;
+            let prob = Math.floor(stats.base + ((stats.pref === "s" && isSunny) ? 12 : 0) + (8 - Math.abs(weatherData.temp - stats.ideal)));
+            prob = Math.min(99, Math.max(10, prob));
+            document.getElementById('final-index').innerText = prob + "%";
+            document.getElementById('weather-status').innerText = (isSunny ? "☀️ " : "🌧️ ") + weatherData.temp.toFixed(1) + "°C";
+            document.getElementById('prob-table').innerHTML = `<tr><td class="p-2 font-bold text-blue-900">RIVIÈRE</td><td class="p-2 font-bold">${Math.min(99, prob + 15)}%</td></tr><tr><td class="p-2 font-bold text-blue-900">LAC</td><td class="p-2 font-bold">${prob}%</td></tr>`;
+        }
+    </script>
+</body>
+</html>
