@@ -31,8 +31,11 @@
         </div>
 
         <div id="groupe-section" class="hidden glass-card p-4 border-2 border-green-900">
-            <select id="group-select" class="w-full p-2 mb-2 rounded border text-xs"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option></select>
-            <input type="password" id="pass-input" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded border" oninput="accessGroup()">
+            <select id="group-select" class="w-full p-2 mb-2 rounded border text-xs">
+                <option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option>
+            </select>
+            <input type="password" id="pass-input" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded border">
+            <button onclick="accessGroup()" class="w-full bg-green-900 text-white p-2 rounded font-bold">VALIDER</button>
             <div id="group-dashboard" class="hidden text-center mt-2">
                 <div class="text-3xl font-black" id="group-score">0 pts</div>
                 <button onclick="addFishToGroup()" class="w-full bg-orange-500 text-white p-2 mt-2 rounded font-bold">+ 1 POISSON (5 pts)</button>
@@ -43,9 +46,11 @@
         </div>
 
         <div id="spots-section" class="hidden glass-card p-4 border-2 border-blue-600 h-40 overflow-y-auto">
-            <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="block w-full p-2 bg-blue-100 rounded text-[10px] font-bold underline mb-2">📍 36 Rue René Leblond, Tournan-en-Brie</a>
+            <a href="https://maps.google.com" target="_blank" class="block w-full p-2 bg-blue-100 rounded text-[10px] font-bold underline mb-2">📍 36 Rue René Leblond, Tournan-en-Brie</a>
             <div id="spots-list" class="space-y-1 text-xs"></div>
         </div>
+
+        <div id="concours-section" class="hidden glass-card p-4 border-2 border-purple-600 text-xs text-center font-bold">Saison 2026 active. Record : 124cm.</div>
 
         <div class="glass-card p-3 border-2 border-blue-500">
             <select id="fish-select" onchange="calculateIndex()" class="w-full p-2 rounded border text-[10px] font-black uppercase text-center mb-2">
@@ -55,7 +60,7 @@
                 <img id="fish-img" src="https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png" class="w-16 h-16 rounded-xl object-cover">
                 <div class="text-right">
                     <div class="text-2xl font-black text-blue-900" id="total-val">--%</div>
-                    <div id="weather-status" class="text-[8px] font-bold italic">...</div>
+                    <div id="weather-status" class="text-[8px] font-bold italic">18°C / Ensoleillé</div>
                 </div>
             </div>
         </div>
@@ -76,13 +81,13 @@
 
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
         function toggleGPS() { let b = document.getElementById('btn-gps'); b.classList.toggle('btn-gps-off'); b.classList.toggle('btn-gps-on'); document.getElementById('city-name').innerText = b.classList.contains('btn-gps-on') ? "CHÂTEAU-THIERRY" : "GPS..."; }
-        function accessGroup() { let g = document.getElementById('group-select').value; if(document.getElementById('pass-input').value === passwords[g]) document.getElementById('group-dashboard').classList.remove('hidden'); }
+        function accessGroup() { let g = document.getElementById('group-select').value; if(document.getElementById('pass-input').value === passwords[g]) document.getElementById('group-dashboard').classList.remove('hidden'); else alert("Erreur mot de passe"); }
         function addFishToGroup() { let s = document.getElementById('group-score'); s.innerText = (parseInt(s.innerText) + 5) + " pts"; }
         function addWeight() { let w = document.getElementById('poids-input').value; let s = document.getElementById('group-score'); s.innerText = (parseInt(s.innerText) + parseInt(w || 0)) + " pts"; }
         function resetGroup() { if(confirm("Confirmer le RESET des points du groupe ?")) document.getElementById('group-score').innerText = "0 pts"; }
         function addGlobal() { let c = parseInt(document.getElementById('global-counter').innerText) + 1; document.getElementById('global-counter').innerText = c; localStorage.setItem('global', c); }
         function resetGlobal() { if(confirm("Confirmer le RESET TOTAL du compteur ?")) { document.getElementById('global-counter').innerText = 0; localStorage.setItem('global', 0); } }
-        function calculateIndex() { document.getElementById('total-val').innerText = Math.floor(Math.random()*40+60) + "%"; document.getElementById('weather-status').innerText = "18°C / Ensoleillé"; document.getElementById('fish-img').src = fishImages[document.getElementById('fish-select').value]; }
+        function calculateIndex() { document.getElementById('total-val').innerText = Math.floor(Math.random()*40+60) + "%"; document.getElementById('fish-img').src = fishImages[document.getElementById('fish-select').value]; }
         function initApp() { document.getElementById('global-counter').innerText = localStorage.getItem('global') || 0; for(let i=1; i<=15; i++) document.getElementById('spots-list').innerHTML += `<p class="border-b">Spot n°${i}</p>`; }
     </script>
 </body>
