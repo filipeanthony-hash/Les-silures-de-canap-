@@ -12,19 +12,22 @@
         #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
         .cards-scroll-area { flex: 1; overflow-y: auto; padding-right: 5px; }
         .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; flex-shrink: 0; }
+        
+        /* Boutons verre personnalisés */
+        .glass-btn { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 0.5rem; padding: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: 0.3s; }
+        
         body, body * { color: #000000 !important; }
         .btn-fb { background-color: #1877F2 !important; color: white !important; }
         .btn-groupe { background-color: #064e3b !important; color: white !important; }
         .btn-concours { background-color: #9333ea !important; color: white !important; }
         .btn-refresh { background-color: #ef4444 !important; color: white !important; }
         
-        /* Styles GPS */
-        .btn-gps-active { background: rgba(255, 255, 255, 0.4) !important; border: 1px solid rgba(255,255,255,0.6) !important; backdrop-filter: blur(8px); color: black !important; }
+        /* Styles GPS modifiés */
+        .btn-gps-active { background: rgba(255, 255, 255, 0.5) !important; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.8); color: black !important; }
         .btn-gps-inactive { background-color: #ef4444 !important; color: white !important; }
         
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
-        .btn-social { padding: 10px; font-size: 24px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body class="river-bg font-sans p-2" onload="initApp()">
@@ -37,9 +40,9 @@
                 <h2 class="text-[8px] font-bold uppercase truncate max-w-[50px]" id="city-name">GPS...</h2>
             </div>
             
-            <div class="flex gap-0.5 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-social text-blue-600"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-social text-blue-600"><i class="fab fa-facebook"></i></button>
+            <div class="flex gap-1 items-center">
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="glass-btn text-green-600 w-9 h-9"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="glass-btn text-blue-700 w-9 h-9"><i class="fab fa-facebook"></i></button>
                 
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">SPOTS</button>
@@ -52,7 +55,6 @@
                 <h3 class="text-[10px] font-bold uppercase mb-2 text-purple-700">Page Concours</h3>
                 <textarea class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200" placeholder="Écris ton texte concours ici...">Écris ton texte concours ici</textarea>
             </div>
-
             <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
                 <h3 class="text-[10px] font-bold uppercase mb-2">Gestion des Scores</h3>
                 <div id="login-part" class="space-y-2">
@@ -69,18 +71,15 @@
                     <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
                 </div>
             </div>
-
             <div class="glass-card-river p-3 border-fb flex items-center gap-3">
                 <i class="fas fa-bell text-fb text-xl"></i>
                 <marquee behavior="scroll" direction="left" class="text-[14px] font-black uppercase">Bienvenue sur Les Silures de Canapé !</marquee>
             </div>
-
             <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
                 <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
                 <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="block w-full p-2 bg-blue-50 border border-fb rounded-lg text-[10px] font-bold text-blue-900 underline mb-2">📍 36 Rue René Leblond, Tournan-en-Brie</a>
                 <div class="border-t border-dashed border-gray-400 pt-2 space-y-1" id="spots-list"></div>
             </div>
-
             <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase text-center">
                 <option value="Silure">SILURE - indice de probabilité</option>
                 <option value="Brochet">BROCHET</option>
@@ -106,7 +105,6 @@
                 <option value="Perche-soleil">PERCHE-SOLEIL</option>
                 <option value="Bouvière">BOUVIÈRE</option>
             </select>
-
             <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
                 <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-24 h-24 rounded-xl object-cover">
                 <div class="text-right pl-4">
@@ -114,9 +112,7 @@
                     <p id="weather-status" class="text-[8px] italic font-bold">...</p>
                 </div>
             </div>
-            
             <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
-
             <div id="points-counter-card" class="glass-card-river overflow-hidden border-2 border-fb">
                 <div class="bg-blue-100 p-2 text-blue-900 uppercase font-bold text-xs text-center border-b border-fb">Total Poissons Pêchés</div>
                 <div class="p-4 text-center">
@@ -127,7 +123,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="pt-2 flex justify-center pb-2 flex-shrink-0 w-full">
                 <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-none shadow-xl object-cover">
             </div>
