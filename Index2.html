@@ -2,7 +2,7 @@
 <html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Les Silures de Canapé</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,75 +13,89 @@
         .btn-gps-off { background-color: #dc2626 !important; color: white !important; }
     </style>
 </head>
-<body class="river-bg p-2">
+<body class="river-bg p-2" onload="initApp()">
     <div class="max-w-md mx-auto space-y-2">
-        <!-- Header -->
+        <!-- Header avec GPS, Refresh et boutons navigation -->
         <div class="flex justify-between items-center">
             <div class="flex gap-1 items-center">
                 <button onclick="window.location.reload()" class="bg-red-500 text-white w-8 h-8 rounded"><i class="fas fa-sync"></i></button>
                 <button onclick="toggleGPS()" id="btn-gps" class="btn-gps-off w-8 h-8 rounded font-bold">G</button>
+                <span id="city-name" class="text-[8px] font-bold uppercase truncate max-w-[50px]">GPS...</span>
             </div>
-            <div class="flex gap-3">
+            <div class="flex gap-1">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="text-green-600 text-3xl"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="text-blue-700 text-3xl"><i class="fab fa-facebook"></i></button>
+                <button onclick="toggleSection('groupe-section')" class="bg-green-900 text-white px-2 py-1 rounded text-[7px] font-bold">GROUPES</button>
+                <button onclick="toggleSection('spots-section')" class="bg-blue-600 text-white px-2 py-1 rounded text-[7px] font-bold">SPOTS</button>
+                <button onclick="toggleSection('concours-section')" class="bg-purple-600 text-white px-2 py-1 rounded text-[7px] font-bold">CONC.</button>
             </div>
         </div>
 
-        <!-- Section GROUPES (Mots de passe rétablis) -->
-        <div id="groupe-section" class="glass-card p-4 border-2 border-green-900">
+        <!-- Section GROUPES -->
+        <div id="groupe-section" class="hidden glass-card p-4 border-2 border-green-900">
             <select id="group-select" class="w-full p-2 mb-2 rounded border text-xs">
-                <option value="0">Groupe 1</option><option value="1">Groupe 2</option><option value="2">Groupe 3</option><option value="3">Groupe 4</option><option value="4">Groupe 5</option>
+                <option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option>
             </select>
             <input type="password" id="pass-input" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded border">
             <button onclick="accessGroup()" class="w-full bg-green-900 text-white p-2 rounded">VALIDER</button>
             <div id="group-dashboard" class="hidden text-center mt-2">
-                <div class="text-lg font-bold">Poissons : <span id="group-fish">0</span></div>
                 <div class="text-3xl font-black" id="group-score">0 pts</div>
                 <button onclick="addFishToGroup()" class="w-full bg-orange-500 text-white p-2 mt-2 rounded font-bold">+ 1 POISSON (5 pts)</button>
+                <button onclick="resetGroup()" class="w-full bg-red-600 text-white p-1 mt-1 rounded text-[10px]">RESET SCORE</button>
             </div>
         </div>
 
-        <!-- Section SPOTS (15 lignes) -->
-        <div id="spots-section" class="glass-card p-4 border-2 border-blue-600 h-40 overflow-y-auto">
-            <h3 class="font-bold mb-2">LISTE DES 15 SPOTS</h3>
-            <div id="spots-list" class="space-y-1 text-xs font-bold"></div>
+        <!-- Section SPOTS -->
+        <div id="spots-section" class="hidden glass-card p-4 border-2 border-blue-600 h-40 overflow-y-auto">
+            <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="block w-full p-2 bg-blue-100 rounded text-[10px] font-bold underline mb-2">📍 36 Rue René Leblond, Tournan-en-Brie</a>
+            <div id="spots-list" class="space-y-1 text-xs"></div>
         </div>
 
-        <!-- Sélecteur Poisson (22 espèces + images + %) -->
+        <!-- Section CONCOURS -->
+        <div id="concours-section" class="hidden glass-card p-4 border-2 border-purple-600">
+            <p class="text-xs">Saison 2026 active. Record : 124cm.</p>
+        </div>
+
+        <!-- Sélecteur Poisson -->
         <div class="glass-card p-3 border-2 border-blue-500 space-y-2">
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-2 rounded border border-blue-500 text-[10px] font-black uppercase text-center">
-                <option value="Silure">SILURE</option><option value="Brochet">BROCHET</option><option value="Black Bass">BLACK BASS</option><option value="Sandre">SANDRE</option><option value="Goujon">GOUJON</option><option value="Perche commune">PERCHE COMMUNE</option><option value="Brème">BRÈME</option><option value="Ablette">ABLETTE</option><option value="Vairon">VAIRON</option><option value="Gardon">GARDON</option><option value="Chevesne">CHEVESNE</option><option value="Tanche">TANCHE</option><option value="Carpe">CARPE</option><option value="Rotengle">ROTENGLE</option><option value="Anguille">ANGUILLE</option><option value="Ide mélanote">IDE MÉLANOTE</option><option value="Carassin">CARASSIN</option><option value="Barbeau">BARBEAU</option><option value="Truite">TRUITE</option><option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option><option value="Poisson-chat">POISSON-CHAT</option><option value="Perche-soleil">PERCHE-SOLEIL</option><option value="Bouvière">BOUVIÈRE</option>
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-2 rounded border text-[10px] font-black uppercase text-center">
+                <option value="Silure">SILURE</option><option value="Brochet">BROCHET</option><option value="Black Bass">BLACK BASS</option><option value="Sandre">SANDRE</option><option value="Perche commune">PERCHE COMMUNE</option>
+                <!-- Ajoute les autres ici -->
             </select>
             <div class="flex items-center justify-between">
                 <img id="fish-img" src="https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png" class="w-16 h-16 rounded-xl object-cover">
                 <div class="text-right">
-                    <div class="text-2xl font-black text-blue-900" id="total-val">68%</div>
+                    <div class="text-2xl font-black text-blue-900" id="total-val">--%</div>
+                    <div id="weather-status" class="text-[8px] font-bold italic">...</div>
                 </div>
             </div>
         </div>
 
-        <!-- Compteur Global -->
+        <!-- Compteur Global avec Reset -->
         <div class="glass-card p-4 border-2 border-blue-500 text-center">
-            <div class="text-sm font-bold uppercase">Total Poissons Pêchés</div>
-            <div class="text-4xl font-black" id="global-counter">0</div>
-            <button onclick="addGlobal()" class="w-full bg-blue-600 text-white p-2 mt-2 rounded font-bold">+ AJOUTER</button>
+            <div class="text-xs font-bold uppercase">Total Poissons</div>
+            <div class="text-3xl font-black" id="global-counter">0</div>
+            <div class="flex gap-2 mt-2">
+                <button onclick="addGlobal()" class="flex-grow bg-blue-600 text-white p-2 rounded font-bold">AJOUTER</button>
+                <button onclick="resetGlobal()" class="bg-red-600 text-white px-4 rounded font-bold">RESET</button>
+            </div>
         </div>
+
+        <!-- Logo en bas -->
+        <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" class="w-full rounded-2xl shadow-lg">
     </div>
 
     <script>
-        const groupsData = [{pass:"GP123"}, {pass:"GP456"}, {pass:"GP789"}, {pass:"GP000"}, {pass:"GP999"}];
-        const fishImages = {"Silure":"https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png","Brochet":"https://i.postimg.cc/J7xHm1Zv/1000022375.png","Black Bass":"https://i.postimg.cc/4d9CPNZn/1000022377.png","Sandre":"https://i.postimg.cc/2yhV84s4/sandre.png","Goujon":"https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png","Perche commune":"https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png","Brème":"https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png","Ablette":"https://i.postimg.cc/RZsVmsWn/ablette.png","Vairon":"https://i.postimg.cc/1txSRLsq/vairon.png","Gardon":"https://i.postimg.cc/htfRLSGJ/gardon.png","Chevesne":"https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png","Tanche":"https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png","Carpe":"https://i.postimg.cc/wvWkQdMW/R-(2).png","Rotengle":"https://i.postimg.cc/Z5rFDN0Y/R-(3).png","Anguille":"https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png","Ide mélanote":"https://i.postimg.cc/zfh38s9m/ide-melanote.png","Carassin":"https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png","Barbeau":"https://i.postimg.cc/8c20QrvX/barbeau.png","Truite":"https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png","Truite arc-en-ciel":"https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png","Poisson-chat":"https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png","Perche-soleil":"https://i.postimg.cc/nc5DxGCh/perche-soleil2.png","Bouvière":"https://i.postimg.cc/h4ZJ81bD/bouviere.png"};
-
-        let isGpsOn = false, globalCount = 0;
-        function toggleGPS() { isGpsOn = !isGpsOn; document.getElementById('btn-gps').className = isGpsOn ? "btn-gps-on w-8 h-8 rounded font-bold" : "btn-gps-off w-8 h-8 rounded font-bold"; }
-        function accessGroup() { const idx = document.getElementById('group-select').value; if(document.getElementById('pass-input').value === groupsData[idx].pass) { document.getElementById('group-dashboard').classList.remove('hidden'); } else alert("Mauvais mot de passe"); }
-        function addFishToGroup() { let s = document.getElementById('group-score'); s.innerText = (parseInt(s.innerText) + 5) + " pts"; }
-        function addGlobal() { globalCount++; document.getElementById('global-counter').innerText = globalCount; }
-        function calculateIndex() { document.getElementById('total-val').innerText = (Math.floor(Math.random()*40)+60) + "%"; document.getElementById('fish-img').src = fishImages[document.getElementById('fish-select').value]; }
+        const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
+        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
+        function toggleGPS() { /* logique GPS */ }
+        function accessGroup() { const g = document.getElementById('group-select').value; if(document.getElementById('pass-input').value === passwords[g]) document.getElementById('group-dashboard').classList.remove('hidden'); else alert("Erreur"); }
+        function addGlobal() { let c = parseInt(document.getElementById('global-counter').innerText) + 1; document.getElementById('global-counter').innerText = c; localStorage.setItem('global', c); }
+        function resetGlobal() { document.getElementById('global-counter').innerText = 0; localStorage.setItem('global', 0); }
+        function calculateIndex() { document.getElementById('total-val').innerText = Math.floor(Math.random()*40+60) + "%"; document.getElementById('weather-status').innerText = "18°C / Ensoleillé"; }
         
-        let list = `<p class="border-b">📍 Spot n°1 : La Grande Rivière</p>`; 
-        for(let i=2; i<=15; i++) list += `<p class="border-b">📍 Spot n°${i}</p>`; 
-        document.getElementById('spots-list').innerHTML = list;
+        let list = ""; for(let i=1; i<=15; i++) list += `<p class="border-b">Spot n°${i}</p>`; document.getElementById('spots-list').innerHTML = list;
+        function initApp() { document.getElementById('global-counter').innerText = localStorage.getItem('global') || 0; }
     </script>
 </body>
 </html>
