@@ -21,52 +21,50 @@
             <div class="flex gap-1 items-center">
                 <button onclick="window.location.reload()" class="bg-red-500 text-white w-8 h-8 rounded"><i class="fas fa-sync"></i></button>
                 <button onclick="toggleGPS()" id="btn-gps" class="btn-gps-off w-8 h-8 rounded font-bold">G</button>
-                <span id="gps-coords" class="text-[9px] font-bold uppercase italic">LAT/LONG: --</span>
+                <span id="gps-coords" class="text-[8px] font-bold">LAT/LONG: --</span>
             </div>
             <div class="flex gap-1">
-                <a href="https://chat.whatsapp.com/..." class="text-green-600 text-2xl"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.facebook.com/share/..." class="text-blue-700 text-2xl"><i class="fab fa-facebook"></i></a>
-                <button onclick="toggleSection('groupe-section')" class="bg-green-900 text-white px-2 py-1 rounded text-[8px] font-bold">GROUPES</button>
-                <button onclick="toggleSection('spots-section')" class="bg-blue-600 text-white px-2 py-1 rounded text-[8px] font-bold">SPOTS</button>
-                <button onclick="toggleSection('concours-section')" class="bg-purple-600 text-white px-2 py-1 rounded text-[8px] font-bold">CONCOURS</button>
+                <a href="https://chat.whatsapp.com/KfltuoycOB548IujbIB38q" class="text-green-600 text-xl"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.facebook.com/share/g/1Fe5eQhNqP/" class="text-blue-700 text-xl"><i class="fab fa-facebook"></i></a>
+                <button onclick="toggleSection('groupe-section')" class="bg-green-900 text-white px-2 py-1 rounded text-[7px] font-bold">GROUPES</button>
+                <button onclick="toggleSection('spots-section')" class="bg-blue-600 text-white px-2 py-1 rounded text-[7px] font-bold">SPOTS</button>
+                <button onclick="toggleSection('concours-section')" class="bg-purple-600 text-white px-2 py-1 rounded text-[7px] font-bold">CONCOURS</button>
             </div>
         </div>
 
-        <!-- Section GROUPES (5 options) -->
+        <!-- Section GROUPES (5 groupes avec mot de passe) -->
         <div id="groupe-section" class="hidden glass-card p-4 border-2 border-green-900">
-            <select id="groupe-select" class="w-full p-2 mb-2 rounded border text-xs">
-                <option value="1">Groupe 1</option><option value="2">Groupe 2</option><option value="3">Groupe 3</option><option value="4">Groupe 4</option><option value="5">Groupe 5</option>
+            <select id="group-select" class="w-full p-2 mb-2 rounded border text-xs">
+                <option value="0">Groupe 1</option><option value="1">Groupe 2</option><option value="2">Groupe 3</option><option value="3">Groupe 4</option><option value="4">Groupe 5</option>
             </select>
-            <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded border">
-            <button onclick="checkPass()" class="w-full bg-green-900 text-white p-2 rounded">ENTRER</button>
-            <div id="score-area" class="hidden text-center mt-2">
-                <div class="text-xl font-bold">Poissons totaux : <span id="count-val">0</span></div>
-                <div class="text-3xl font-black" id="total-score">0 pts</div>
-                <button onclick="addFish()" class="bg-orange-500 text-white w-full p-2 mt-2 rounded font-bold">+ 1 POISSON</button>
+            <input type="password" id="pass-input" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded border">
+            <button onclick="accessGroup()" class="w-full bg-green-900 text-white p-2 rounded">VALIDER</button>
+            <div id="group-dashboard" class="hidden text-center mt-2">
+                <div class="text-lg font-bold">Poissons : <span id="group-fish">0</span></div>
+                <div class="text-3xl font-black" id="group-score">0 pts</div>
+                <button onclick="addFishToGroup()" class="w-full bg-orange-500 text-white p-2 mt-2 rounded font-bold">+ 1 POISSON (5 pts)</button>
             </div>
         </div>
 
-        <!-- Section SPOTS (15 adresses) -->
+        <!-- Section SPOTS (15 emplacements) -->
         <div id="spots-section" class="hidden glass-card p-4 border-2 border-blue-600 h-48 overflow-y-auto">
             <h3 class="font-bold mb-2">LISTE DES 15 SPOTS</h3>
-            <div id="spots-list" class="space-y-1 text-xs">
-                <!-- Insère ici tes 15 adresses avec liens Maps -->
-                <p>📍 Spot 1 : [COLLE TON ADRESSE ICI]</p>
-            </div>
+            <div id="spots-list" class="space-y-1 text-xs"></div>
         </div>
 
         <!-- Section CONCOURS -->
         <div id="concours-section" class="hidden glass-card p-4 border-2 border-purple-600">
-            <h3 class="font-bold text-purple-700">PAGE CONCOURS</h3>
+            <textarea class="w-full h-20 p-2 text-xs" placeholder="Entrez les détails du concours..."></textarea>
         </div>
 
-        <marquee class="glass-card p-2 font-black text-blue-900 uppercase text-sm">Bienvenue chez les Silures de Canapé !</marquee>
+        <marquee class="glass-card p-2 font-black text-blue-900 uppercase text-xs">Bienvenue chez les Silures de Canapé !</marquee>
 
-        <!-- Sélecteur Poisson + Résultat + Image -->
+        <!-- Sélecteur Poisson -->
         <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl border border-blue-500 text-xs font-black uppercase text-center">
-            <!-- (Liste des 23 poissons) -->
+            <option value="Silure">SILURE</option><option value="Brochet">BROCHET</option><option value="Black Bass">BLACK BASS</option><option value="Sandre">SANDRE</option><option value="Goujon">GOUJON</option><option value="Perche commune">PERCHE COMMUNE</option><option value="Brème">BRÈME</option><option value="Ablette">ABLETTE</option><option value="Vairon">VAIRON</option><option value="Gardon">GARDON</option><option value="Chevesne">CHEVESNE</option><option value="Tanche">TANCHE</option><option value="Carpe">CARPE</option><option value="Rotengle">ROTENGLE</option><option value="Anguille">ANGUILLE</option><option value="Ide mélanote">IDE MÉLANOTE</option><option value="Carassin">CARASSIN</option><option value="Barbeau">BARBEAU</option><option value="Truite">TRUITE</option><option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option><option value="Poisson-chat">POISSON-CHAT</option><option value="Perche-soleil">PERCHE-SOLEIL</option><option value="Bouvière">BOUVIÈRE</option>
         </select>
 
+        <!-- Résultat -->
         <div class="glass-card p-4 border-2 border-blue-500 flex items-center justify-between">
             <img id="fish-img" src="https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png" class="w-20 h-20 rounded-xl object-cover">
             <div class="text-right">
@@ -75,27 +73,51 @@
             </div>
         </div>
 
-        <!-- Image pied de page -->
         <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" class="w-full rounded-2xl shadow-xl">
     </div>
 
     <script>
-        // API CONFIG
-        const MY_API_KEY = "[INSÉRER TA CLÉ ICI]";
-        let isGpsOn = false;
+        // CONFIGURATION DES GROUPES (Remplace tes mots de passe ici)
+        const groupsData = [
+            { pass: "MDP1", score: 0, fish: 0 }, { pass: "MDP2", score: 0, fish: 0 },
+            { pass: "MDP3", score: 0, fish: 0 }, { pass: "MDP4", score: 0, fish: 0 },
+            { pass: "MDP5", score: 0, fish: 0 }
+        ];
+        
+        let currentGroupId = 0, isGpsOn = false;
+        
+        const fishImages = { "Silure": "https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet": "https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass": "https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre": "https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon": "https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune": "https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème": "https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette": "https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon": "https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon": "https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne": "https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche": "https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe": "https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle": "https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille": "https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote": "https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin": "https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau": "https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite": "https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel": "https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat": "https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
 
+        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
         function toggleGPS() {
             isGpsOn = !isGpsOn;
-            const btn = document.getElementById('btn-gps');
-            btn.className = isGpsOn ? "btn-gps-on w-8 h-8 rounded font-bold" : "btn-gps-off w-8 h-8 rounded font-bold";
-            if(isGpsOn) document.getElementById('gps-coords').innerText = "LAT: 49.07, LONG: 3.33";
-            else document.getElementById('gps-coords').innerText = "LAT/LONG: --";
+            document.getElementById('btn-gps').className = isGpsOn ? "btn-gps-on w-8 h-8 rounded font-bold" : "btn-gps-off w-8 h-8 rounded font-bold";
+            document.getElementById('gps-coords').innerText = isGpsOn ? "LAT: 49.07, LONG: 3.33" : "LAT/LONG: --";
         }
-        
-        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function checkPass() { if(document.getElementById('pass').value === "1234") document.getElementById('score-area').classList.remove('hidden'); }
-        function addFish() { /* Ajoute logique score */ }
-        function calculateIndex() { /* Ajoute logique probabilité */ }
+        function accessGroup() {
+            const idx = document.getElementById('group-select').value;
+            if(document.getElementById('pass-input').value === groupsData[idx].pass) {
+                currentGroupId = idx;
+                document.getElementById('group-dashboard').classList.remove('hidden');
+                updateDashboard();
+            } else alert("Erreur mot de passe");
+        }
+        function addFishToGroup() {
+            groupsData[currentGroupId].fish++; groupsData[currentGroupId].score += 5; updateDashboard();
+        }
+        function updateDashboard() {
+            document.getElementById('group-score').innerText = groupsData[currentGroupId].score + " pts";
+            document.getElementById('group-fish').innerText = groupsData[currentGroupId].fish;
+        }
+        function calculateIndex() {
+            const p = Math.floor(Math.random() * 50) + 50;
+            document.getElementById('total-val').innerText = p + "%";
+            document.getElementById('lac-p').innerText = (p-5) + "%";
+            document.getElementById('riv-p').innerText = (p+5) + "%";
+            document.getElementById('fish-img').src = fishImages[document.getElementById('fish-select').value];
+        }
+        let list = ""; for(let i=1; i<=15; i++) list += `<p class="border-b border-blue-200">📍 Spot ${i} : [Adresse GPS]</p>`;
+        document.getElementById('spots-list').innerHTML = list;
     </script>
 </body>
 </html>
