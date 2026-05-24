@@ -9,6 +9,7 @@
     <style>
         .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
         .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid #1877F2; border-radius: 1rem; }
+        /* Style spécifique pour le bouton GPS */
         .btn-gps-on { background-color: #16a34a !important; color: white !important; }
         .btn-gps-off { background-color: #dc2626 !important; color: white !important; }
     </style>
@@ -27,27 +28,27 @@
                 <a href="https://www.facebook.com/share/g/1Fe5eQhNqP/" class="text-blue-700 text-2xl"><i class="fab fa-facebook"></i></a>
                 <button onclick="toggleSection('groupe-section')" class="bg-green-900 text-white px-2 py-1 rounded text-[8px] font-bold">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="bg-blue-600 text-white px-2 py-1 rounded text-[8px] font-bold">SPOTS</button>
-                <button onclick="toggleSection('concours-section')" class="bg-purple-600 text-white px-2 py-1 rounded text-[8px] font-bold">CONCOURS</button>
             </div>
         </div>
 
-        <!-- Section GROUPES -->
+        <!-- Section Groupe -->
         <div id="groupe-section" class="hidden glass-card p-4 border-2 border-green-900">
             <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded border">
             <button onclick="checkPass()" class="w-full bg-green-900 text-white p-2 rounded">ENTRER</button>
-            <div id="score-area" class="hidden text-center mt-2">
-                <div class="text-xl font-bold">Poissons : <span id="fish-count">0</span></div>
+            <div id="score-area" class="hidden text-center mt-2 space-y-2">
+                <div class="text-xl font-bold">Poissons : <span id="count-val">0</span></div>
                 <div class="text-3xl font-black" id="total-score">0 pts</div>
-                <button onclick="addScore()" class="bg-orange-500 text-white w-full p-2 mt-2 rounded">+ 1 POISSON (5 pts)</button>
+                <button onclick="addFish()" class="bg-orange-500 text-white w-full p-2 rounded font-bold">+ 1 POISSON</button>
             </div>
         </div>
 
-        <!-- Section SPOTS -->
+        <!-- Section Spots -->
         <div id="spots-section" class="hidden glass-card p-4 border-2 border-blue-600 h-48 overflow-y-auto">
             <h3 class="font-bold mb-2">LISTE DES 15 SPOTS</h3>
             <div id="spots-list" class="space-y-1 text-xs"></div>
         </div>
 
+        <!-- Notification -->
         <marquee class="glass-card p-2 font-black text-blue-900 uppercase text-sm">Bienvenue chez les Silures de Canapé !</marquee>
 
         <!-- Sélecteur Poisson -->
@@ -55,25 +56,28 @@
             <option value="Silure">SILURE</option><option value="Brochet">BROCHET</option><option value="Black Bass">BLACK BASS</option><option value="Sandre">SANDRE</option><option value="Goujon">GOUJON</option><option value="Perche commune">PERCHE COMMUNE</option><option value="Brème">BRÈME</option><option value="Ablette">ABLETTE</option><option value="Vairon">VAIRON</option><option value="Gardon">GARDON</option><option value="Chevesne">CHEVESNE</option><option value="Tanche">TANCHE</option><option value="Carpe">CARPE</option><option value="Rotengle">ROTENGLE</option><option value="Anguille">ANGUILLE</option><option value="Ide mélanote">IDE MÉLANOTE</option><option value="Carassin">CARASSIN</option><option value="Barbeau">BARBEAU</option><option value="Truite">TRUITE</option><option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option><option value="Poisson-chat">POISSON-CHAT</option><option value="Perche-soleil">PERCHE-SOLEIL</option><option value="Bouvière">BOUVIÈRE</option>
         </select>
 
-        <!-- Affichage Résultat -->
+        <!-- Affichage Résultat avec Image dynamique -->
         <div class="glass-card p-4 border-2 border-blue-500 flex items-center justify-between">
-            <img id="fish-img" src="https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png" class="w-20 h-20 rounded-xl">
+            <img id="fish-img" src="https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png" class="w-20 h-20 rounded-xl object-cover">
             <div class="text-right">
-                <div class="text-3xl font-black" id="total-val">--%</div>
-                <div class="text-[10px] font-bold">LAC: <span id="lac-p">--%</span> | RIVIÈRE: <span id="riv-p">--%</span></div>
+                <div class="text-3xl font-black text-blue-900" id="total-val">68%</div>
+                <div class="text-[10px] font-bold">LAC: <span id="lac-p">63%</span> | RIVIÈRE: <span id="riv-p">73%</span></div>
             </div>
         </div>
     </div>
 
     <script>
-        let score = 0;
-        let count = 0;
+        let score = 0, count = 0, isGpsOn = true;
         const fishImages = { "Silure": "https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet": "https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass": "https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre": "https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon": "https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune": "https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème": "https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette": "https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon": "https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon": "https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne": "https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche": "https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe": "https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle": "https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille": "https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote": "https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin": "https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau": "https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite": "https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel": "https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat": "https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
 
-        function addScore() { score += 5; count++; document.getElementById('total-score').innerText = score + " pts"; document.getElementById('fish-count').innerText = count; }
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function toggleGPS() { document.getElementById('btn-gps').classList.toggle('btn-gps-off'); }
+        function toggleGPS() {
+            isGpsOn = !isGpsOn;
+            const btn = document.getElementById('btn-gps');
+            btn.className = isGpsOn ? "btn-gps-on w-8 h-8 rounded font-bold" : "btn-gps-off w-8 h-8 rounded font-bold";
+        }
         function checkPass() { if(document.getElementById('pass').value === "1234") document.getElementById('score-area').classList.remove('hidden'); }
+        function addFish() { count++; score += 5; document.getElementById('count-val').innerText = count; document.getElementById('total-score').innerText = score + " pts"; }
         function calculateIndex() {
             const p = Math.floor(Math.random() * 50) + 50;
             document.getElementById('total-val').innerText = p + "%";
