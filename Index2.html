@@ -7,73 +7,112 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        html, body { height: 100vh; background: #e0f2f1; }
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid #1877F2; border-radius: 1rem; padding: 10px; }
-        .btn-base { color: white; padding: 8px 12px; border-radius: 8px; font-weight: 900; font-size: 8px; text-transform: uppercase; }
+        html, body { height: 100vh; height: -webkit-fill-available; overflow: hidden; display: flex; flex-direction: column; }
+        .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
+        #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+        .cards-scroll-area { flex: 1; overflow-y: auto; padding-right: 5px; }
+        .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; flex-shrink: 0; }
+        body, body * { color: #000000 !important; }
+        .btn-fb { background-color: #1877F2 !important; color: white !important; }
+        .btn-groupe { background-color: #064e3b !important; color: white !important; }
+        .btn-concours { background-color: #9333ea !important; color: white !important; }
+        .btn-refresh { background-color: #ef4444 !important; color: white !important; }
+        /* Bouton G dynamique */
+        .btn-gps-on { background-color: #16a34a !important; color: white !important; font-weight: 900; }
+        .btn-gps-off { background-color: #dc2626 !important; color: white !important; font-weight: 900; }
+        .border-fb { border-color: #1877F2 !important; }
+        .text-fb { color: #1877F2 !important; }
+        .btn-social { padding: 10px; font-size: 24px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
-<body class="p-2">
+<body class="river-bg font-sans p-2" onload="initApp()">
 
-    <div class="max-w-md mx-auto space-y-2">
-        <!-- Header -->
-        <div class="flex justify-between items-center">
-            <div class="flex gap-1">
-                <button onclick="window.location.reload()" class="bg-red-500 text-white w-8 h-8 rounded"><i class="fas fa-sync"></i></button>
-                <button onclick="toggleGPS()" id="btn-gps" class="bg-green-600 text-white w-8 h-8 rounded font-bold">G</button>
+    <div id="main-container" class="w-full max-w-md mx-auto">
+        <div class="flex justify-between items-center px-1 pt-2 pb-1 flex-shrink-0">
+            <div class="flex items-center gap-1">
+                <button onclick="window.location.reload()" class="btn-refresh w-7 h-7 rounded flex items-center justify-center text-[10px]"><i class="fas fa-sync"></i></button>
+                <!-- Bouton G -->
+                <button onclick="toggleGPS()" id="btn-gps-main" class="btn-gps-on w-7 h-7 rounded flex items-center justify-center text-[12px]">G</button>
+                <h2 class="text-[8px] font-bold uppercase truncate max-w-[50px]" id="city-name">GPS...</h2>
             </div>
-            <div class="flex gap-1">
-                <button onclick="toggleSection('groupe-section')" class="bg-green-900 btn-base">GROUPES</button>
-                <button onclick="toggleSection('spots-section')" class="bg-blue-600 btn-base">SPOTS</button>
-                <button onclick="toggleSection('concours-section')" class="bg-purple-600 btn-base">CONCOURS</button>
+            
+            <div class="flex gap-0.5 items-center">
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-social text-green-600"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-social text-fb"><i class="fab fa-facebook"></i></button>
+                <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">GROUPES</button>
+                <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">SPOTS</button>
+                <button onclick="toggleSection('concours-section')" class="btn-concours px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">CONCOURS</button>
             </div>
         </div>
 
-        <!-- Notification -->
-        <div class="glass-card border-blue-500 overflow-hidden">
-            <marquee class="font-black uppercase text-sm text-blue-900">Bienvenue sur Les Silures de Canapé !</marquee>
-        </div>
-
-        <!-- Sections -->
-        <div id="concours-section" class="hidden glass-card border-purple-600">
-            <h3 class="text-[10px] font-bold text-purple-700">PAGE CONCOURS</h3>
-        </div>
-        <div id="groupe-section" class="hidden glass-card border-green-800">
-            <h3 class="text-[10px] font-bold">GESTION DES SCORES</h3>
-        </div>
-        <div id="spots-section" class="hidden glass-card border-blue-600">
-            <h3 class="text-[10px] font-bold">LISTE DES SPOTS</h3>
-        </div>
-
-        <!-- Sélecteurs -->
-        <select id="fish-select" onchange="calculateIndex()" class="w-full p-2 rounded-lg border border-blue-500 text-xs font-bold text-center">
-            <option value="Silure">SILURE</option>
-            <option value="Brochet">BROCHET</option>
-        </select>
-
-        <!-- Affichage Probabilités -->
-        <div class="glass-card border-2 border-blue-500 space-y-2">
-            <div class="flex justify-between items-center text-xs font-bold">
-                <span>LAC: <span id="lac-prob">100%</span></span>
-                <span>RIVIÈRE: <span id="riv-prob">100%</span></span>
+        <div class="cards-scroll-area flex flex-col space-y-2 p-1">
+            <div id="concours-section" class="hidden glass-card-river p-4 border-2 border-purple-600">
+                <h3 class="text-[10px] font-bold uppercase mb-2 text-purple-700">Page Concours</h3>
+                <textarea class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200" placeholder="Écris ton texte concours ici..."></textarea>
             </div>
-            <div class="text-center text-2xl font-black text-blue-900" id="total-val">--%</div>
-        </div>
 
-        <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" class="w-full rounded-2xl shadow-lg">
+            <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
+                <h3 class="text-[10px] font-bold uppercase mb-2">Gestion des Scores</h3>
+                <div id="login-part" class="space-y-2">
+                    <select id="groupe-select" class="w-full p-2 rounded text-xs"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option></select>
+                    <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 rounded text-xs border">
+                    <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded text-xs font-black">ENTRER</button>
+                </div>
+                <div id="counter-part" class="hidden text-center space-y-2">
+                    <h4 id="group-title" class="font-bold text-xs uppercase"></h4>
+                    <div class="text-4xl font-black" id="total-score">0 pts</div>
+                    <button onclick="addFishToGroup()" class="w-full bg-orange-500 text-white p-2 rounded-lg font-black text-xs">+ 1 POISSON (5 pts)</button>
+                    <input type="number" id="poids-input" placeholder="Grammes" class="w-full p-2 rounded text-xs border">
+                    <button onclick="addWeight()" class="w-full bg-blue-600 text-white p-2 rounded-lg font-black text-xs">+ AJOUTER POIDS</button>
+                    <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
+                </div>
+            </div>
+
+            <div class="glass-card-river p-3 border-fb flex items-center gap-3">
+                <i class="fas fa-bell text-fb text-xl"></i>
+                <marquee behavior="scroll" direction="left" class="text-[14px] font-black uppercase">Bienvenue sur Les Silures de Canapé !</marquee>
+            </div>
+
+            <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
+                <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
+                <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="block w-full p-2 bg-blue-50 border border-fb rounded-lg text-[10px] font-bold text-blue-900 underline mb-2">📍 36 Rue René Leblond, Tournan-en-Brie</a>
+            </div>
+
+            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase text-center">
+                <option value="Silure">SILURE - indice de probabilité</option>
+                <option value="Brochet">BROCHET</option><option value="Black Bass">BLACK BASS</option><option value="Sandre">SANDRE</option><option value="Goujon">GOUJON</option><option value="Perche commune">PERCHE COMMUNE</option><option value="Brème">BRÈME</option><option value="Ablette">ABLETTE</option><option value="Vairon">VAIRON</option><option value="Gardon">GARDON</option><option value="Chevesne">CHEVESNE</option><option value="Tanche">TANCHE</option><option value="Carpe">CARPE</option><option value="Rotengle">ROTENGLE</option><option value="Anguille">ANGUILLE</option><option value="Ide mélanote">IDE MÉLANOTE</option><option value="Carassin">CARASSIN</option><option value="Barbeau">BARBEAU</option><option value="Truite">TRUITE</option><option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option><option value="Poisson-chat">POISSON-CHAT</option><option value="Perche-soleil">PERCHE-SOLEIL</option><option value="Bouvière">BOUVIÈRE</option>
+            </select>
+
+            <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
+                <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-24 h-24 rounded-xl object-cover">
+                <div class="text-right pl-4">
+                    <div id="final-index" class="text-2xl font-black">--%</div>
+                    <p id="weather-status" class="text-[8px] italic font-bold">...</p>
+                </div>
+            </div>
+            
+            <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
+
+            <div class="pt-2 flex justify-center pb-2 flex-shrink-0 w-full">
+                <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-none shadow-xl object-cover">
+            </div>
+        </div>
     </div>
 
     <script>
+        const API_KEY = "000000000000"; 
+        let gpsActive = true;
+
+        function toggleGPS() {
+            const btn = document.getElementById('btn-gps-main');
+            const cityName = document.getElementById('city-name');
+            gpsActive = !gpsActive;
+            btn.className = gpsActive ? "btn-gps-on w-7 h-7 rounded flex items-center justify-center text-[12px]" : "btn-gps-off w-7 h-7 rounded flex items-center justify-center text-[12px]";
+            cityName.innerText = gpsActive ? "GPS..." : "MANUEL";
+        }
+        
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function toggleGPS() { 
-            const btn = document.getElementById('btn-gps');
-            btn.classList.toggle('bg-green-600');
-            btn.classList.toggle('bg-red-600');
-        }
-        function calculateIndex() {
-            document.getElementById('lac-prob').innerText = "100%";
-            document.getElementById('riv-prob').innerText = "100%";
-            document.getElementById('total-val').innerText = "100%";
-        }
+        // ... (Tu peux réintégrer tes fonctions initApp et calculateIndex ici)
     </script>
 </body>
 </html>
