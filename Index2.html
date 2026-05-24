@@ -83,37 +83,38 @@
                 </div>
             </div>
 
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase text-center">
-                <option value="Silure">SILURE - indice de probabilité</option>
-                <option value="Brochet">BROCHET</option>
-                <option value="Black Bass">BLACK BASS</option>
-                <option value="Sandre">SANDRE</option>
-                <option value="Goujon">GOUJON</option>
-                <option value="Perche commune">PERCHE COMMUNE</option>
-                <option value="Brème">BRÈME</option>
-                <option value="Ablette">ABLETTE</option>
-                <option value="Vairon">VAIRON</option>
-                <option value="Gardon">GARDON</option>
-                <option value="Chevesne">CHEVESNE</option>
-                <option value="Tanche">TANCHE</option>
-                <option value="Carpe">CARPE</option>
-                <option value="Rotengle">ROTENGLE</option>
-                <option value="Anguille">ANGUILLE</option>
-                <option value="Ide mélanote">IDE MÉLANOTE</option>
-                <option value="Carassin">CARASSIN</option>
-                <option value="Barbeau">BARBEAU</option>
-                <option value="Truite">TRUITE</option>
-                <option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option>
-                <option value="Poisson-chat">POISSON-CHAT</option>
-                <option value="Perche-soleil">PERCHE-SOLEIL</option>
-                <option value="Bouvière">BOUVIÈRE</option>
-            </select>
-
-            <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
-                <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-24 h-24 rounded-xl object-cover">
-                <div class="text-right pl-4">
-                    <div id="final-index" class="text-2xl font-black">--%</div>
-                    <p id="weather-status" class="text-[8px] italic font-bold">...</p>
+            <div class="glass-card-river p-3 border-2 border-fb flex flex-col gap-3">
+                <select id="fish-select" onchange="calculateIndex()" class="w-full p-2 rounded-lg bg-white/70 border border-fb text-[10px] font-black uppercase text-center">
+                    <option value="Silure">SILURE</option>
+                    <option value="Brochet">BROCHET</option>
+                    <option value="Black Bass">BLACK BASS</option>
+                    <option value="Sandre">SANDRE</option>
+                    <option value="Goujon">GOUJON</option>
+                    <option value="Perche commune">PERCHE COMMUNE</option>
+                    <option value="Brème">BRÈME</option>
+                    <option value="Ablette">ABLETTE</option>
+                    <option value="Vairon">VAIRON</option>
+                    <option value="Gardon">GARDON</option>
+                    <option value="Chevesne">CHEVESNE</option>
+                    <option value="Tanche">TANCHE</option>
+                    <option value="Carpe">CARPE</option>
+                    <option value="Rotengle">ROTENGLE</option>
+                    <option value="Anguille">ANGUILLE</option>
+                    <option value="Ide mélanote">IDE MÉLANOTE</option>
+                    <option value="Carassin">CARASSIN</option>
+                    <option value="Barbeau">BARBEAU</option>
+                    <option value="Truite">TRUITE</option>
+                    <option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option>
+                    <option value="Poisson-chat">POISSON-CHAT</option>
+                    <option value="Perche-soleil">PERCHE-SOLEIL</option>
+                    <option value="Bouvière">BOUVIÈRE</option>
+                </select>
+                <div class="flex items-center justify-between">
+                    <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-20 h-20 rounded-xl object-cover">
+                    <div class="text-right pl-4">
+                        <div id="final-index" class="text-2xl font-black">--%</div>
+                        <p id="weather-status" class="text-[8px] italic font-bold">...</p>
+                    </div>
                 </div>
             </div>
             
