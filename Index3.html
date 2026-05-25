@@ -172,7 +172,7 @@
 
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
-            document.getElementById('gps-btn').classList.add('bg-gps-active');
+            if(gpsEnabled) document.getElementById('gps-btn').classList.add('bg-gps-active');
             
             if (navigator.geolocation && gpsEnabled) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
@@ -184,10 +184,31 @@
                         if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
                     } catch (e) { document.getElementById('city-name').innerText = "LOCALISATION"; }
                 });
+            } else {
+                calculateIndex();
             }
-            calculateIndex();
         }
 
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
-            document.getElementById('fish-img
+            if(!fish) return;
+            document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/160";
+            const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
+            const isSunny = weatherData.clouds < 50;
+            let prob = Math.floor(stats.base + ((stats.pref === "s" && isSunny) ? 12 : 0) + (8 - Math.abs(weatherData.temp - stats.ideal)));
+            prob = Math.min(99, Math.max(10, prob));
+            document.getElementById('final-index').innerText = prob + "%";
+            document.getElementById('weather-status').innerText = (isSunny ? "☀️ " : "🌧️ ") + weatherData.temp.toFixed(1) + "°C";
+            document.getElementById('prob-table').innerHTML = `<tr><td class="p-2 font-bold text-blue-900">RIVIÈRE</td><td class="p-2 font-bold">${Math.min(99, prob + 15)}%</td></tr><tr><td class="p-2 font-bold text-blue-900">LAC</td><td class="p-2 font-bold">${prob}%</td></tr>`;
+        }
+
+        function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
+        function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
+        function addFishToGroup() { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += 5; localStorage.setItem(currentGroup, JSON.stringify(data)); updateGroupDisplay(); }
+        function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += p; localStorage.setItem(currentGroup, JSON.stringify(data)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
+        function resetScore() { if(confirm("Vider les points ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
+        function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
+        function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
+    </script>
+</body>
+</html>
