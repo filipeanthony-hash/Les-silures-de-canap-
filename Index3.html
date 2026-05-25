@@ -26,7 +26,7 @@
         .bg-facebook { background-color: #1877F2 !important; }
     </style>
 </head>
-<body class="river-bg font-sans p-2" onload="initApp()">
+<body class="river-bg font-sans p-2">
 
     <div id="main-container" class="w-full max-w-md mx-auto">
         <div class="flex justify-between items-center px-1 pt-2 pb-1 flex-shrink-0">
@@ -200,6 +200,9 @@
             document.getElementById('weather-status').innerText = (isSunny ? "☀️ " : "🌧️ ") + weatherData.temp.toFixed(1) + "°C";
             document.getElementById('prob-table').innerHTML = `<tr><td class="p-2 font-bold text-blue-900">RIVIÈRE</td><td class="p-2 font-bold">${Math.min(99, prob + 15)}%</td></tr><tr><td class="p-2 font-bold text-blue-900">LAC</td><td class="p-2 font-bold">${prob}%</td></tr>`;
         }
+
+        // Lancement forcé
+        setTimeout(initApp, 200);
 
         function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
         function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
