@@ -10,69 +10,74 @@
         html, body { height: 100vh; height: -webkit-fill-available; overflow: hidden; display: flex; flex-direction: column; background: #e0f2f1; }
         #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
         .cards-scroll-area { flex: 1; overflow-y: auto; padding-right: 5px; }
-        .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; flex-shrink: 0; }
-        .btn-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white !important; font-size: 16px; }
-        .btn-nav { padding: 8px 12px; border-radius: 8px; font-size: 7px; font-weight: 900; text-transform: uppercase; color: white; }
-        .fish-select-custom { background-color: #dbeafe !important; color: #1e3a8a !important; font-weight: 900 !important; border: 1px solid #1877F2 !important; }
+        .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 2px solid #000; border-radius: 1.5rem; flex-shrink: 0; }
+        .btn-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000 !important; border: 2px solid #000; font-size: 16px; background: white; }
+        .btn-nav { padding: 8px 12px; border-radius: 0.75rem; font-size: 7px; font-weight: 900; text-transform: uppercase; color: white; background: #000; }
+        .fish-select-custom { background-color: #fff !important; color: #000 !important; font-weight: 900 !important; border: 2px solid #000 !important; border-radius: 0.75rem !important; }
     </style>
 </head>
 <body class="p-2" onload="initApp()">
     <div id="main-container" class="w-full max-w-md mx-auto">
-        <!-- HEADER AVEC COULEURS ORIGINALES -->
         <div class="flex justify-between items-center px-1 pt-2 pb-1 flex-shrink-0">
             <div class="flex items-center gap-1">
-                <button onclick="window.location.reload()" class="btn-circle bg-red-500"><i class="fas fa-sync"></i></button>
-                <button id="gps-btn" onclick="toggleGPS()" class="btn-circle bg-green-500"><i class="fas fa-location-arrow"></i></button>
+                <button onclick="window.location.reload()" class="btn-circle"><i class="fas fa-sync"></i></button>
+                <button id="gps-btn" onclick="toggleGPS()" class="btn-circle"><i class="fas fa-location-arrow"></i></button>
                 <h2 id="city-name" class="text-[8px] font-bold uppercase truncate w-16">GPS: TOURNAN</h2>
             </div>
             <div class="flex gap-1 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-circle bg-[#25D366]"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-circle bg-[#1877F2]"><i class="fab fa-facebook"></i></button>
-                <button onclick="toggleSection('groupe-section')" class="btn-nav bg-[#064e3b]">GROUPES</button>
-                <button onclick="toggleSection('spots-section')" class="btn-nav bg-[#1877F2]">SPOTS</button>
-                <button onclick="toggleSection('concours-section')" class="btn-nav bg-[#9333ea]">CONCOURS</button>
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-circle bg-white"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-circle bg-white"><i class="fab fa-facebook"></i></button>
+                <button onclick="toggleSection('groupe-section')" class="btn-nav">GROUPES</button>
+                <button onclick="toggleSection('spots-section')" class="btn-nav">SPOTS</button>
+                <button onclick="toggleSection('concours-section')" class="btn-nav">CONCOURS</button>
             </div>
         </div>
 
         <div class="cards-scroll-area flex flex-col space-y-2 p-1">
-            <div id="concours-section" class="hidden glass-card-river p-4 border-2 border-purple-600">Le prochain concours approche !</div>
-            <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
-                <select id="groupe-select" class="w-full p-2 mb-2 rounded text-xs border"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option></select>
-                <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded text-xs border">
-                <button onclick="checkPass()" class="w-full bg-green-800 text-white p-2 rounded text-xs font-black">ENTRER</button>
-                <div id="counter-part" class="hidden text-center mt-2"><div id="total-score" class="text-3xl font-black">0 pts</div><button onclick="addScore()" class="w-full bg-orange-500 text-white p-2 mt-2 font-black">+ 5 PTS</button><button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 mt-1 text-[9px]">RESET</button></div>
+            <div id="concours-section" class="hidden glass-card-river p-4">Le prochain concours approche !</div>
+            
+            <div id="groupe-section" class="hidden glass-card-river p-4">
+                <select id="groupe-select" class="w-full p-2 mb-2 rounded-xl text-xs border-2 border-black"><option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option><option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option></select>
+                <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded-xl text-xs border-2 border-black">
+                <button onclick="checkPass()" class="w-full bg-black text-white p-2 rounded-xl text-xs font-black">ENTRER</button>
+                <div id="counter-part" class="hidden text-center mt-2 border-t-2 border-black pt-2">
+                    <div id="total-score" class="text-3xl font-black">0 pts</div>
+                    <button onclick="addScore()" class="w-full bg-black text-white p-2 rounded-xl mt-2 font-black">+ 5 PTS</button>
+                    <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded-xl mt-1 text-[9px]">RESET</button>
+                </div>
             </div>
 
-            <div class="glass-card-river p-3 border-2 border-blue-400 flex items-center gap-3">
+            <div class="glass-card-river p-3 flex items-center gap-3">
+                <i class="fas fa-bell text-black"></i>
                 <marquee class="text-[10px] font-black uppercase">Bienvenue sur Les Silures de Canapé !</marquee>
             </div>
 
-            <div id="spots-section" class="hidden glass-card-river p-4 border-2 border-blue-400">
-                <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="text-[10px] font-bold underline mb-2 block">📍 36 Rue René Leblond, 77220 Tournan-en-Brie</a>
+            <div id="spots-section" class="hidden glass-card-river p-4">
+                <a href="#" class="text-[10px] font-bold underline mb-2 block">📍 36 Rue René Leblond, 77220 Tournan-en-Brie</a>
                 <div id="spots-list" class="grid grid-cols-5 gap-1 pt-2"></div>
             </div>
 
-            <div class="glass-card-river p-3 border-2 border-blue-400 space-y-2">
-                <select id="fish-select" onchange="updateUI()" class="w-full p-2 rounded fish-select-custom text-[10px] font-black uppercase text-center"></select>
+            <div class="glass-card-river p-3 space-y-2">
+                <select id="fish-select" onchange="updateUI()" class="w-full p-2 fish-select-custom text-[10px] uppercase text-center"></select>
                 <div class="flex items-center gap-4">
-                    <img id="fish-img" src="" class="w-20 h-20 rounded-xl object-cover">
+                    <img id="fish-img" src="" class="w-20 h-20 rounded-2xl object-cover border-2 border-black">
                     <div class="text-right flex-1"><div id="final-index" class="text-2xl font-black">--%</div><p class="text-[8px] font-bold">☀️ 15°C</p></div>
                 </div>
             </div>
 
-            <div class="glass-card-river border-2 border-blue-400 p-2">
+            <div class="glass-card-river p-2">
                 <table class="w-full text-center text-xs">
-                    <tr><td class="font-bold text-blue-900">RIVIÈRE</td><td id="prob-riv" class="font-bold">--%</td></tr>
-                    <tr><td class="font-bold border-t border-blue-200 text-blue-900">LAC</td><td id="prob-lac" class="font-bold border-t border-blue-200">--%</td></tr>
+                    <tr><td class="font-bold">RIVIÈRE</td><td id="prob-riv" class="font-bold">--%</td></tr>
+                    <tr><td class="font-bold border-t-2 border-black">LAC</td><td id="prob-lac" class="font-bold border-t-2 border-black">--%</td></tr>
                 </table>
             </div>
 
-            <div class="glass-card-river border-2 border-blue-400">
-                <div class="bg-blue-100 p-2 text-blue-900 uppercase font-bold text-xs text-center">Total Poissons Pêchés</div>
+            <div class="glass-card-river overflow-hidden">
+                <div class="bg-black text-white p-2 text-center text-xs font-bold uppercase">Total Poissons Pêchés</div>
                 <div class="p-4 text-center">
-                    <div id="global-counter" class="text-4xl font-black text-blue-900">0</div>
-                    <button onclick="addGlobal()" class="w-full bg-[#1877F2] text-white p-2 rounded mt-2 font-black">AJOUTER POISSON</button>
-                    <button onclick="resetGlobal()" class="w-full bg-red-600 text-white p-1 mt-1 text-[9px]">RESET GLOBAL</button>
+                    <div id="global-counter" class="text-4xl font-black">0</div>
+                    <button onclick="addGlobal()" class="w-full bg-black text-white p-2 rounded-xl mt-2 font-black">AJOUTER</button>
+                    <button onclick="resetGlobal()" class="w-full bg-red-600 text-white p-1 rounded-xl mt-1 text-[9px]">RESET GLOBAL</button>
                 </div>
             </div>
             <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" class="w-full rounded-2xl pb-4">
@@ -83,25 +88,20 @@
         const fishData = { "Silure":"https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet":"https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass":"https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre":"https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon":"https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune":"https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème":"https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette":"https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon":"https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon":"https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne":"https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche":"https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe":"https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle":"https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille":"https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote":"https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin":"https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau":"https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite":"https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel":"https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat":"https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil":"https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière":"https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
         
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function toggleGPS() { document.getElementById('city-name').innerText = (document.getElementById('city-name').innerText === "GPS: TOURNAN") ? "GPS: OFF" : "GPS: TOURNAN"; }
+        function toggleGPS() { document.getElementById('city-name').innerText = (document.getElementById('city-name').innerText.includes("OFF")) ? "GPS: TOURNAN" : "GPS: OFF"; }
         function checkPass() { if(document.getElementById('pass').value !== "") document.getElementById('counter-part').classList.remove('hidden'); }
-        function updateUI() { 
-            const f = document.getElementById('fish-select').value;
-            document.getElementById('fish-img').src = fishData[f];
-            document.getElementById('final-index').innerText = "75%";
-            document.getElementById('prob-riv').innerText = "85%";
-            document.getElementById('prob-lac').innerText = "75%";
-        }
         function addScore() { let s = parseInt(localStorage.getItem('s')||0)+5; localStorage.setItem('s', s); document.getElementById('total-score').innerText = s + " pts"; }
-        function resetScore() { if(confirm("Réinitialiser ?")) { localStorage.setItem('s', 0); document.getElementById('total-score').innerText = "0 pts"; } }
+        function resetScore() { localStorage.setItem('s', 0); document.getElementById('total-score').innerText = "0 pts"; }
         function addGlobal() { let g = parseInt(localStorage.getItem('g')||0)+1; localStorage.setItem('g', g); document.getElementById('global-counter').innerText = g; }
-        function resetGlobal() { if(confirm("Reset ?")) { localStorage.setItem('g', 0); document.getElementById('global-counter').innerText = 0; } }
-
+        function resetGlobal() { localStorage.setItem('g', 0); document.getElementById('global-counter').innerText = 0; }
+        function updateUI() { const f = document.getElementById('fish-select').value; document.getElementById('fish-img').src = fishData[f]; document.getElementById('final-index').innerText = "75%"; }
+        
         function initApp() {
             const s = document.getElementById('fish-select');
             Object.keys(fishData).forEach(f => s.innerHTML += `<option value="${f}">${f}</option>`);
-            for(let i=1; i<=15; i++) document.getElementById('spots-list').innerHTML += `<div class="bg-blue-100 text-blue-900 p-2 text-[8px] text-center rounded font-bold">${i}</div>`;
+            for(let i=1; i<=15; i++) document.getElementById('spots-list').innerHTML += `<div class="bg-black text-white p-2 text-[8px] text-center rounded-lg font-bold">${i}</div>`;
             document.getElementById('global-counter').innerText = localStorage.getItem('g')||0;
+            document.getElementById('total-score').innerText = (localStorage.getItem('s')||0) + " pts";
             updateUI();
         }
     </script>
