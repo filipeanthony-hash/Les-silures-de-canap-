@@ -18,7 +18,6 @@
         .btn-concours { background-color: #9333ea !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
-        
         .btn-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white !important; font-size: 16px; }
         .bg-refresh { background-color: #ef4444 !important; }
         .bg-gps { background-color: #57534e !important; }
@@ -40,7 +39,6 @@
             <div class="flex gap-1 items-center">
                 <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-circle bg-whatsapp"><i class="fab fa-whatsapp"></i></button>
                 <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-circle bg-facebook"><i class="fab fa-facebook"></i></button>
-                
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">SPOTS</button>
                 <button onclick="toggleSection('concours-section')" class="btn-concours px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">CONCOURS</button>
@@ -50,7 +48,7 @@
         <div class="cards-scroll-area flex flex-col space-y-2 p-1">
             <div id="concours-section" class="hidden glass-card-river p-4 border-2 border-purple-600">
                 <h3 class="text-[10px] font-bold uppercase mb-2 text-purple-700">Page Concours</h3>
-                <textarea class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200" placeholder="Écris ton texte concours ici...">Écris ton texte concours ici</textarea>
+                <textarea class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200" placeholder="Écris ton texte concours ici..."></textarea>
             </div>
 
             <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
@@ -87,38 +85,39 @@
                 </div>
             </div>
 
-            <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase text-center">
-                <option value="Silure">SILURE - indice de probabilité</option>
-                <option value="Brochet">BROCHET</option>
-                <option value="Black Bass">BLACK BASS</option>
-                <option value="Sandre">SANDRE</option>
-                <option value="Goujon">GOUJON</option>
-                <option value="Perche commune">PERCHE COMMUNE</option>
-                <option value="Brème">BRÈME</option>
-                <option value="Ablette">ABLETTE</option>
-                <option value="Vairon">VAIRON</option>
-                <option value="Gardon">GARDON</option>
-                <option value="Chevesne">CHEVESNE</option>
-                <option value="Tanche">TANCHE</option>
-                <option value="Carpe">CARPE</option>
-                <option value="Rotengle">ROTENGLE</option>
-                <option value="Anguille">ANGUILLE</option>
-                <option value="Ide mélanote">IDE MÉLANOTE</option>
-                <option value="Carassin">CARASSIN</option>
-                <option value="Barbeau">BARBEAU</option>
-                <option value="Truite">TRUITE</option>
-                <option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option>
-                <option value="Poisson-chat">POISSON-CHAT</option>
-                <option value="Perche-soleil">PERCHE-SOLEIL</option>
-                <option value="Bouvière">BOUVIÈRE</option>
-            </select>
-
-            <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
-                <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-24 h-24 rounded-xl object-cover">
-                <div class="text-right pl-4">
-                    <div id="final-index" class="text-2xl font-black">--%</div>
-                    <p id="weather-status" class="text-[8px] italic font-bold">...</p>
+            <div class="glass-card-river p-3 border-2 border-fb space-y-3">
+                <div class="flex items-center gap-3">
+                    <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-20 h-20 rounded-xl object-cover">
+                    <div class="flex-grow text-right">
+                        <div id="final-index" class="text-3xl font-black">--%</div>
+                        <p id="weather-status" class="text-[8px] italic font-bold">...</p>
+                    </div>
                 </div>
+                <select id="fish-select" onchange="calculateIndex()" class="w-full p-2 rounded-lg bg-white border border-fb text-[10px] font-black uppercase text-center">
+                    <option value="Silure">SILURE - indice de probabilité</option>
+                    <option value="Brochet">BROCHET</option>
+                    <option value="Black Bass">BLACK BASS</option>
+                    <option value="Sandre">SANDRE</option>
+                    <option value="Goujon">GOUJON</option>
+                    <option value="Perche commune">PERCHE COMMUNE</option>
+                    <option value="Brème">BRÈME</option>
+                    <option value="Ablette">ABLETTE</option>
+                    <option value="Vairon">VAIRON</option>
+                    <option value="Gardon">GARDON</option>
+                    <option value="Chevesne">CHEVESNE</option>
+                    <option value="Tanche">TANCHE</option>
+                    <option value="Carpe">CARPE</option>
+                    <option value="Rotengle">ROTENGLE</option>
+                    <option value="Anguille">ANGUILLE</option>
+                    <option value="Ide mélanote">IDE MÉLANOTE</option>
+                    <option value="Carassin">CARASSIN</option>
+                    <option value="Barbeau">BARBEAU</option>
+                    <option value="Truite">TRUITE</option>
+                    <option value="Truite arc-en-ciel">TRUITE ARC-EN-CIEL</option>
+                    <option value="Poisson-chat">POISSON-CHAT</option>
+                    <option value="Perche-soleil">PERCHE-SOLEIL</option>
+                    <option value="Bouvière">BOUVIÈRE</option>
+                </select>
             </div>
             
             <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
@@ -182,8 +181,8 @@
                         const d = await res.json();
                         if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
                         if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
-                    } catch (e) { document.getElementById('city-name').innerText = "LOCALISATION"; }
-                });
+                    } catch (e) { document.getElementById('city-name').innerText = "LOCALISATION"; calculateIndex(); }
+                }, () => calculateIndex());
             } else {
                 calculateIndex();
             }
