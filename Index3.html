@@ -125,6 +125,10 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="pt-2 flex justify-center pb-2 flex-shrink-0 w-full">
+                <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo Les Silures de Canapé" class="w-full rounded-2xl border-none shadow-xl object-cover">
+            </div>
         </div>
     </div>
 
@@ -168,8 +172,8 @@
         function resetGlobal() { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; }
         
         function resetScore() { const g = document.getElementById('groupe-select').value; localStorage.removeItem(g); alert("Score reset"); }
-        function addFishToGroup() { /* Logique simplifiée pour l'exemple */ alert("Poisson ajouté !"); }
-        function addWeight() { /* Logique simplifiée pour l'exemple */ alert("Poids ajouté !"); }
+        function addFishToGroup() { alert("Poisson ajouté !"); }
+        function addWeight() { alert("Poids ajouté !"); }
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
