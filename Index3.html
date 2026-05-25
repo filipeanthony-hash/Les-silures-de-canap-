@@ -2,29 +2,29 @@
 <html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Les Silures de Canapé</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #e0f2f1; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.1); border-radius: 1.5rem; }
-        .btn-black { background: #000 !important; color: #fff !important; }
-        .btn-nav { padding: 5px 8px; border-radius: 6px; font-size: 7px; font-weight: 900; text-transform: uppercase; color: #fff; background: #000; }
+        html, body { height: 100vh; overflow: hidden; background: #e0f2f1; }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.2); border-radius: 1.5rem; }
+        .btn-black { background: #000 !important; color: #fff !important; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .btn-nav { padding: 8px; border-radius: 8px; font-size: 7px; font-weight: 900; text-transform: uppercase; color: white; background: #000; }
     </style>
 </head>
-<body class="p-2">
-    <div class="max-w-md mx-auto w-full flex flex-col h-full space-y-2">
+<body class="p-2 flex flex-col">
+    <div class="w-full max-w-md mx-auto flex flex-col h-full space-y-2">
         <!-- HEADER -->
-        <div class="flex justify-between items-center px-1">
-            <div class="flex gap-1">
-                <button onclick="location.reload()" class="btn-black w-8 h-8 rounded-full"><i class="fas fa-sync"></i></button>
-                <button id="gps-btn" onclick="toggleGPS()" class="btn-black w-8 h-8 rounded-full"><i class="fas fa-location-arrow"></i></button>
-                <div id="gps-text" class="text-[8px] font-bold uppercase truncate self-center">GPS: TOURNAN</div>
+        <div class="flex justify-between items-center py-2">
+            <div class="flex gap-1 items-center">
+                <button onclick="window.location.reload()" class="btn-black"><i class="fas fa-sync"></i></button>
+                <button id="gps-btn" onclick="toggleGPS()" class="btn-black"><i class="fas fa-location-arrow"></i></button>
+                <div id="gps-text" class="text-[8px] font-black uppercase">GPS: TOURNAN</div>
             </div>
             <div class="flex gap-1">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-black w-8 h-8 rounded-full"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-black w-8 h-8 rounded-full"><i class="fab fa-facebook"></i></button>
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-black"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-black"><i class="fab fa-facebook"></i></button>
                 <button onclick="toggleSection('groupe-section')" class="btn-nav">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-nav">SPOTS</button>
                 <button onclick="toggleSection('concours-section')" class="btn-nav">CONCOURS</button>
@@ -32,56 +32,48 @@
         </div>
 
         <!-- BANDEAU -->
-        <div class="glass p-2 border-2 border-black"><marquee class="text-xs font-black uppercase">Bienvenue sur Les Silures de Canapé !</marquee></div>
+        <div class="glass-card p-2 border-2 border-black"><marquee class="text-[10px] font-black uppercase">Bienvenue sur les Silures de Canapé</marquee></div>
 
-        <!-- CONTENU -->
         <div class="flex-1 overflow-y-auto space-y-2">
-            <div id="concours-section" class="hidden glass p-4">Le prochain concours approche !</div>
+            <div id="concours-section" class="hidden glass-card p-4 border-2 border-black">Le prochain concours approche !</div>
             
-            <div id="groupe-section" class="hidden glass p-4 border-2 border-black">
-                <select id="groupe-select" class="w-full p-2 mb-2 rounded text-xs bg-white border">
-                    <option value="groupe1">Groupe 1</option><option value="groupe2">Groupe 2</option>
-                    <option value="groupe3">Groupe 3</option><option value="groupe4">Groupe 4</option><option value="groupe5">Groupe 5</option>
-                </select>
-                <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded text-xs border">
+            <div id="groupe-section" class="hidden glass-card p-4 border-2 border-black">
+                <select id="groupe-select" class="w-full p-2 mb-2 rounded text-xs border border-black"><option value="g1">Groupe 1</option><option value="g2">Groupe 2</option><option value="g3">Groupe 3</option><option value="g4">Groupe 4</option><option value="g5">Groupe 5</option></select>
+                <input type="password" id="pass" placeholder="Mot de passe" class="w-full p-2 mb-2 rounded text-xs border border-black">
                 <button onclick="checkPass()" class="w-full btn-black p-2 rounded text-xs font-black">ENTRER</button>
-                <div id="counter-part" class="hidden text-center mt-2">
-                    <div id="total-score" class="text-3xl font-black">0 pts</div>
-                    <button onclick="addScore()" class="w-full bg-orange-500 text-white p-2 rounded mt-2 font-black">+ 5 PTS</button>
-                    <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded mt-1 text-[9px]">RESET</button>
-                </div>
+                <div id="counter-part" class="hidden text-center mt-2"><div id="total-score" class="text-3xl font-black">0 pts</div><button onclick="addScore()" class="w-full bg-black text-white p-2 rounded mt-2 font-black">+ 5 PTS</button><button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded mt-1 text-[9px]">RESET</button></div>
             </div>
 
-            <div id="spots-section" class="hidden glass p-4 border-2 border-black">
-                <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="text-[10px] font-bold underline">📍 36 Rue René Leblond, 77220 Tournan-en-Brie</a>
-                <div id="spots-list" class="grid grid-cols-3 gap-1 pt-2"></div>
+            <div id="spots-section" class="hidden glass-card p-4 border-2 border-black">
+                <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="text-[10px] font-bold underline block mb-2">📍 36 Rue René Leblond, 77220 Tournan-en-Brie</a>
+                <div id="spots-list" class="grid grid-cols-5 gap-1"></div>
             </div>
 
             <!-- POISSONS -->
-            <div class="glass p-3 border-2 border-black">
+            <div class="glass-card p-3 border-2 border-black">
                 <select id="fish-select" onchange="updateUI()" class="w-full p-2 rounded bg-white text-[10px] font-black uppercase text-center"></select>
                 <div class="flex items-center mt-2">
                     <img id="fish-img" src="" class="w-20 h-20 rounded-xl object-cover">
                     <div class="ml-4 text-right flex-1">
                         <div id="final-index" class="text-2xl font-black">--%</div>
-                        <p id="weather-status" class="text-[8px] font-bold">☀️ 15°C</p>
+                        <p class="text-[8px] italic font-bold">☀️ 15°C</p>
                     </div>
                 </div>
             </div>
 
-            <div class="glass p-2 border-2 border-black">
+            <div class="glass-card border-2 border-black">
                 <table class="w-full text-center text-xs">
-                    <tr><td class="font-bold">RIVIÈRE</td><td id="prob-riv" class="font-bold">--%</td></tr>
-                    <tr><td class="font-bold">LAC</td><td id="prob-lac" class="font-bold">--%</td></tr>
+                    <tr><td class="p-2 font-bold">RIVIÈRE</td><td id="prob-riv" class="font-bold">--%</td></tr>
+                    <tr><td class="p-2 font-bold border-t border-black">LAC</td><td id="prob-lac" class="font-bold border-t border-black">--%</td></tr>
                 </table>
             </div>
 
-            <div class="glass border-2 border-black">
+            <div class="glass-card border-2 border-black">
                 <div class="bg-black text-white p-2 text-center text-xs font-bold uppercase">Total Poissons Pêchés</div>
                 <div class="p-4 text-center">
                     <div id="global-counter" class="text-4xl font-black">0</div>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="addGlobal()" class="flex-grow btn-black p-2 rounded text-xs">AJOUTER</button>
+                        <button onclick="addGlobal()" class="flex-grow bg-black text-white p-2 rounded text-xs font-black">AJOUTER</button>
                         <button onclick="resetGlobal()" class="bg-red-600 text-white px-3 rounded text-[9px]">RESET</button>
                     </div>
                 </div>
@@ -92,12 +84,10 @@
 
     <script>
         const fishData = { "Silure":"https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet":"https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass":"https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre":"https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon":"https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune":"https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème":"https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette":"https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon":"https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon":"https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne":"https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche":"https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe":"https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle":"https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille":"https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote":"https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin":"https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau":"https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite":"https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel":"https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat":"https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil":"https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière":"https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
-        const pass = { "groupe1":"pass1", "groupe2":"pass2", "groupe3":"pass3", "groupe4":"pass4", "groupe5":"pass5" };
-
-        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function toggleGPS() { document.getElementById('gps-text').innerText = (document.getElementById('gps-text').innerText.includes("TOURNAN")) ? "GPS: HORS LIGNE" : "GPS: TOURNAN"; }
-        function checkPass() { if(document.getElementById('pass').value === pass[document.getElementById('groupe-select').value]) document.getElementById('counter-part').classList.remove('hidden'); }
         
+        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
+        function toggleGPS() { document.getElementById('gps-text').innerText = (document.getElementById('gps-text').innerText.includes("HORS")) ? "GPS: TOURNAN" : "GPS: HORS LIGNE"; }
+        function checkPass() { if(document.getElementById('pass').value === "pass123") document.getElementById('counter-part').classList.remove('hidden'); }
         function updateUI() { 
             const f = document.getElementById('fish-select').value;
             document.getElementById('fish-img').src = fishData[f];
@@ -105,17 +95,16 @@
             document.getElementById('prob-riv').innerText = "85%";
             document.getElementById('prob-lac').innerText = "75%";
         }
-        
         function addScore() { let s = parseInt(localStorage.getItem('s')||0)+5; localStorage.setItem('s', s); document.getElementById('total-score').innerText = s + " pts"; }
         function resetScore() { if(confirm("Réinitialiser ?")) { localStorage.setItem('s', 0); document.getElementById('total-score').innerText = "0 pts"; } }
         function addGlobal() { let g = parseInt(localStorage.getItem('g')||0)+1; localStorage.setItem('g', g); document.getElementById('global-counter').innerText = g; }
-        function resetGlobal() { if(confirm("Réinitialiser global ?")) { localStorage.setItem('g', 0); document.getElementById('global-counter').innerText = 0; } }
+        function resetGlobal() { if(confirm("Réinitialiser ?")) { localStorage.setItem('g', 0); document.getElementById('global-counter').innerText = 0; } }
 
         document.addEventListener('DOMContentLoaded', () => {
             const s = document.getElementById('fish-select');
             Object.keys(fishData).forEach(f => s.innerHTML += `<option value="${f}">${f}</option>`);
+            for(let i=1; i<=15; i++) document.getElementById('spots-list').innerHTML += `<div class="bg-black text-white p-2 text-[8px] text-center rounded">${i}</div>`;
             document.getElementById('global-counter').innerText = localStorage.getItem('g')||0;
-            for(let i=1; i<=15; i++) document.getElementById('spots-list').innerHTML += `<div class="bg-gray-200 p-2 text-[8px] text-center rounded">${i}</div>`;
             updateUI();
         });
     </script>
