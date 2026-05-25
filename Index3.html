@@ -28,14 +28,11 @@
 <body class="river-bg font-sans p-2" onload="initApp()">
 
     <div id="main-container" class="w-full max-w-md mx-auto">
-        <div id="gps-arrow" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none z-50">
-            <i class="fas fa-location-arrow text-red-500 text-6xl opacity-70 rotate-45 animate-pulse"></i>
-        </div>
 
         <div class="flex justify-between items-center px-1 pt-2 pb-1 flex-shrink-0">
             <div class="flex items-center gap-1">
                 <button onclick="window.location.reload()" class="btn-circle bg-refresh"><i class="fas fa-sync"></i></button>
-                <button id="gps-btn" onclick="toggleGPSState()" class="btn-circle bg-gps"><i id="gps-icon" class="fas fa-location-crosshairs"></i></button>
+                <button id="gps-btn" onclick="toggleGPSState()" class="btn-circle bg-gps"><i id="gps-icon" class="fas fa-location-arrow"></i></button>
                 <h2 class="text-[8px] font-bold uppercase truncate max-w-[50px]" id="city-name">GPS...</h2>
             </div>
             
@@ -153,20 +150,14 @@
 
         function toggleGPSState() {
             const btn = document.getElementById('gps-btn');
-            const icon = document.getElementById('gps-icon');
-            const arrow = document.getElementById('gps-arrow');
-
+            
             if (gpsEnabled) {
                 btn.classList.replace('bg-gps', 'bg-red-600');
-                icon.classList.replace('fa-location-crosshairs', 'fa-location-slash');
-                arrow.classList.remove('hidden');
                 document.getElementById('city-name').innerText = "MANUEL";
                 weatherData = { temp: 20, clouds: 20 };
                 gpsEnabled = false;
             } else {
                 btn.classList.replace('bg-red-600', 'bg-gps');
-                icon.classList.replace('fa-location-slash', 'fa-location-crosshairs');
-                arrow.classList.add('hidden');
                 gpsEnabled = true;
                 initApp();
             }
