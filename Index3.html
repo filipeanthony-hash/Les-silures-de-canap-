@@ -9,7 +9,7 @@
     <style>
         html, body { height: 100vh; height: -webkit-fill-available; overflow: hidden; display: flex; flex-direction: column; }
         .river-bg { background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%); }
-        #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+        #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: calc(10px + env(safe-area-inset-bottom)); position: relative; }
         .cards-scroll-area { flex: 1; overflow-y: auto; padding-right: 5px; }
         .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; flex-shrink: 0; }
         body, body * { color: #000000 !important; }
@@ -18,9 +18,7 @@
         .btn-concours { background-color: #9333ea !important; color: white !important; }
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
-        
-        /* Boutons ronds harmonisés */
-        .btn-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white !important; font-size: 16px; }
+        .btn-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white !important; font-size: 16px; transition: all 0.3s; }
         .bg-refresh { background-color: #ef4444 !important; }
         .bg-gps { background-color: #57534e !important; }
         .bg-whatsapp { background-color: #25D366 !important; }
@@ -30,10 +28,14 @@
 <body class="river-bg font-sans p-2" onload="initApp()">
 
     <div id="main-container" class="w-full max-w-md mx-auto">
+        <div id="gps-arrow" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none z-50">
+            <i class="fas fa-location-arrow text-red-500 text-6xl opacity-70 rotate-45 animate-pulse"></i>
+        </div>
+
         <div class="flex justify-between items-center px-1 pt-2 pb-1 flex-shrink-0">
             <div class="flex items-center gap-1">
                 <button onclick="window.location.reload()" class="btn-circle bg-refresh"><i class="fas fa-sync"></i></button>
-                <button onclick="disableGPS()" class="btn-circle bg-gps"><i class="fas fa-location-slash"></i></button>
+                <button id="gps-btn" onclick="toggleGPSState()" class="btn-circle bg-gps"><i id="gps-icon" class="fas fa-location-crosshairs"></i></button>
                 <h2 class="text-[8px] font-bold uppercase truncate max-w-[50px]" id="city-name">GPS...</h2>
             </div>
             
@@ -141,13 +143,36 @@
     </div>
 
     <script>
+        let gpsEnabled = true;
         const fishImages = { "Silure": "https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet": "https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass": "https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre": "https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon": "https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune": "https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème": "https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette": "https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon": "https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon": "https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne": "https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche": "https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe": "https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle": "https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille": "https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote": "https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin": "https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau": "https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite": "https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel": "https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat": "https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
         const API_KEY = "a090c783f28f7752b68192791fac9dea"; 
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
         let currentGroup = null;
         let weatherData = { temp: 15, clouds: 50 };
-        function disableGPS() { if(confirm("Désactiver le GPS et passer en manuel ?")) { document.getElementById('city-name').innerText = "MANUEL"; weatherData = { temp: 20, clouds: 20 }; calculateIndex(); } }
+
+        function toggleGPSState() {
+            const btn = document.getElementById('gps-btn');
+            const icon = document.getElementById('gps-icon');
+            const arrow = document.getElementById('gps-arrow');
+
+            if (gpsEnabled) {
+                btn.classList.replace('bg-gps', 'bg-red-600');
+                icon.classList.replace('fa-location-crosshairs', 'fa-location-slash');
+                arrow.classList.remove('hidden');
+                document.getElementById('city-name').innerText = "MANUEL";
+                weatherData = { temp: 20, clouds: 20 };
+                gpsEnabled = false;
+            } else {
+                btn.classList.replace('bg-red-600', 'bg-gps');
+                icon.classList.replace('fa-location-slash', 'fa-location-crosshairs');
+                arrow.classList.add('hidden');
+                gpsEnabled = true;
+                initApp();
+            }
+            calculateIndex();
+        }
+
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
         function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
         function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
@@ -156,10 +181,11 @@
         function resetScore() { if(confirm("Vider les points ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
         function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
         function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
+        
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
             calculateIndex();
-            if (navigator.geolocation) {
+            if (gpsEnabled && navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
                     try {
@@ -171,6 +197,7 @@
                 });
             }
         }
+        
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
             if(!fish) return;
