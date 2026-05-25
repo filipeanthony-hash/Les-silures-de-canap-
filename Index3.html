@@ -48,7 +48,7 @@
         <div class="cards-scroll-area flex flex-col space-y-2 p-1">
             <div id="concours-section" class="hidden glass-card-river p-4 border-2 border-purple-600">
                 <h3 class="text-[10px] font-bold uppercase mb-2 text-purple-700">Page Concours</h3>
-                <textarea class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200" placeholder="Écris ton texte concours ici..."></textarea>
+                <textarea id="concours-text" oninput="saveConcours()" class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200">Bienvenue sur le concours officiel des Silures de Canapé ! Poste ici ta plus belle prise et les détails pour participer.</textarea>
             </div>
 
             <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
@@ -151,6 +151,8 @@
 
         function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
         
+        function saveConcours() { localStorage.setItem('concoursMsg', document.getElementById('concours-text').value); }
+        
         function toggleGPS() {
             if (gpsEnabled) {
                 if(confirm("Désactiver le GPS et passer en manuel ?")) {
@@ -171,6 +173,7 @@
 
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
+            document.getElementById('concours-text').value = localStorage.getItem('concoursMsg') || document.getElementById('concours-text').value;
             if(gpsEnabled) document.getElementById('gps-btn').classList.add('bg-gps-active');
             
             if (navigator.geolocation && gpsEnabled) {
