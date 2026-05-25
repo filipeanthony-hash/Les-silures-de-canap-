@@ -21,9 +21,10 @@
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
         
-        /* Styles des bulles réseaux sociaux */
-        .bubble-whatsapp { background: rgba(255, 255, 255, 0.7); border: 2px solid #16a34a; color: #16a34a !important; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; backdrop-filter: blur(10px); }
-        .bubble-facebook { background: rgba(255, 255, 255, 0.7); border: 2px solid #1877F2; color: #1877F2 !important; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; backdrop-filter: blur(10px); }
+        /* Boutons ronds réseaux sociaux */
+        .btn-social-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white !important; font-size: 16px; }
+        .bg-whatsapp { background-color: #25D366 !important; }
+        .bg-facebook { background-color: #1877F2 !important; }
     </style>
 </head>
 <body class="river-bg font-sans p-2" onload="initApp()">
@@ -37,8 +38,8 @@
             </div>
             
             <div class="flex gap-1 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="bubble-whatsapp"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="bubble-facebook"><i class="fab fa-facebook"></i></button>
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-social-circle bg-whatsapp"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-social-circle bg-facebook"><i class="fab fa-facebook"></i></button>
                 
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">SPOTS</button>
@@ -140,31 +141,7 @@
     </div>
 
     <script>
-        const fishImages = {
-            "Silure": "https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png",
-            "Brochet": "https://i.postimg.cc/J7xHm1Zv/1000022375.png",
-            "Black Bass": "https://i.postimg.cc/4d9CPNZn/1000022377.png",
-            "Sandre": "https://i.postimg.cc/2yhV84s4/sandre.png",
-            "Goujon": "https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png",
-            "Perche commune": "https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png",
-            "Brème": "https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png",
-            "Ablette": "https://i.postimg.cc/RZsVmsWn/ablette.png",
-            "Vairon": "https://i.postimg.cc/1txSRLsq/vairon.png",
-            "Gardon": "https://i.postimg.cc/htfRLSGJ/gardon.png",
-            "Chevesne": "https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png",
-            "Tanche": "https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png",
-            "Carpe": "https://i.postimg.cc/wvWkQdMW/R-(2).png",
-            "Rotengle": "https://i.postimg.cc/Z5rFDN0Y/R-(3).png",
-            "Anguille": "https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png",
-            "Ide mélanote": "https://i.postimg.cc/zfh38s9m/ide-melanote.png",
-            "Carassin": "https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png",
-            "Barbeau": "https://i.postimg.cc/8c20QrvX/barbeau.png",
-            "Truite": "https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png",
-            "Truite arc-en-ciel": "https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png",
-            "Poisson-chat": "https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png",
-            "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png",
-            "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png"
-        };
+        const fishImages = { "Silure": "https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet": "https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass": "https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre": "https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon": "https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune": "https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème": "https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette": "https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon": "https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon": "https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne": "https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche": "https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe": "https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle": "https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille": "https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote": "https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin": "https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau": "https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite": "https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel": "https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat": "https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
         const API_KEY = "a090c783f28f7752b68192791fac9dea"; 
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
