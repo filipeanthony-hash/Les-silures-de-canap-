@@ -12,22 +12,19 @@
         #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
         .cards-scroll-area { flex: 1; overflow-y: auto; padding-right: 5px; }
         .glass-card-river { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(178, 223, 219, 0.5); border-radius: 1.5rem; flex-shrink: 0; }
-        
-        /* Boutons verre personnalisés */
-        .glass-btn { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 0.5rem; padding: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: 0.3s; }
-        
         body, body * { color: #000000 !important; }
         .btn-fb { background-color: #1877F2 !important; color: white !important; }
         .btn-groupe { background-color: #064e3b !important; color: white !important; }
         .btn-concours { background-color: #9333ea !important; color: white !important; }
-        .btn-refresh { background-color: #ef4444 !important; color: white !important; }
-        
-        /* Styles GPS modifiés */
-        .btn-gps-active { background: rgba(255, 255, 255, 0.5) !important; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.8); color: black !important; }
-        .btn-gps-inactive { background-color: #ef4444 !important; color: white !important; }
-        
         .border-fb { border-color: #1877F2 !important; }
         .text-fb { color: #1877F2 !important; }
+        
+        .btn-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white !important; font-size: 16px; }
+        .bg-refresh { background-color: #ef4444 !important; }
+        .bg-gps { background-color: #57534e !important; }
+        .bg-gps-active { background-color: #22c55e !important; }
+        .bg-whatsapp { background-color: #25D366 !important; }
+        .bg-facebook { background-color: #1877F2 !important; }
     </style>
 </head>
 <body class="river-bg font-sans p-2" onload="initApp()">
@@ -35,14 +32,14 @@
     <div id="main-container" class="w-full max-w-md mx-auto">
         <div class="flex justify-between items-center px-1 pt-2 pb-1 flex-shrink-0">
             <div class="flex items-center gap-1">
-                <button onclick="window.location.reload()" class="btn-refresh w-7 h-7 rounded flex items-center justify-center text-[10px]"><i class="fas fa-sync"></i></button>
-                <button id="gps-btn" onclick="toggleGPS()" class="btn-gps-active w-7 h-7 rounded flex items-center justify-center text-[10px]"><i class="fas fa-location-arrow"></i></button>
+                <button onclick="window.location.reload()" class="btn-circle bg-refresh"><i class="fas fa-sync"></i></button>
+                <button id="gps-btn" onclick="toggleGPS()" class="btn-circle bg-gps bg-gps-active"><i class="fas fa-location-arrow"></i></button>
                 <h2 class="text-[8px] font-bold uppercase truncate max-w-[50px]" id="city-name">GPS...</h2>
             </div>
             
             <div class="flex gap-1 items-center">
-                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="glass-btn text-green-600 w-9 h-9"><i class="fab fa-whatsapp"></i></button>
-                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="glass-btn text-blue-700 w-9 h-9"><i class="fab fa-facebook"></i></button>
+                <button onclick="window.open('https://chat.whatsapp.com/KfltuoycOB548IujbIB38q', '_blank')" class="btn-circle bg-whatsapp"><i class="fab fa-whatsapp"></i></button>
+                <button onclick="window.open('https://www.facebook.com/share/g/1Fe5eQhNqP/', '_blank')" class="btn-circle bg-facebook"><i class="fab fa-facebook"></i></button>
                 
                 <button onclick="toggleSection('groupe-section')" class="btn-groupe px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">GROUPES</button>
                 <button onclick="toggleSection('spots-section')" class="btn-fb px-2 py-2 rounded-lg text-[7px] font-black uppercase shadow-lg">SPOTS</button>
@@ -55,6 +52,7 @@
                 <h3 class="text-[10px] font-bold uppercase mb-2 text-purple-700">Page Concours</h3>
                 <textarea class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200" placeholder="Écris ton texte concours ici...">Écris ton texte concours ici</textarea>
             </div>
+
             <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
                 <h3 class="text-[10px] font-bold uppercase mb-2">Gestion des Scores</h3>
                 <div id="login-part" class="space-y-2">
@@ -71,15 +69,24 @@
                     <button onclick="resetScore()" class="w-full bg-red-600 text-white p-1 rounded text-[9px]">RESET</button>
                 </div>
             </div>
+
             <div class="glass-card-river p-3 border-fb flex items-center gap-3">
                 <i class="fas fa-bell text-fb text-xl"></i>
                 <marquee behavior="scroll" direction="left" class="text-[14px] font-black uppercase">Bienvenue sur Les Silures de Canapé !</marquee>
             </div>
+
             <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
                 <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
                 <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="block w-full p-2 bg-blue-50 border border-fb rounded-lg text-[10px] font-bold text-blue-900 underline mb-2">📍 36 Rue René Leblond, Tournan-en-Brie</a>
-                <div class="border-t border-dashed border-gray-400 pt-2 space-y-1" id="spots-list"></div>
+                <div class="border-t border-dashed border-gray-400 pt-2 space-y-1">
+                    <script>
+                        for(let i=1; i<=15; i++) {
+                            document.write('<div class="text-[9px] text-gray-500 italic border-b border-gray-100 py-1">Pose ta clé ici (Spot '+ (i+1) +')</div>');
+                        }
+                    </script>
+                </div>
             </div>
+
             <select id="fish-select" onchange="calculateIndex()" class="w-full p-3 rounded-xl bg-white/50 border border-fb text-xs font-black uppercase text-center">
                 <option value="Silure">SILURE - indice de probabilité</option>
                 <option value="Brochet">BROCHET</option>
@@ -105,6 +112,7 @@
                 <option value="Perche-soleil">PERCHE-SOLEIL</option>
                 <option value="Bouvière">BOUVIÈRE</option>
             </select>
+
             <div class="glass-card-river p-3 flex items-center justify-between border-2 border-fb">
                 <img id="fish-img" src="https://via.placeholder.com/160" alt="Poisson" class="w-24 h-24 rounded-xl object-cover">
                 <div class="text-right pl-4">
@@ -112,7 +120,9 @@
                     <p id="weather-status" class="text-[8px] italic font-bold">...</p>
                 </div>
             </div>
+            
             <div class="glass-card-river overflow-hidden border-fb"><table class="w-full text-xs text-center"><tbody id="prob-table"></tbody></table></div>
+
             <div id="points-counter-card" class="glass-card-river overflow-hidden border-2 border-fb">
                 <div class="bg-blue-100 p-2 text-blue-900 uppercase font-bold text-xs text-center border-b border-fb">Total Poissons Pêchés</div>
                 <div class="p-4 text-center">
@@ -123,6 +133,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="pt-2 flex justify-center pb-2 flex-shrink-0 w-full">
                 <img src="https://i.postimg.cc/yY1bXpD4/1779352785742.png" alt="Logo" class="w-full rounded-2xl border-none shadow-xl object-cover">
             </div>
@@ -134,56 +145,49 @@
         const API_KEY = "a090c783f28f7752b68192791fac9dea"; 
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
         const fishStats = { "Silure": { base: 65, pref: "p", ideal: 20 }, "Brochet": { base: 50, pref: "s", ideal: 12 }, "Black Bass": { base: 45, pref: "s", ideal: 22 }, "Sandre": { base: 55, pref: "p", ideal: 14 }, "Goujon": { base: 35, pref: "s", ideal: 15 }, "Perche commune": { base: 55, pref: "s", ideal: 16 }, "Brème": { base: 45, pref: "s", ideal: 18 }, "Ablette": { base: 50, pref: "s", ideal: 17 }, "Vairon": { base: 40, pref: "s", ideal: 12 }, "Gardon": { base: 55, pref: "s", ideal: 15 }, "Chevesne": { base: 45, pref: "s", ideal: 16 }, "Tanche": { base: 40, pref: "s", ideal: 19 }, "Carpe": { base: 45, pref: "s", ideal: 21 }, "Rotengle": { base: 45, pref: "s", ideal: 18 }, "Anguille": { base: 60, pref: "p", ideal: 17 }, "Ide mélanote": { base: 35, pref: "s", ideal: 15 }, "Carassin": { base: 40, pref: "s", ideal: 18 }, "Barbeau": { base: 50, pref: "s", ideal: 17 }, "Truite": { base: 70, pref: "s", ideal: 10 }, "Truite arc-en-ciel": { base: 65, pref: "s", ideal: 11 }, "Poisson-chat": { base: 50, pref: "s", ideal: 22 }, "Perche-soleil": { base: 45, pref: "s", ideal: 20 }, "Bouvière": { base: 30, pref: "s", ideal: 14 } };
-        let currentGroup = null, weatherData = { temp: 15, clouds: 50 }, isGPSActive = true;
+        
+        let currentGroup = null;
+        let gpsEnabled = true;
+        let weatherData = { temp: 15, clouds: 50 };
+
+        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
         
         function toggleGPS() {
-            if (isGPSActive) {
+            if (gpsEnabled) {
                 if(confirm("Désactiver le GPS et passer en manuel ?")) {
-                    isGPSActive = false;
-                    document.getElementById('gps-btn').className = "btn-gps-inactive w-7 h-7 rounded flex items-center justify-center text-[10px]";
+                    gpsEnabled = false;
+                    document.getElementById('gps-btn').classList.remove('bg-gps-active');
                     document.getElementById('city-name').innerText = "MANUEL";
                     weatherData = { temp: 20, clouds: 20 };
                     calculateIndex();
                 }
-            } else { location.reload(); }
+            } else {
+                if(confirm("Réactiver le GPS ?")) {
+                    gpsEnabled = true;
+                    document.getElementById('gps-btn').classList.add('bg-gps-active');
+                    initApp();
+                }
+            }
         }
-        function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
-        function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
-        function addFishToGroup() { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += 5; localStorage.setItem(currentGroup, JSON.stringify(data)); updateGroupDisplay(); }
-        function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += p; localStorage.setItem(currentGroup, JSON.stringify(data)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
-        function resetScore() { if(confirm("Vider les points ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
-        function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
-        function resetGlobal() { if(confirm("Reset total ?")) { localStorage.setItem('globalFish', 0); document.getElementById('global-fish-counter').innerText = 0; } }
+
         async function initApp() {
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
-            let spotsHtml = ""; for(let i=1; i<=15; i++) { spotsHtml += '<div class="text-[9px] text-gray-500 italic border-b border-gray-100 py-1">Pose ta clé ici (Spot '+ (i+1) +')</div>'; }
-            document.getElementById('spots-list').innerHTML = spotsHtml;
-            calculateIndex();
-            if (navigator.geolocation) {
+            document.getElementById('gps-btn').classList.add('bg-gps-active');
+            
+            if (navigator.geolocation && gpsEnabled) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const lat = pos.coords.latitude, lon = pos.coords.longitude;
                     try {
                         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
                         const d = await res.json();
-                        if (d.name) document.getElementById('city-name').innerText = d.name.toUpperCase();
+                        if (d.name) { document.getElementById('city-name').innerText = d.name.toUpperCase(); }
                         if (d.main) { weatherData.temp = d.main.temp; weatherData.clouds = d.clouds.all; calculateIndex(); }
-                    } catch (e) { document.getElementById('city-name').innerText = "LAT: " + lat.toFixed(2); }
+                    } catch (e) { document.getElementById('city-name').innerText = "LOCALISATION"; }
                 });
             }
+            calculateIndex();
         }
+
         function calculateIndex() {
             const fish = document.getElementById('fish-select').value;
-            if(!fish) return;
-            document.getElementById('fish-img').src = fishImages[fish] || "https://via.placeholder.com/160";
-            const stats = fishStats[fish] || { base: 50, pref: "s", ideal: 15 };
-            const isSunny = weatherData.clouds < 50;
-            let prob = Math.floor(stats.base + ((stats.pref === "s" && isSunny) ? 12 : 0) + (8 - Math.abs(weatherData.temp - stats.ideal)));
-            prob = Math.min(99, Math.max(10, prob));
-            document.getElementById('final-index').innerText = prob + "%";
-            document.getElementById('weather-status').innerText = (isSunny ? "☀️ " : "🌧️ ") + weatherData.temp.toFixed(1) + "°C";
-            document.getElementById('prob-table').innerHTML = `<tr><td class="p-2 font-bold text-blue-900">RIVIÈRE</td><td class="p-2 font-bold">${Math.min(99, prob + 15)}%</td></tr><tr><td class="p-2 font-bold text-blue-900">LAC</td><td class="p-2 font-bold">${prob}%</td></tr>`;
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('fish-img
