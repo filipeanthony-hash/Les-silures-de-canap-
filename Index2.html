@@ -48,7 +48,7 @@
         <div class="cards-scroll-area flex flex-col space-y-2 p-1">
             <div id="concours-section" class="hidden glass-card-river p-4 border-2 border-purple-600">
                 <h3 class="text-[10px] font-bold uppercase mb-2 text-purple-700">Page Concours</h3>
-                <textarea class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200" placeholder="Écris ton texte concours ici..."></textarea>
+                <textarea id="concours-text" readonly class="w-full h-32 p-2 rounded-lg text-xs border border-purple-200 bg-transparent"></textarea>
             </div>
 
             <div id="groupe-section" class="hidden glass-card-river p-4 border-2 border-green-800">
@@ -140,6 +140,9 @@
     </div>
 
     <script>
+        // CONTEXTE DU CONCOURS - MODIFIER ICI POUR TOUT LE MONDE
+        const MESSAGE_CONCOURS = "🏆 GRAND CONCOURS 2026 : Le plus gros silure de la saison remporte le trophée de la Canapé ! Fin des inscriptions le 31/07/2026.";
+        
         const fishImages = { "Silure": "https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet": "https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass": "https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre": "https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon": "https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune": "https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème": "https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette": "https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon": "https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon": "https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne": "https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche": "https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe": "https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle": "https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille": "https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote": "https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin": "https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau": "https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite": "https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel": "https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat": "https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
         const API_KEY = "a090c783f28f7752b68192791fac9dea"; 
         const passwords = { "groupe1":"pass123", "groupe2":"silureA", "groupe3":"brochet77", "groupe4":"canap2026", "groupe5":"pecheur99" };
@@ -170,7 +173,11 @@
         }
 
         async function initApp() {
+            // Initialisation du texte du concours en dur
+            document.getElementById('concours-text').value = MESSAGE_CONCOURS;
+            
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
+            
             if(gpsEnabled) document.getElementById('gps-btn').classList.add('bg-gps-active');
             
             if (navigator.geolocation && gpsEnabled) {
