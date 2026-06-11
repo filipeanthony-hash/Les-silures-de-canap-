@@ -75,10 +75,11 @@
 
             <div id="spots-section" class="hidden glass-card-river p-4 space-y-2 border-fb">
                 <h3 class="text-[10px] font-bold uppercase mb-2">Liste des Spots</h3>
-                <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="block w-full p-2 bg-blue-50 border border-fb rounded-lg text-[10px] font-bold text-blue-900 underline mb-2">📍 36 Rue René Leblond, Tournan-en-Brie</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=36+Rue+René+Leblond+77220+Tournan-en-Brie" target="_blank" class="block w-full p-2 bg-blue-50 border border-fb rounded-lg text-[10px] font-bold text-blue-900 underline mb-1">📍 1. 36 Rue René Leblond, Tournan-en-Brie</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Étang+de+Montévrain+Rue+du+Puits+du+Gué+77144+Montévrain" target="_blank" class="block w-full p-2 bg-blue-50 border border-fb rounded-lg text-[10px] font-bold text-blue-900 underline mb-2">📍 2. Étang de Montévrain, Rue du Puits du Gué, 77144 Montévrain</a>
                 <div class="border-t border-dashed border-gray-400 pt-2 space-y-1">
                     <script>
-                        for(let i=1; i<=15; i++) {
+                        for(let i=2; i<=15; i++) {
                             document.write('<div class="text-[9px] text-gray-500 italic border-b border-gray-100 py-1">Pose ta clé ici (Spot '+ (i+1) +')</div>');
                         }
                     </script>
@@ -141,7 +142,7 @@
 
     <script>
         // CONTEXTE DU CONCOURS - MODIFIER ICI POUR TOUT LE MONDE
-        const MESSAGE_CONCOURS = "🏆 GRAND CONCOURS 2026 : Le plus gros silure de la saison remporte le trophée de la Canapé ! Fin des inscriptions le 31/07/2026.";
+        const MESSAGE_CONCOURS = "🏆 Concours de pêche le 13/06/2026 à l'étang de montévrain ne hésitez pas à vous approcher de la page WhatsApp j'ai intégré l'adresse sur la case spot.";
         
         const fishImages = { "Silure": "https://i.postimg.cc/8k2cNq9Z/Pngtree-catfish-clipart-illustration-digital-art-16698862-1.png", "Brochet": "https://i.postimg.cc/J7xHm1Zv/1000022375.png", "Black Bass": "https://i.postimg.cc/4d9CPNZn/1000022377.png", "Sandre": "https://i.postimg.cc/2yhV84s4/sandre.png", "Goujon": "https://i.postimg.cc/sxjwg7sQ/sullo-sander-lucioperca-480x480-(2)-(1)-(1).png", "Perche commune": "https://i.postimg.cc/jSMXML6r/Poisson-Perche-1-1024x511-(2)-(1).png", "Brème": "https://i.postimg.cc/CL9q0x9L/Illustration-breme-commune-CC-Dunbar-P.png", "Ablette": "https://i.postimg.cc/RZsVmsWn/ablette.png", "Vairon": "https://i.postimg.cc/1txSRLsq/vairon.png", "Gardon": "https://i.postimg.cc/htfRLSGJ/gardon.png", "Chevesne": "https://i.postimg.cc/SQrBHX23/Illustration-chevesne-CC-Dunbar-P.png", "Tanche": "https://i.postimg.cc/q7VDN0hW/Illustration-tanche-CC-Dunbar-P.png", "Carpe": "https://i.postimg.cc/wvWkQdMW/R-(2).png", "Rotengle": "https://i.postimg.cc/Z5rFDN0Y/R-(3).png", "Anguille": "https://i.postimg.cc/DwZXkYvS/202409-Japanese-eel.png", "Ide mélanote": "https://i.postimg.cc/zfh38s9m/ide-melanote.png", "Carassin": "https://i.postimg.cc/0QfkNPnt/Illustration-carassin-commun.png", "Barbeau": "https://i.postimg.cc/8c20QrvX/barbeau.png", "Truite": "https://i.postimg.cc/JhsYnqq8/Truite-detouree-e1513789345352.png", "Truite arc-en-ciel": "https://i.postimg.cc/66fcBgXC/Illustration-truite-arc-en-ciel.png", "Poisson-chat": "https://i.postimg.cc/8Pnh5Vnj/poisson-chat2.png", "Perche-soleil": "https://i.postimg.cc/nc5DxGCh/perche-soleil2.png", "Bouvière": "https://i.postimg.cc/h4ZJ81bD/bouviere.png" };
         const API_KEY = "a090c783f28f7752b68192791fac9dea"; 
@@ -173,9 +174,7 @@
         }
 
         async function initApp() {
-            // Initialisation du texte du concours en dur
             document.getElementById('concours-text').value = MESSAGE_CONCOURS;
-            
             document.getElementById('global-fish-counter').innerText = localStorage.getItem('globalFish') || 0;
             
             if(gpsEnabled) document.getElementById('gps-btn').classList.add('bg-gps-active');
@@ -210,7 +209,9 @@
 
         function checkPass() { const g = document.getElementById('groupe-select').value; if(document.getElementById('pass').value === passwords[g]) { currentGroup = g; document.getElementById('login-part').classList.add('hidden'); document.getElementById('counter-part').classList.remove('hidden'); document.getElementById('group-title').innerText = g.toUpperCase(); updateGroupDisplay(); } else { alert("Code incorrect"); } }
         function updateGroupDisplay() { const data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); document.getElementById('total-score').innerText = data.points + " pts"; }
-        function addFishToGroup() { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += 5; localStorage.setItem(currentGroup, JSON.stringify(data)); updateGroupDisplay(); }
+        
+        function addFishToGroup() { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += 1; localStorage.setItem(currentGroup, JSON.stringify(data)); updateGroupDisplay(); }
+        
         function addWeight() { const p = parseInt(document.getElementById('poids-input').value); if(!isNaN(p) && p > 0) { let data = JSON.parse(localStorage.getItem(currentGroup) || '{"points":0}'); data.points += p; localStorage.setItem(currentGroup, JSON.stringify(data)); document.getElementById('poids-input').value = ""; updateGroupDisplay(); } }
         function resetScore() { if(confirm("Vider les points ?")) { localStorage.removeItem(currentGroup); updateGroupDisplay(); } }
         function addGlobalFish() { let total = parseInt(localStorage.getItem('globalFish') || 0); localStorage.setItem('globalFish', total + 1); document.getElementById('global-fish-counter').innerText = total + 1; }
