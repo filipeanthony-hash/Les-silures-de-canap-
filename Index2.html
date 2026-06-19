@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Overlay Perso</title>
+    <title>Shark Officiel TV - ETS2 Overlay</title>
     <style>
-        /* Import d'une police moderne et lisible */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
 
         * {
             box-sizing: border-box;
@@ -15,103 +14,116 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Ubuntu', sans-serif;
             width: 1920px;
             height: 1080px;
-            background-color: transparent; /* Fond transparent pour Streamlabs */
+            background-color: transparent;
             overflow: hidden;
             position: relative;
-            color: #fff;
+            color: #eceff1;
         }
 
-        /* --- STYLE DE LA BANDE EN HAUT (RÉSEAUX / INFOS) --- */
-        .top-bar {
+        /* --- BANDEAU INFÉRIEUR ULTRA ÉPURÉ --- */
+        .bottom-ticker {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 30px;
-            background: rgba(15, 15, 15, 0.75);
-            backdrop-filter: blur(5px);
-            padding: 10px 30px;
-            border-radius: 50px;
-            border: 2px solid #00adb5; /* Bordure couleur Cyan/Néon */
-            box-shadow: 0 0 15px rgba(0, 173, 181, 0.4);
-        }
-
-        .info-item {
+            bottom: 0;
+            left: 0;
+            width: 1920px;
+            height: 45px;
+            background: linear-gradient(90deg, rgba(20, 27, 38, 0.9) 0%, rgba(38, 50, 68, 0.8) 50%, rgba(20, 27, 38, 0.9) 100%);
+            border-top: 2px solid #00d2ff; /* Ligne fine Bleu Océan */
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 18px;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- BLOC NOM DE CHAÎNE (STYLE SHARK) --- */
+        .channel-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Petit aileron stylisé en CSS */
+        .shark-fin {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 20px solid #00d2ff;
+            transform: rotate(-25px);
+            display: inline-block;
+        }
+
+        .channel-name {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 8px rgba(0, 210, 255, 0.6);
+        }
+
+        /* --- BLOC RÉSEAUX / INFOS --- */
+        .socials-container {
+            display: flex;
+            gap: 40px;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 400;
+            color: #b0bec5; /* Gris requin clair */
+        }
+
+        .social-item strong {
+            color: #00d2ff;
+            font-weight: 700;
+        }
+
+        /* --- PETIT EFFET SIMU DE ROUTE --- */
+        .simulation-tag {
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Petit point lumineux animé */
-        .live-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #ff2e63;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #ff2e63;
-            animation: pulse 1.5s infinite;
-        }
-
-        /* --- STYLE DU CADRE WEBCAM (Ajustable) --- */
-        .webcam-box {
-            position: absolute;
-            bottom: 50px;
-            right: 50px;
-            width: 400px;
-            height: 225px; /* Ratio 16:9 */
-            border: 3px solid #00adb5;
-            box-shadow: 0 0 20px rgba(0, 173, 181, 0.5);
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .webcam-label {
-            position: absolute;
-            top: -15px;
-            left: 15px;
-            background: #00adb5;
-            padding: 2px 12px;
-            font-size: 12px;
-            font-weight: bold;
+            background: rgba(0, 210, 255, 0.15);
+            color: #00d2ff;
+            padding: 2px 10px;
             border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        /* --- ANIMATIONS --- */
-        @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 15px #ff2e63; }
-            100% { transform: scale(0.9); opacity: 0.6; }
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Barre d'infos supérieure -->
-    <div class="top-bar">
-        <div class="info-item">
-            <div class="live-dot"></div>
-            <span style="color: #ff2e63;">Live</span>
+    <!-- Barre unique tout en bas de l'écran, façon tableau de bord discret -->
+    <div class="bottom-ticker">
+        
+        <!-- Gauche : Identité de ta chaîne -->
+        <div class="channel-brand">
+            <span class="shark-fin"></span>
+            <span class="channel-name">Shark Officiel TV</span>
         </div>
-        <div class="info-item">
-            <span style="color: #00adb5;">Pseudo :</span> MonStream
-        </div>
-        <div class="info-item">
-            <span style="color: #00adb5;">YouTube :</span> @MonLien
-        </div>
-    </div>
 
-    <!-- Cadre pour la Webcam / Incrustation -->
-    <div class="webcam-box">
-        <div class="webcam-label">Joueur</div>
+        <!-- Droite : Tes réseaux (à modifier selon tes besoins) -->
+        <div class="socials-container">
+            <div class="social-item">
+                <span>YouTube :</span> <strong>Shark Officiel TV</strong>
+            </div>
+            <div class="social-item">
+                <span>TikTok :</span> <strong>@SharkOfficiel</strong>
+            </div>
+            <div class="simulation-tag">
+                ETS2 Live
+            </div>
+        </div>
+
     </div>
 
 </body>
